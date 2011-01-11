@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<document xmlns="http://di.tamu.edu/DRI/1.0/" xmlns:i18n="http://apache.org/cocoon/i18n/2.1" version="1.1">
+<body>
+<div id="file.news.div.news" n="news" rend="primary">
+<head>Brasiliana Digital</head>
+<p>
+Bem vindo à <i18n:text>xmlui.Brasiliana.version.long</i18n:text> da Brasiliana Digital. Acesse a
+extraordinária coleção de livros, folhetos, periódicos, manuscritos,
+mapas e imagens sobre a história e a cultura do Brasil, reunida pela
+USP. Tendo como ponto de partida a Biblioteca Mindlin, doada em 2006,
+pretendemos ampliar a oferta com outros acervos da USP e de outras
+instituições parceiras. Inicie sua busca pelo nosso catálogo.
+Visualize os textos e as imagens. Pesquise os textos (em pdf) pelo seu
+conteúdo.
+</p>
+</div>
+</body>
+<options/>
+<meta>
+<userMeta/>
+<pageMeta/>
+<repositoryMeta/>
+</meta>
+</document>

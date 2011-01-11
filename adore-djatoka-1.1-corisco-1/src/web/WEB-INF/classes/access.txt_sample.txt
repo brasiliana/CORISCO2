@@ -1,0 +1,5 @@
+order deny,allow
+deny from all
+allow from 192.168.1.44
+allow from nasa.gov
+allow from loc.gov

@@ -1,0 +1,413 @@
+@charset "utf-8";
+
+
+/*
+CSS desenvolvido para Brasiliana Digital
+
+organização do CSS
+1. tags gerais
+2. classes e ids, por 'ordem de aparição'
+
+propriedades: retirado do aloe studios (http://aloestudios.com/2009/02/order-of-the-day-css-properties/)
+   1. Display & Flow
+   2. Positioning
+   3. Dimensions
+   4. Margins, Padding, Borders, Outline
+   5. Typographic Styles
+   6. Backgrounds
+   7. Opacity, Cursors, Generated Content
+*/
+
+
+/*
+eric meyer css reset
+http://meyerweb.com/eric/tools/css/reset/index.html
+v1.0 | 20080212
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	/*vertical-align: baseline; modificação do original:*/vertical-align: middle;
+	background: transparent;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+}
+
+/* remember to highlight inserts somehow! */
+ins {
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* ---------- para customização ---------- */
+html, body {font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #303030; background: #FFFFFF;}
+p {font-size: 12px; line-height: 14px;}
+h2 {font-size: 14px; line-height: 18px; font-weight: normal;}
+h3 {font-size: 18px; font-weight: bold;}
+h4 {font-size: 11px; font-weight: bold;}
+a, a:link, a:visited {text-decoration: none; color:inherit;}
+a:hover {text-decoration: underline; color: inherit;}
+
+.cor1, .cor1 a, td .info-resultado p a, .funcoes-resultado div a:hover {color: #FF0000;}
+.cor2, #cabecalho-barra a, #abas div a {color: #FFFFFF;}
+.funcoes-resultado div a, .dado-item a, li span a {color: #303030;}
+
+.caixa {background: #E7E7E7;}
+.caixa2 {background: #FFDFDF;}
+.borda {border: 1px solid #A0A0A0;}
+.bordaBT {border: 1px dotted #A0A0A0;}
+.caixa-borda {border: 1px solid #A0A0A0; background: #E7E7E7;}
+.caixa-borda2 {border: 1px solid #A0A0A0; background: #FFDFDF;}
+.caixa-borda3 {border: 1px solid #A0A0A0; background: #FFFFFF !important;}
+
+#cabecalho-barra {background: #000000;}
+/* ---------- fim da customização ---------- */
+
+.clear {position: relative; clear:both;}
+
+
+/*classes e ids*/
+
+#pagina {position: relative; width: 950px; margin: 0 auto;}
+
+#cabecalho {height: 115px;}
+
+	#cabecalho-menu {position: relative; height: 40px; font-size: 12px;}
+		#menu-esquerdo {position: absolute; top: 0; left: 0;}
+				#menu-esquerdo ul li {float: left; padding:15px 10px 0; border-top: none; border-left: none; border-bottom: none;}
+				#menu-esquerdo ul li.first {float: left; padding:15px 10px 0 0; border-top: none; border-left: none; border-bottom: none;}
+
+		#menu-direito {position: absolute; top: 0; right: 0; padding: 10px 0 0; text-align: right;}
+		
+	#cabecalho-barra {position: relative; height: 75px;}
+		#detalhes-site {position: absolute; top: 22px; left: 50px; z-index: 1;}
+		#cabecalho-busca {position: relative; padding: 24px 0 0 475px;}
+
+            #formulario-busca-cabecalho {height: 24px;}
+			#formulario-busca {height: auto;}
+				#caixa-busca {float: left; position: relative; width: 370px; height: 24px; padding-left: 5px; border: 1px solid #606060; background: #F0F0F0;}
+					#selecionar-filtro {z-index: 1; position: absolute; top: 27px; left: 705px; width: 140px; height: 20px; /*background: url(../img/filtro.png) no-repeat;*/}
+						/*#selecionar-filtro input {border: none; background: none;}
+						#selecionar-filtro label {margin: 3px 0 0 5px;}*/
+						.selecionar-display {float: left; position: relative; width: 50px; font-size: 12px;}
+				#botao-enviar {float: left; width: 65px; height: 24px; margin-left: 6px; border: none; text-align: center; background: url(../img/buscar.png) no-repeat; cursor: pointer;}
+					#botao-enviar:hover {background: url(../img/buscar_OVER.png) no-repeat;}
+			
+			#menu-busca {padding: 5px 0 0 5px;}
+			
+#conteudo {position: relative; height: auto; padding: 25px 0 0;}
+	
+/*	#conteudo-alto {padding: 0 0 25px;}*/
+		
+		#dados-item {position: relative; height: auto; padding: 0 80px 15px 0; line-height: 24px;}
+			#autoria-item {font-weight: normal;}
+			#mais-metadados {cursor: pointer;}
+			#ficha-meta {display: none; z-index: 50; position: absolute; top: 60px; left: 0; width: 400px; padding: 10px;}
+				.fechar {position: absolute; top: 10px; right: 10px; background: url(../img/fechar.png) no-repeat; cursor: pointer;}
+				.caixa-borda3 p {padding-bottom: 12px;}
+				
+		
+		/* visualizador */ #colecao-item {position: absolute; top: 20px; right: 0; text-align: right;}
+		
+		#conteudo-alto .caixa {position: relative; height: 35px; font-size: 12px; line-height: 25px;}
+		/* visualizador */ #visualizador-barra {background: url(../img/barra-visu-bg.png) center no-repeat;}
+		/* visualizador */ #visualizador-barra2 {background: url(../img/barra-visu-bg.png) center no-repeat;}
+			.modos, .modos_visualizador {float: left; width: 250px; height: 25px; margin-left: 10px; padding: 5px 0;}
+				.modos span, .modos_visualizador span {float: left;}
+				.modos span img, .modos_visualizador span img {float: left; width: 25px; margin-left: 3px;}
+				.ocr {padding-left: 10px;}
+			.numero-resultados{float: left; width: 180px; margin: 0; padding: 5px 0;}
+            ul.links-paginacao{display: inline;}
+            ul.links-paginacao li{display: inline;}
+			/* visualizador */
+            .zoom {float: left; width: 100px; margin: 0; padding: 5px 0; text-align: center;}
+            .paginacao {float: left; width: 260px; margin: 0; padding: 5px 0; text-align: center;}
+				.paginacao span {padding: 0 4px;}
+			.resultados-pagina {float: left; width: 140px; margin: 0; padding: 5px 0; text-align: center;}
+			.resultados-ordenar {float: left; width: auto; margin: 0; padding: 5px 0;}
+				.resultados-ordenar span {float: left;}
+				.ordenar-crescente {width: 20px; height: 20px; padding: 0 ;}
+				.ordenar-decrescente {position: relative; width: 20px; height: 20px; padding: 0;}
+			/* visualizador */ .funcional {float: right; position: relative; width: auto; margin: 0; padding: 4px 0;}
+				/* visualizador */ .funcional span {float: left; padding: 4px 8px 0 0;}
+				/* visualizador */ #ficha-link {display: none; z-index: 50; position: absolute !important; top: 30px; left: -200px; width: 300px; height: auto !important; padding: 10px;}
+				
+	#conteudo-central {height: auto;}
+		
+		/* -- visualizador -- */
+/*		#visualizador-paginas {height: auto; margin-top: -25px; padding: 0 0 10px; background: #DDDDDD;}*/
+		#visualizador-paginas {background: #DDDDDD;}
+			#caixas {height: 20px; padding: 8px 0;}
+				#caixas div {float: left; position: relative; height: 12px; margin-right: 5px; padding: 4px 8px; line-height: 12px; background: #000000; cursor: pointer;}
+					#ficha-imagens {z-index: 50; position: absolute !important; top: 20px; left: 0; width: 400px; height: auto !important; padding: 10px; display: none;}
+						.fechar {position: absolute; top: 10px; right: 10px; cursor: pointer;}
+				.info-visualizador {background: none !important;}
+		
+		#pagina-dupla {position: relative; padding-left: 35px; text-align: center;}
+			.voltar-pagina {position: absolute; left: 5px; top: 0; width: 20px;}
+			.pagina-esquerda img, .pagina-direita img {float: left; width: 440px;}
+			.avancar-pagina {position: absolute; right: 5px; top: 0; width: 20px;}
+			
+		#pagina-unica {position: relative;}
+			#trilho-thumb {float: left; overflow-y: auto; width: 225px; height: 580px; padding: 10px;}
+				#trilho-thumb div {position: relative; width: 170px; height: 170px; margin-bottom: 20px; padding: 20px; text-align: center; background: #FFFFFF;}
+					#trilho-thumb div span {position: absolute; top: 5px; left: 5px;}
+					#trilho-thumb div img {height: 170px; border: 1px solid #A0A0A0;}
+			#trilho-pagina {float: left; overflow-y: auto; width: 500px; height: 600px; margin-left: 30px; padding: 0 80px;}
+				#trilho-pagina div {position: relative; width: 500px; margin-bottom: 20px}
+				
+		#pagina-mosaico {position: relative; padding-left: 35px; background: #DDDDDD;}
+			#mosaico {position: relative; width: auto;}
+				#mosaico div {position: relative; float: left; width: 170px; height: 170px; margin: 0 10px 10px 0; padding: 20px; text-align: center; background: #FFFFFF;}
+					#mosaico div span {position: absolute; top: 5px; left: 5px;}
+					#mosaico div img {height: 170px; border: 1px solid #A0A0A0;}
+
+        #visualizador-imagem {position: relative; background: #FFF;
+                              margin: 0px; left: 0px; top: 0px; right: 0px; padding: 0px;  border: 1px solid black; }
+
+        #visualizador-livro {position: relative; min-height: 600px; background: black;
+                              margin: 0px; left: 0px; top: 0px; padding: 0px; }
+
+        #IIPMooViewer {overflow: hidden; position: relative; font-family: arial, sans-serif; min-height: 600px;}
+
+		/* -- fim  -- */
+		
+		#coluna-resultados {float: left; width: 678px; height: auto; padding: 0 30px 0 0;}
+		
+			/*--- listas ---*/
+			.alfabeto {padding-bottom: 10px; font-size: 18px; font-weight: bold; text-align: center;}
+				.alfabeto ul li {float: left; padding: 0 5px;}
+			#lista {clear: both; padding: 20px 50px; margin-bottom: 10px; border-right: none; border-left: none; font-size: 12px; line-height: 18px;}
+			
+			#abas {z-index: 20; position: relative; height: 45px; text-align: center; font-size: 12px; font-weight: bold;}
+				#abas .borda {float: left; width: 110px; height: 32px; margin: 9px 1px 1px 0; line-height: 32px; background: url(../img/aba_inativa.png) repeat-x;}
+				#aba-ativa {height: 45px !important; margin: 0 1px 0 0 !important; border-bottom: none !important; line-height: 45px !important; background: #FFFFFF !important;}
+			
+			#sem-resultados {height: 300px; z-index: 10; position: relative; padding-bottom: 35px; border-right: none; border-bottom: none;}
+
+            #resultados {z-index: 10; position: relative; padding-bottom: 35px; border-right: none; border-bottom: none;}
+				
+				#lista-resultados {padding-left: 10px;}
+					#lista-resultados li {position: relative; padding-top: 30px;}
+						#lista-resultados li .caixa {float: left; width: 100px; height: 100px; margin-right: 20px; padding: 10px; text-align: center;}
+							#lista-resultados li .caixa img {max-height: 100px; max-width: 100px;}
+						
+						.info {position: relative; width: 527px; float: left;}
+							.info-resultado {padding-bottom: 25px;}
+								.titulo-resultado {padding-bottom: 14px;}
+							.funcoes-resultado {height: 12px;  font-size: 11px; line-height: 12px;}
+								.funcoes-resultado div {float: left; padding-right: 20px;}
+								.funcoes-resultado div a:hover {text-decoration: none;}
+										.funcoes-resultado div a img {padding-right: 5px;}
+							.colecao-resultado {position: absolute; top: 70px; right: 0; text-align: right;}
+								.tipo-documento img {padding-left: 8px;}
+							.info .borda /*ficha metadados*/{padding: 20px 0 3px; border-top: none; border-right: none; border-left: none; cursor: pointer;}
+							.info .caixa-borda /*ver metadados*/{position: relative; width: 497px; padding: 15px 15px 2px; border-top: none; border-right: none; border-left: none;}
+								.info .caixa-borda p {padding-bottom: 12px;}
+								.tipo-dado {font-weight: bold;}
+									.dado-item a, .dado-item a:link, .dado-item a:visited {text-decoration: underline;}
+									.dado-item a:hover {text-decoration: none;}
+													
+				#grade-resultados {position: relative;}
+						#grade-resultados tr td {position: relative; width: 206px; height: 300px; padding: 10px; vertical-align: bottom;}
+							.thumb-resultado {width: 100%; text-align: center;}
+								.thumb-resultado img {max-width: 206px; max-height: 200px; margin: 0 auto;}
+				
+		#coluna-filtros {float: left; width: 242px; height: auto; padding-top: 17px;}
+			#titulo-busca, #titulo-coluna {position: relative; height: 28px; margin-bottom: 10px; line-height: 28px;}
+			#adicionar-busca {position: relative; padding-bottom: 30px;}/* height: 24px;}*/
+				#filtertype {z-index: 30; position: absolute; top: 2px; left: 140px; width: 70px; height: 20px; /*background: url(../img/filtro.png) no-repeat;*/}
+				#adicionar-busca #caixa-busca2 {;float: left; position: relative; width: 212px; height: 24px; border: 1px solid #606060; background: #F0F0F0;
+                                                    -webkit-box-sizing: border-box;
+                                                    -moz-box-sizing: border-box;
+                                                    -ms-box-sizing: border-box;} /* http://www.quirksmode.org/css/box.html */
+				#botao-enviar2 {float: left; width: 24px; height: 24px; margin-left: 6px; border: none; text-align: center; text-indent: -5000px; background: url(../img/buscar2.png) no-repeat; cursor: pointer;}
+					#botao-enviar2:hover {background: url(../img/buscar_OVER2.png) no-repeat;}
+
+			#coluna-filtros .borda {position: relative; margin-bottom: 10px; border-top: none; border-right: none; border-left: none;}
+				#coluna-filtros div h3 {line-height: 24px;}
+				.mais-filtro {position: absolute; top: 0; right: 0; cursor: pointer;}
+				#coluna-filtros div ul {margin-top: 5px; padding: 6px;}
+					.filtro-item {line-height: 14px; padding: 0 0 11px 18px; background: url(../img/mais.png) left top no-repeat;}
+							.ver-mais a {color: #FF0000 !important;}
+					.lista-item {line-height: 14px; padding: 0 0 11px 18px; background: url(../img/seta.png) left top no-repeat;}
+
+			#titulo-listar {position: relative; height: 28px; margin-bottom: 0 !important; line-height: 28px;}
+				.caixa-listar {padding: 3px 0; border-bottom: 1px solid #A0A0A0;}
+					.caixa-listar ul {margin-top: 0 !important; padding-bottom: 0 !important; background: #E7E7E7;}
+					
+#conteudo-baixo {clear: both; position: relative; width: 950px; height: auto; padding: 0 0 25px; border-right: none; border-left: none; border-bottom: none;}
+	#conteudo-baixo .caixa {position: relative; height: 35px; font-size: 12px; line-height: 25px;}
+
+
+/*#iipviewer-help > ul > li > ul {list-style: circle inside !important;}*/
+
+.icone_barra {
+    width: 24px;
+    height: 24px;
+    padding: 0px;
+    vertical-align: middle;
+    border: none;
+    cursor: pointer;
+}
+
+
+.icone_barra.logo { background: url(../img/logo_icon.png) no-repeat; }
+
+.icone_barra.one_page_mode { background: url(../img/modo_pg_unica.png) no-repeat; }
+.icone_barra.one_page_mode:hover { background: url(../img/modo_pg_unicaOVER.png) no-repeat; }
+.icone_barra.one_page_mode.selected { background: url(../img/modo_pg_unicaON.png) no-repeat; }
+
+.icone_barra.two_page_mode { background: url(../img/modo_pg_dupla.png) no-repeat; }
+.icone_barra.two_page_mode:hover { background: url(../img/modo_pg_duplaOVER.png) no-repeat; }
+.icone_barra.two_page_mode.selected { background: url(../img/modo_pg_duplaON.png) no-repeat; }
+
+.icone_barra.thumbnail_mode { background: url(../img/modo_mosaico.png) no-repeat; }
+.icone_barra.thumbnail_mode:hover { background: url(../img/modo_mosaicoOVER.png) no-repeat; }
+.icone_barra.thumbnail_mode.selected { background: url(../img/modo_mosaicoON.png) no-repeat; }
+
+.icone_barra.ocr_mode { background: url(../img/modo_ocr.png) no-repeat; }
+.icone_barra.ocr_mode:hover { background: url(../img/modo_ocrOVER.png) no-repeat; }
+.icone_barra.ocr_mode.selected { background: url(../img/modo_ocrON.png) no-repeat; }
+
+.icone_barra.print { background: url(../img/func_imprimir.png) no-repeat; }
+.icone_barra.download { background: url(../img/func_baixar.png) no-repeat; }
+.icone_barra.cite { background: url(../img/func_citar.png) no-repeat; }
+.icone_barra.link { background: url(../img/func_link.png) no-repeat; }
+
+.icone_barra.zoom_out { background: url(../BookReader/images/zoom_out_icon.png) no-repeat; }
+.icone_barra.zoom_out:hover { background: url(../BookReader/images/zoom_out_iconOVER.png) no-repeat; }
+
+.icone_barra.zoom_in { background: url(../BookReader/images/zoom_in_icon.png) no-repeat; }
+.icone_barra.zoom_in:hover { background: url(../BookReader/images/zoom_in_iconOVER.png) no-repeat; }
+
+.icone_barra.book_left { background: url(../BookReader/images/book_left_icon.png) no-repeat; }
+.icone_barra.book_left:hover { background: url(../BookReader/images/book_left_iconOVER.png) no-repeat; }
+
+.icone_barra.book_right { background: url(../BookReader/images/book_right_icon.png) no-repeat; }
+.icone_barra.book_right:hover { background: url(../BookReader/images/book_right_iconOVER.png) no-repeat; }
+
+.icone_barra.book_up { background: url(../BookReader/images/book_up_icon.png) no-repeat; }
+.icone_barra.book_up:hover { background: url(../BookReader/images/book_up_iconOVER.png) no-repeat; }
+
+.icone_barra.book_down { background: url(../BookReader/images/book_down_icon.png) no-repeat; }
+.icone_barra.book_down:hover { background: url(../BookReader/images/book_down_iconOVER.png) no-repeat; }
+
+.icone_barra.book_leftmost { background: url(../BookReader/images/book_leftmost_icon.png) no-repeat; }
+.icone_barra.book_leftmost:hover { background: url(../BookReader/images/book_leftmost_iconOVER.png) no-repeat; }
+
+.icone_barra.book_rightmost { background: url(../BookReader/images/book_rightmost_icon.png) no-repeat; }
+.icone_barra.book_rightmost:hover { background: url(../BookReader/images/book_rightmost_iconOVER.png) no-repeat; }
+
+.icone_barra.book_top { background: url(../BookReader/images/book_top_icon.png) no-repeat; }
+.icone_barra.book_top:hover { background: url(../BookReader/images/book_top_iconOVER.png) no-repeat; }
+
+.icone_barra.book_bottom { background: url(../BookReader/images/book_bottom_icon.png) no-repeat; }
+.icone_barra.book_bottom:hover { background: url(../BookReader/images/book_bottom_iconOVER.png) no-repeat; }
+
+
+
+/*.icone_barra.play { background: url(../img/control_play_icon.png) no-repeat; }
+.icone_barra.pause { background: url(../img/control_pause_icon.png) no-repeat; }*/
+
+a.icone_barra {
+    display: block;
+    text-decoration: none;
+    border: none;
+    float: left;
+}
+
+/*.icone_barra.rollover:hover { background-position: -24px 0; }*/
+
+
+/*#fechar-link { background: url(../img/fechar.png) no-repeat; float: left; }*/
+.icone_peq {
+    width: 12px;
+    height: 12px;
+    padding: 0px;
+    vertical-align: middle;
+    border: none;
+    cursor: pointer;
+}
+
+/* Botões de controle das barras de busca e listagem. */
+.botao_barra {
+    width: 24px;
+    height: 24px;
+    padding: 0px;
+    vertical-align: middle;
+    border: none;
+    cursor: pointer;
+    color: transparent;
+}
+
+.botao_barra.view_listing { background: url(../img/modo_listagem.png) no-repeat; }
+.botao_barra.view_listing:hover { background: url(../img/modo_listagemOVER.png) no-repeat; }
+.botao_barra.view_listing.selected { background: url(../img/modo_listagemON.png) no-repeat; }
+
+.botao_barra.view_grid { background: url(../img/modo_mosaico.png) no-repeat; }
+.botao_barra.view_grid:hover { background: url(../img/modo_mosaicoOVER.png) no-repeat; }
+.botao_barra.view_grid.selected { background: url(../img/modo_mosaicoON.png) no-repeat; }
+
+.botao_barra.view_list { background: url(../img/modo_lista.png) no-repeat; }
+.botao_barra.view_list:hover { background: url(../img/modo_listaOVER.png) no-repeat; }
+.botao_barra.view_list.selected { background: url(../img/modo_listaON.png) no-repeat; }
+
+.botao_barra.view_cloud { background: url(../img/modo_nuvem.png) no-repeat; }
+.botao_barra.view_cloud:hover { background: url(../img/modo_nuvemOVER.png) no-repeat; }
+.botao_barra.view_cloud.selected { background: url(../img/modo_nuvemON.png) no-repeat; }
+
+.botao_barra.order_asc { background: url(../img/ordenar_crescente.png) no-repeat; }
+.botao_barra.order_asc:hover { background: url(../img/ordenar_crescenteOVER.png) no-repeat; }
+.botao_barra.order_asc.selected { background: url(../img/ordenar_crescenteON.png) no-repeat; }
+
+.botao_barra.order_desc { background: url(../img/ordenar_decrescente.png) no-repeat; }
+.botao_barra.order_desc:hover { background: url(../img/ordenar_decrescenteOVER.png) no-repeat; }
+.botao_barra.order_desc.selected { background: url(../img/ordenar_decrescenteON.png) no-repeat; }
+
+
+div#navcontainer {
+  position: absolute;
+  right: 180px;
+  top: 270px;
+  z-index: 2;
+  text-align: center;
+  background: transparent;
+}

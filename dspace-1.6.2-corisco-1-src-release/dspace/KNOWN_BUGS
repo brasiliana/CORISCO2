@@ -1,0 +1,65 @@
+INTRODUCTION
+=============================================================================
+
+Detailed Issue Tracking for DSpace is managed in our JIRA issue tracker:
+
+ - http://jira.dspace.org/
+
+In the past we used Sourceforge Trackers to track issues with. Older
+detailed bug descriptions and some status may still be available on 
+the SourceForge bug tracker:
+
+ - http://sourceforge.net/tracker/?group_id=19984
+
+
+KNOWN BUGS
+=============================================================================
+
+The following is a list of some of the known bugs in DSpace version 1.6 which
+will likely be fixed in 1.6.1.
+
+ - http://jira.dspace.org/jira/browse/DS-493
+   - Url in browser is incorrect after login
+   - Affects XMLUI only
+
+ - http://jira.dspace.org/jira/browse/DS-463
+   - Collection administrator help page not linked in some places
+   - Affects JSPUI only
+
+ - http://jira.dspace.org/jira/browse/DS-471
+   - Accessing site-level 'mets.xml' in XMLUI doesn't work properly for
+     handle prefixes with periods (e.g. 2010.1)
+   - Affects XMLUI only
+
+ - http://jira.dspace.org/jira/browse/DS-494
+   - DatabaseManager.process() unnecessarily limits range of DECIMAL or
+     NUMERIC
+   - Affects core DSpace API
+
+ - http://jira.dspace.org/jira/browse/DS-239
+   - java.net.MalformedURLException: unknown protocol: resource
+   - Affects XMLUI only
+
+ - http://jira.dspace.org/jira/browse/DS-469
+   - DCDate.displayDate(false,*) displays only year
+   - Affects core DSpace API
+
+ - http://jira.dspace.org/jira/browse/DS-501
+   - Kubrick Theme - NaN in Item Browse
+   - Affects XMLUI only
+
+ - http://jira.dspace.org/jira/browse/DS-298
+   - Caching problem when users logout
+   - Affects XMLUI only
+
+ - http://jira.dspace.org/jira/browse/DS-449
+   - Command line utility org.dspace.app.harvest.Harvest -S throws
+     AuthorizeException
+   - Affects core DSpace API
+
+
+This list is not exhaustive, but a definitive and up to date list of bugs
+affecting DSpace version 1.6 can be found in the JIRA issue tracker:
+
+ - http://jira.dspace.org/jira/secure/IssueNavigator.jspa?reset=true&&type=1
+    &pid=10020&resolution=-1&fixfor=-2&version=10020

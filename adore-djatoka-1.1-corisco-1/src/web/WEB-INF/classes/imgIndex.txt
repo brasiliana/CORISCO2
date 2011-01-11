@@ -1,0 +1,1 @@
+info:lanl-repo/i/test	/usr/local/adore-djatoka-1.0/etc/test.jp2

@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<!--
+
+    $Id: messages.xml 5173 2010-07-09 06:46:14Z KevinVandeVelde $
+    $URL: http://scm.dspace.org/svn/repo/modules/dspace-discovery/trunk/block/src/main/resources/aspects/Discovery/i18n/messages.xml $
+    *************************************************************************
+    Copyright (c) 2002-2009, DuraSpace.  All rights reserved
+    Licensed under the DuraSpace License.
+
+    A copy of the DuraSpace License has been included in this
+    distribution and is available at: http://scm.dspace.org/svn/repo/licenses/LICENSE.txt
+
+-->
+<catalogue xml:lang="en" xmlns:i18n="http://apache.org/cocoon/i18n/2.1" xmlns="http://apache.org/cocoon/i18n/2.1">
+
+    <!--
+		The format used by all keys is as follows
+
+		xmlui.<Aspect>.<Java Class>.<name>
+
+		There are a few exceptions to this nameing format,
+		1) Some general keys are in the xmlui.general namespace
+		   because they are used very frequently.
+		2) Some general keys which are specific to a particular aspect
+		   may be found at xmlui.<Aspect> without specifiying a
+		   particular java class.
+		-->
+
+
+    <!-- org.dspace.app.xmlui.artifactbrowser.AbstractSearch.java -->
+
+
+
+
+    <!-- org.dspace.app.xmlui.artifactbrowser.AdvancedSearch.java -->
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_author_lc">Autor</message>
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dc.contributor.author">Autor</message>
+
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_subject_lc">Assunto</message>
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dc.subject">Assunto</message>
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dc.type">Tipo de Documento</message>
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dc.date.issued">Data de Publicação</message>
+
+    <!-- Site Leve Recently Added Content -->
+    <message key="xmlui.ArtifactBrowser.SiteViewer.head_recent_submissions">Adições Recentes</message>
+
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_type">Tipo</message>
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_publisher">Editor</message>
+
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.filter_by.head">Adicionar à busca</message>
+
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.sort_by.ispartof">Parte de</message>
+
+	<message key="xmlui.ArtifactBrowser.AbstractSearch.result_empty_query">A busca produziu {0} resultado(s).</message>
+
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.group_by">Agrupar resultados por</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.group_by.none">Nenhum</message>
+
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.group_by.publication_grp">Publicação</message>
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dateissued">Data de Publicação</message>
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dateissued.year">Ano de Publicação</message>
+
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_location.comm">Comunidade</message>
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_location.coll">Coleção</message>
+
+
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dc.relation.ispartofseries">Série</message>
+
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.browse_head">Listagem por:</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_dc.contributor.author_browse">Autor</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_dc.title_browse">Título</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_dc.subject_browse">Assunto</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_dateissued.year_browse">Ano de Publicação</message>
+        
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_dc.description.abstract_browse">Browsing by: Abstract</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_series_browse">Browsing by: Series</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_sponsor_browse">Browsing by: Sponsor</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_identifier_browse">Browsing by: Identifier</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_language_browse">Browsing by: Language (ISO)</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_keyword_browse">Browsing by: Keyword</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_taxon_browse">Browsing by: Scientific Name</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_contributor_browse">Browsing by: Contributor</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_creator_browse">Browsing by: Creator</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_subject_browse">Browsing by: Subject</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_description_browse">Browsing by: Description</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_relation_browse">Browsing by: Relation</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_mime_browse">Browsing by: Mime-Type</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_other_browse">Browsing by: Other Contributor</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_advisor_browse">Browsing by: Advisor</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_department_browse">Browsing by: Department</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.type_dateissued_dt_browse">Browsing by: Issue date</message>
+
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.selected_filters">Filtros selecionados</message>
+
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.all">Tudo</message>
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.title">Título</message>
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.title_t">Título</message>
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.contributor.author">Autor</message>
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.contributor.author_t">Autor</message>
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.subject">Assunto</message>
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.subject_t">Assunto</message>
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.description">Descrição</message>
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.description_t">Descrição</message>
+<!--    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dateissued.year">Ano de Publicação</message>-->
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dateissued.year">Ano</message>
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.author_t">Autor</message>
+
+
+    <message key="xmlui.Discovery.SimpleSearch.filter_help">Enter some text to add a filter to your results, the box has an auto complete function containing all the values that can be found in the fields selected in the dropdown box. Please be aware however that although the full text option also has an auto complete, this only shows values from all the fields which can be selected &amp; not for all the values in the repository in which the search will occur when this is selected.</message>
+    <message key="xmlui.Discovery.SimpleSearch.filter_head">Adicionar à busca</message>
+
+	<!-- org.dspace.app.xmlui.artifactbrowser.Navigation.java -->
+	<message key="xmlui.Discovery.Navigation.head_browse">Listar por</message>
+	<message key="xmlui.Discovery.Navigation.head_all_of_dspace">Todo o repositório</message>
+	<message key="xmlui.Discovery.Navigation.communities_and_collections">Tipos de documentos</message>
+	<message key="xmlui.Discovery.Navigation.browse_title">Título</message>
+	<message key="xmlui.Discovery.Navigation.browse_author">Autor</message>
+	<message key="xmlui.Discovery.Navigation.browse_subject">Assunto</message>
+	<message key="xmlui.Discovery.Navigation.browse_dateissued">Ano de publicação</message>
+	<message key="xmlui.Discovery.Navigation.browse_dateaccessioned">Pela data de submissão</message>
+	<message key="xmlui.Discovery.Navigation.head_this_collection">Esta Coleção</message>
+	<message key="xmlui.Discovery.Navigation.head_this_community">Esta Comunidade</message>
+
+    <message key="xmlui.Discovery.Navigation.top-search.head">Pesquisa</message>
+    <message key="xmlui.Discovery.Navigation.top-search.help">Pesquisa no acervo digital</message>
+
+    <message key="xmlui.dri2xhtml.structural.pagination-info">Items {0}-{1}</message>
+
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.view_more">Ver mais</message>
+
+
+    <message key="xmlui.Discovery.BrowseFacet.browse_century_head">Século</message>
+    <message key="xmlui.Discovery.BrowseFacet.browse_century">{0}</message>
+
+
+    <message key="xmlui.Discovery.ItemViewer.toolbar.view_modes">Modos de visualização:</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.navigation">Navegação:</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.jump_to_page">Ir à página:</message>
+
+
+    <message key="xmlui.Discovery.ItemViewer.toolbar.logo">Inicial</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.zoom_in">Maior</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.zoom_out">Menor</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.one_page_mode">Ver uma página</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.two_page_mode">Ver duas páginas</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.thumbnail_mode">Ver mosaico</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.ocr_mode">Ver OCR</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.embed">Embed bookreader</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.print">Imprimir página</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.download">Baixar arquivo completo</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.cite">Citar documento</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.permalink">Ver link permanente para este documento</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.permalink_head">Link permanente</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.book_left">Folhear à esquerda</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.book_right">Folhear à direita</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.book_up">Página acima</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.book_down">Página abaixo</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.play">Play</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.pause">Pausa</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.book_top">Primeira página</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.book_bottom">Última página</message>
+
+    <message key="xmlui.Discovery.ItemViewer.toolbar.close">Fechar</message>
+
+</catalogue>

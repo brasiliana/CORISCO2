@@ -1,0 +1,46 @@
+<config xmlns="info:collections/oomImpls/oomRef">
+        <processor>
+                <className>org.oclc.oomRef.OpenURLRequestProcessorImpl</className>
+        </processor>
+        <profiles>
+                <!-- Registry Framework Architecture -->
+                <registry-identifier>info:ofi/pro:sap1-2004</registry-identifier>
+        </profiles>
+        <transportMap>
+                <transport>
+                        <className>org.oclc.oomRef.transports.HttpOpenURLInlineTransport</className>
+                </transport>
+        </transportMap>
+        <serviceMap>
+                <service ID="info:lanl-repo/svc/getRegion">
+                        <className>gov.lanl.adore.djatoka.openurl.OpenURLJP2KService</className>
+                        <args>
+                                <props>djatoka.properties</props>
+                        </args>
+                </service>
+        </serviceMap>
+        <serviceMap>
+                <service ID="info:lanl-repo/svc/getMetadata">
+                        <className>gov.lanl.adore.djatoka.openurl.OpenURLJP2KMetadata</className>
+                        <args>
+                                <props>djatoka.properties</props>
+                        </args>
+                </service>
+        </serviceMap>
+        <serviceMap>
+                <service ID="info:lanl-repo/svc/getJP2XML">
+                        <className>gov.lanl.adore.djatoka.openurl.OpenURLJP2XML</className>
+                        <args>
+                                <props>djatoka.properties</props>
+                        </args>
+                </service>
+        </serviceMap>
+        <serviceMap>
+                <service ID="info:lanl-repo/svc/ping">
+                        <className>gov.lanl.adore.djatoka.openurl.OpenURLJP2Ping</className>
+                        <args>
+                                <props>djatoka.properties</props>
+                        </args>
+                </service>
+        </serviceMap>
+</config>

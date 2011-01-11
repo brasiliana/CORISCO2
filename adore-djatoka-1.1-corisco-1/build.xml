@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Copyright (c) 2008  Los Alamos National Security, LLC.
+  
+   Los Alamos National Laboratory
+   Research Library
+   Digital Library Research & Prototyping Team
+  
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+  
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+   Lesser General Public License for more details.
+  
+   You should have received a copy of the GNU Lesser General Public
+   License along with this library; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+-->
+<project name="djatoka" default="all" basedir=".">
+
+  <!-- environment variables -->
+  <property environment="env"/>
+  <property name="version" value="1.1" />
+
+  <!-- source/build directory -->
+  <property name="bin.dir"      value="${basedir}/bin"/>
+  <property name="etc.dir"      value="${basedir}/etc"/>
+  <property name="doc.dir"      value="${basedir}/doc"/>
+  <property name="src.dir"      value="${basedir}/src"/>
+  <property name="build.dir"    value="${basedir}/tmp"/>
+  <property name="dist.dir"     value="${basedir}/dist"/>
+  <property name="lib.dir"      value="${basedir}/lib"/>
+
+  <!-- debug/optimize settings -->
+  <property name="debug"        value="on"/>
+  <property name="optimize"     value="on"/>
+  <property name="nowarn"     value="on"/>
+
+  <!-- external library packages -->
+  <path id="djatoka.classpath">
+    <fileset dir="${lib.dir}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <target name="prepare">
+    <!-- Create the time stamp --> <!-- Should we make use of this or remove it. -->
+    <tstamp/>
+    <echo message="Timestamp ${TSTAMP}" />
+
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${build.dir}/classes"/>
+    <mkdir dir="${build.dir}/javadoc"/>
+  </target>
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <target name="compile" depends="prepare" description="Compile Java source files">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}/classes"
+           source="1.5"
+           optimize="${optimize}"
+           nowarn="${nowarn}"
+           debug="${debug}">
+           <classpath refid="djatoka.classpath"/>
+    </javac>
+  </target>
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <target name="copy-config" depends="prepare" description="Copy config files to build area">
+    <copy todir="${build.dir}/classes">
+      <fileset dir="${etc.dir}">
+         <include name="djatoka.properties"/>
+      </fileset>
+    </copy>
+  </target>
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <target name="dist" depends="compile,copy-config" description="Generate jar file to dist area">
+    <delete file="adore-djatoka-${version}.tar.gz"/>
+    <delete file="${lib.dir}/adore-djatoka-${version}.jar"/>
+    <jar jarfile="${dist.dir}/adore-djatoka-${version}.jar" basedir="${build.dir}/classes"/>
+    <copy file="${dist.dir}/adore-djatoka-${version}.jar" todir="${lib.dir}"/>
+    <war destfile="${dist.dir}/djatoka.war" webxml="${src.dir}/web/WEB-INF/web.xml">
+        <fileset dir="${src.dir}/web" excludes="WEB-INF/web.xml"/>
+        <!-- Define Required Modules -->
+        <lib dir="${dist.dir}">
+          <include name="adore-djatoka-${version}.jar"/>
+        </lib>
+        <lib dir="${lib.dir}">
+          <include name="*.jar"/>
+          <exclude name="servlet-api.jar"/>
+        </lib>
+    </war>
+    <tar destfile="adore-djatoka-${version}.tar.gz" compression="gzip" >
+        <tarfileset dir="." mode="755" prefix="adore-djatoka-${version}">
+            <include name="bin/**/*"/>
+        </tarfileset>
+        <tarfileset dir="." prefix="adore-djatoka-${version}">
+            <exclude name="adore-djatoka-${version}.tar.gz"/>
+            <exclude name="src/gov/lanl/adore/djatoka/test/"/>
+            <include name="build.xml"/>
+            <include name="README.txt"/>
+            <include name="INSTALL.txt"/>
+            <include name="LICENSE.txt"/>
+            <include name="dist/**/*"/>
+            <include name="etc/**/*"/>
+            <include name="lib/**/*"/>
+            <include name="src/gov/**/*"/>
+            <include name="src/web/**/*"/>
+        </tarfileset>
+    </tar>
+  </target>
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <target name="clean" description="Remove all generated files from build tree">
+    <delete dir="${build.dir}"/>
+    <delete file="adore-djatoka-${version}.tar"/>
+  </target>
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <target name="javadoc" depends="prepare" description="Generate javadocs">
+    <javadoc destdir="${doc.dir}/javadoc"
+             windowtitle="aDORe djatoka API"
+             classpathref="djatoka.classpath"
+             additionalparam="-breakiterator">
+      <packageset dir="${src.dir}">
+         <exclude name="kdu_jni"/>
+         <exclude name="gov/lanl/adore/djatoka/test/"/>
+      </packageset>
+    </javadoc>
+  </target>
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <target name="all" depends="clean,compile,dist,javadoc" description="Clean and compile all files"/>
+
+</project>

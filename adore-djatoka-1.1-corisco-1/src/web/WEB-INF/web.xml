@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <display-name>OpenURL 1.0 resolver</display-name>
+    <description>
+      OpenURL 1.0 resolver
+    </description>
+    <context-param>
+        <param-name>djatoka-config</param-name>
+        <param-value>/adore-djatoka-1.1/config/djatoka.cfg</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>resolver</servlet-name>
+        <servlet-class>gov.lanl.adore.djatoka.openurl.OpenURLServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>resolver</servlet-name> 
+        <url-pattern>/resolver</url-pattern> 
+    </servlet-mapping>
+    <session-config>
+      <session-timeout>30</session-timeout>    <!-- 30 minutes -->
+    </session-config>
+	<welcome-file-list id="WelcomeFileList">
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.jws</welcome-file>
+	</welcome-file-list>
+    <!-- Listener to initialize / clean up the application -->
+    <listener>
+        <listener-class>gov.lanl.util.DjatokaContextListener</listener-class>
+    </listener>
+</web-app> 

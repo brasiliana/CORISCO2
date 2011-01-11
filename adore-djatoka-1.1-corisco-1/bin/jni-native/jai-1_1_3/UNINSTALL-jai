@@ -1,0 +1,19 @@
+#!/bin/sh
+# @(#)UNINSTALL-jai	3.1 06/05/25 18:35:35
+# usage: UNINSTALL-jai
+
+echo "Uninstalling Java Advanced Imaging"
+
+rm -f *jai.txt
+rm -f lib/jai_core.jar
+rm -f lib/jai_codec.jar
+rm -f lib/mlibwrapper_jai.jar
+rm -f lib/libmlib_jai.so
+if [ \( "`uname`" = "SunOS" \) -a \( "`uname -p`" = "sparc" \) ]; then
+    rm -f lib/libmlib_jai_vis.so
+    rm -f lib/libmlib_jai_vis2.so
+fi
+rmdir lib
+rm -f UNINSTALL-jai
+
+echo "Done"

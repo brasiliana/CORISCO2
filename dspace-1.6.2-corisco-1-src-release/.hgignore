@@ -1,0 +1,15 @@
+syntax: glob
+
+*.war
+*.jar
+*.class
+target/
+lib/*.jar
+
+syntax: regexp
+
+\.orig\..*$
+\.orig$
+\.chg\..*$
+\.rej$
+\.conflict\~$

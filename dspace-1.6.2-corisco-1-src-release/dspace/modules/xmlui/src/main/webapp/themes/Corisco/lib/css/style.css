@@ -1,0 +1,229 @@
+@charset "utf-8";
+
+
+/*
+CSS desenvolvido para Brasiliana Digital
+
+organização do CSS
+1. tags gerais
+2. classes e ids, por 'ordem de aparição'
+
+propriedades: retirado do aloe studios (http://aloestudios.com/2009/02/order-of-the-day-css-properties/)
+   1. Display & Flow
+   2. Positioning
+   3. Dimensions
+   4. Margins, Padding, Borders, Outline
+   5. Typographic Styles
+   6. Backgrounds
+   7. Opacity, Cursors, Generated Content
+*/
+
+
+/*
+eric meyer css reset
+http://meyerweb.com/eric/tools/css/reset/index.html
+v1.0 | 20080212
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	/*vertical-align: baseline; modificação do original:*/vertical-align: middle;
+	background: transparent;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+}
+
+/* remember to highlight inserts somehow! */
+ins {
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* ---------- para customização ---------- */
+html, body {font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #303030; background: #FFFFFF;}
+p {font-size: 12px; line-height: 15px;}
+h2 {font-size: 14px; line-height: 18px; font-weight: normal;}
+h3 {font-size: 18px; font-weight: bold;}
+h4 {font-size: 11px; font-weight: bold;}
+a, a:link, a:visited {text-decoration: none; color:inherit;}
+a:hover {text-decoration: underline; color: inherit;}
+
+.cor1 {color: #FF0000;}
+.cor2 {color: #FFFFFF;}
+
+.caixa {background: #E7E7E7;}
+.caixa2 {background: #FFDFDF;}
+.borda {border: 1px solid #A0A0A0;}
+.bordaBT {border: 1px dotted #A0A0A0;}
+.caixa-borda {border: 1px solid #A0A0A0; background: #E7E7E7;}
+.caixa-borda2 {border: 1px solid #A0A0A0; background: #FFDFDF;}
+
+#cabecalho-barra {background: #000000;}
+/* ---------- fim da customização ---------- */
+
+.clear {position: relative; clear:both;}
+
+
+/*classes e ids*/
+
+#pagina {position: relative; width: 950px; margin: 0 auto;}
+
+#cabecalho {height: 115px;}
+
+	#cabecalho-menu {position: relative; height: 40px; font-size: 10px;}
+		#menu-esquerdo {position: absolute; top: 14px; left: 0;}
+		#menu-direito {position: absolute; top: 14px; right: 0; text-align: right;}
+		
+	#cabecalho-barra {position: relative; height: 75px;}
+		#detalhes-site {position: absolute; top: 22px; left: 50px;}
+		#cabecalho-busca {position: relative; padding: 24px 0 0 475px;}
+			
+			#formulario-busca {height: 24px;}
+				#caixa-busca {float: left; position: relative; width: 370px; height: 24px; border: 1px solid #606060; background: #F0F0F0;}
+					#selecionar-filtro {position: absolute; top: 26px; left: 715px; width: 128px; height: 20px; background: url(img/filtro.png) no-repeat;}
+						#selecionar-filtro input {border: none; background: none;}
+						#selecionar-filtro label {margin: 3px 0 0 5px;}
+						.selecionar-display {float: left; position: relative; width: 50px; font-size: 12px;}
+				#botao-enviar {float: left; width: 65px; height: 24px; margin-left: 6px; border: none; text-align: center; background: url(img/buscar.png) no-repeat;}
+					#botao-enviar:hover {background: url(img/buscar_OVER.png) no-repeat;}
+			
+			#menu-busca {padding: 5px 0 0 5px;}
+			
+#conteudo {position: relative; height: auto; padding: 25px 0 0;}
+	
+	#conteudo-alto {padding: 0 0 25px;}
+		
+		#dados-item {height: 24px; padding: 0 0 15px; line-height: 24px;}
+			#autoria-item {font-weight: normal;}
+		
+		/* visualizador */ #colecao-item {position: absolute; top: 20px; right: 0; text-align: right;}
+		
+		#conteudo-alto .caixa {position: relative; height: 35px; font-size: 12px; line-height: 25px;}
+		/* visualizador */ #visualizador-barra {background: url(img/barra-visu-bg.png) center no-repeat;}
+		/* visualizador */ #visualizador-barra2 {background: url(img/barra-visu-bg.png) center no-repeat;}
+			.modos, .modos_visualizador {float: left; width: 250px; height: 25px; margin-left: 10px; padding: 5px 0;}
+				.modos span, .modos_visualizador span {float: left;}
+				.modos span img, .modos_visualizador span img {float: left; width: 25px; margin-left: 3px;}
+				.ocr {padding-left: 10px;}
+			.numero-resultados{float: left; width: 180px; margin: 0; padding: 5px 0;}
+			/* visualizador */ .paginacao {float: left; width: 360px; margin: 0; padding: 5px 0; text-align: center;}
+				.paginacao span {padding: 0 4px;}
+			.resultados-pagina {float: left; width: 200px; margin: 0; padding: 5px 0;}
+			.resultados-ordenar {float: left; width: auto; margin: 0; padding: 5px 0;}
+				.resultados-ordenar span {float: left;}
+				.ordenar-crescente {width: 11px; height: 11px; padding: 7px 2px 0 6px ;}
+				.ordenar-decrescente {position: relative; width: 11px; height: 11px; padding: 7px 6px 0 2px;}
+			/* visualizador */ .funcional {float: left; width: auto; margin: 0; padding: 4px 0;}
+				/* visualizador */ .funcional span {float: left; padding: 4px 8px 0 0;}
+				
+	#conteudo-central {height: auto;}
+		
+		/* -- visualizador -- */
+		#visualizador-paginas {height: auto; margin-top: -25px; padding: 0 0 10px; background: #DDDDDD;}
+			#caixas {height: 20px; padding: 8px 0;}
+				#caixas div {float: left; height: 12px; margin-right: 5px; padding: 4px 8px; line-height: 12px; background: #000000;}
+				.info-visualizador {background: none !important;}
+		
+		#pagina-dupla {position: relative; padding-left: 35px; text-align: center;}
+			.voltar-pagina {position: absolute; left: 5px; top: 0; width: 20px;}
+			.pagina-esquerda img, .pagina-direita img {float: left; width: 440px;}
+			.avancar-pagina {position: absolute; right: 5px; top: 0; width: 20px;}
+			
+		#pagina-unica {position: relative;}
+			#trilho-thumb {float: left; overflow-y: auto; width: 225px; height: 580px; padding: 10px;}
+				#trilho-thumb div {position: relative; width: 170px; height: 170px; margin-bottom: 20px; padding: 20px; text-align: center; background: #FFFFFF;}
+					#trilho-thumb div span {position: absolute; top: 5px; left: 5px;}
+					#trilho-thumb div img {height: 170px; border: 1px solid #A0A0A0;}
+			#trilho-pagina {float: left; overflow-y: auto; width: 500px; height: 600px; margin-left: 30px; padding: 0 80px;}
+				#trilho-pagina div {position: relative; width: 500px; margin-bottom: 20px}
+				
+		#pagina-mosaico {position: relative; padding-left: 35px; background: #DDDDDD;}
+			#mosaico {position: relative; width: auto;}
+				#mosaico div {position: relative; float: left; width: 170px; height: 170px; margin: 0 10px 10px 0; padding: 20px; text-align: center; background: #FFFFFF;}
+					#mosaico div span {position: absolute; top: 5px; left: 5px;}
+					#mosaico div img {height: 170px; border: 1px solid #A0A0A0;}
+		/* -- fim  -- */
+		
+		#coluna-resultados {float: left; width: 678px; height: auto; padding: 0 30px 0 0;}
+		
+			/*--- listas ---*/
+			.alfabeto {padding-bottom: 10px; font-size: 18px; font-weight: bold; text-align: center;}
+				.alfabeto ul li {float: left; padding: 0 5px;}
+			#lista {clear: both; padding: 20px 50px; margin-bottom: 10px; border-right: none; border-left: none; font-size: 12px; line-height: 18px;}
+			
+			#abas {z-index: 20; position: relative; height: 45px; text-align: center; font-size: 12px; font-weight: bold;}
+				#abas .borda {float: left; width: 110px; height: 32px; margin: 9px 1px 1px 0; line-height: 32px; background: url("img/aba_inativa.png") repeat-x;}
+				#aba-ativa {height: 45px !important; margin: 0 1px 0 0 !important; border-bottom: none !important; line-height: 45px !important; background: #FFFFFF !important;}
+			
+			#resultados {z-index: 10; position: relative; padding-bottom: 35px; border-right: none; border-bottom: none;}
+				
+				#lista-resultados {padding-left: 10px;}
+					#lista-resultados li {position: relative; padding-top: 30px;}
+						#lista-resultados li .caixa {float: left; width: 120px; height: 90px; margin-right: 20px; padding: 15px 0; text-align: center;}
+							#lista-resultados li .caixa img {height: 90px;}
+						
+						.info {position: relative; width: 527px; float: left;}
+							.info-resultado {padding-bottom: 25px;}
+								.titulo-resultado {padding-bottom: 14px;}
+							.funcoes-resultado {height: 12px;  font-size: 11px; line-height: 12px;}
+								.funcoes-resultado div {float: left; padding-right: 20px;}
+							.colecao-resultado {position: absolute; top: 70px; right: 0; text-align: right;}
+							.info .borda /*ficha metadados*/{padding: 20px 0 3px; border-top: none; border-right: none; border-left: none;}
+							.info .caixa-borda /*ver metadados*/{position: relative; width: 497px; padding: 15px 15px 2px; border-top: none; border-right: none; border-left: none;}
+								.info .caixa-borda p {padding-bottom: 12px;}
+								.tipo-dado {font-weight: bold;}
+				
+				#grade-resultados {position: relative;}
+						#grade-resultados tr td {position: relative; width: 206px; height: 300px; padding: 10px; vertical-align: bottom;}
+							.thumb-resultado {width: 100%; text-align: center;}
+								.thumb-resultado img {max-width: 206px; max-height: 200px; margin: 0 auto;}
+				
+		#coluna-filtros {float: left; width: 242px; height: auto;}
+			#titulo-busca, #titulo-coluna {position: relative; height: 28px; margin-bottom: 10px; line-height: 28px;}
+			#adicionar-busca {position: relative; padding-bottom: 20px;}
+				#adicionar-busca form #caixa-busca {width: 171px !important;}
+			#coluna-filtros .borda {position: relative; margin-bottom: 10px; border-top: none; border-right: none; border-left: none;}
+				#coluna-filtros div h3 {line-height: 24px; font-weight: normal;}
+				.mais-filtro {position: absolute; top: 0; right: 0;}
+				#coluna-filtros div ul {margin-top: 5px; padding: 6px;}
+					#coluna-filtros div ul li {line-height: 24px;}
+					
+#conteudo-baixo {clear: both; position: relative; width: 950px; height: auto; padding: 0 0 25px; border-right: none; border-left: none; border-bottom: none;}
+	#conteudo-baixo .caixa {position: relative; height: 35px; font-size: 12px; line-height: 25px;}

@@ -1,0 +1,124 @@
+adore-djatoka-1.1 Installation Notes
+
+-------------------------------
+1. Requirements
+-------------------------------
+* Sun Java 1.5+
+* Tomcat 5+
+* Currently Supported OS/Hardware: 
+- Linux-x86-32 
+- Linux-x86-64
+- Mac OS-X Intel
+- Solaris-sparc
+- Solaris Sparcv9
+- Solaris x86
+- Windows-i586
+
+-------------------------------
+2. Test the djatoka compression and extraction applications
+-------------------------------
+cd bin
+./compress.sh -i ../etc/test.jpg -o ../etc/test.jp2
+./extract.sh -i ../etc/test.jp2 -o ../etc/test-size1.jpg -l 1
+
+Verify that ../etc/test-size1.jpg exists and can be opened using an image viewer.
+ls -l ../etc/test-size1.jpg
+
+On Windows:
+cd bin
+compress.bat -i ..\etc\test.jpg -o ..\etc\test.jp2
+extract.bat -i ..\etc\test.jp2 -o ..\etc\test-size1.jpg -l 1
+
+Verify that ..\etc\test-size1.jpg exists and can be opened using an image viewer.
+dir ..\etc\test-size1.jpg
+
+-------------------------------
+3. Verify your Tomcat Configurations
+-------------------------------
+The djatoka Tomcat start-up script assumes an out of the box Tomcat 5.* installation.  You'll need to change the script around if you're using different CATALINA_BASE and CATALINA_HOME dirs.
+
+You'll need to ensure the CATALINA_HOME env var is set.
+
+cp ../dist/adore-djatoka.war $CATALINA_HOME/webapps/
+./tomcat.sh start
+
+On Windows:
+copy ..\dist\adore-djatoka.war $CATALINA_HOME/webapps/adore-djatoka.war
+tomcat.bat start
+
+In a browser, open 'http://<host>:<port>/adore-djatoka/'.  Verify that the BaseURL is correct, and click the 'Update Image' button.  This will download the an LoC American Memory Image from 'http://memory.loc.gov/gmd/gmd433/g4330/g4330/np000066.jp2' and extract a 500 x 500 region from the JP2 file and return a JPG version on the image in the response.
+
+NOTES:
+Issue 1: The exception "gov.lanl.adore.djatoka.DjatokaException: gov.lanl.adore.djatoka.DjatokaException: java.lang.Exception: kakadu.home is not defined" appears when I click 'Update Image'
+Resolution: djatoka requires a number of parameters to be passed into Tomcat using JAVA_OPT, this includes the kakadu.home env var. The tomcat startup script in adore-djatoka/bin should be used to initially test the installation.  Afterwards, you can extract the JAVA_OPTS settings from env.sh and add them to your preferred Tomcat initialization script, should you have one.
+
+Issue 2:  The exception "gov.lanl.adore.djatoka.DjatokaException: gov.lanl.adore.djatoka.DjatokaException: java.lang.Exception: Unknown JP2/JPX file format" appears when I click 'Update Image'
+Resolution: The is typically the result of a firewall or proxy server blocking a request to download a remote image.  The env.sh script in adore-djatoka/bin provides the necessary JAVA_OPTS proxy settings. Uncomment and set these properties then restart the Tomcat instance using the djatoka Tomcat start-up script and try "Update Image" again.
+
+-------------------------------
+4. Add Content
+-------------------------------
+1. Compress some images
+2. Update the reference in $CATALINA_HOME/webapps/adore-djatoka/WEB-INF/classes/imgIndex.txt
+- imgIndex.txt is an example the identifier resolver interface functions. It's a simple map associating a rft_id with a file path.
+- Format: 2 tab delimited columns with a single line per resource.
+		- Column A being the rft_id
+		- Column B being an absolute file path for the JP2 file.
+		- Example: info:lanl-repo/ds/CB_TM_QQ432    /path/to/file.jp2
+- Request Usage:
+http://an.example.org/djatoka/resolver?
+    url_ver=Z39.88-2004 &
+    rft_id=info:lanl-repo/ds/CB_TM_QQ432 &
+    svc_id=info:lanl-repo/svc/getRegion &
+    svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000 &
+    svc.format=image/jpeg &
+    svc.level=4 &
+    svc.rotate=0 &
+    svc.region=899,1210,657,1106
+will resolve the rft_id (e.g. info:lanl-repo/ds/CB_TM_QQ432) to a local file path (e.g. /path/to/file.jp2) using the imgIndex.txt file, then perform the necessary operations on the resource.
+3. ./tomcat.sh stop
+4. ./tomcat.sh start
+5. Go to http://<host>:<port>/adore-djatoka/
+6. Enter an identifier for one of your images defined in imgIndex.txt. 
+
+-------------------------------
+5. Windows Installation Instructions
+-------------------------------
+1. Download the adore-djatoka archive to a directory of your choosing.
+2. Extract the adore-djatoka-1.0 dir from the archive using an archive utility (e.g. WinZip).
+3. In a cmd.exe prompt, cd to the %install_dir%/adore-djatoka-1.1/bin/ directory.
+4. Check that java.exe is in your PATH (e.g. java -version) and that you are using a Sun JVM. If this doesn't work, you'll need to add %JAVA_HOME%/bin to your path.
+5. Set/Verify the follow environment variables:
+JAVA_HOME       Required: Must point at your Java Development Kit installation.
+  e.g. set JAVA_HOME=C:\Documents and Settings\208183\java
+DJATOKA_HOME    Required: Must point at your djatoka installation.
+  e.g. set DJATOKA_HOME=C:\Documents and Settings\208183\adore-djatoka-1.1
+KAKADU_HOME     Required: Must point at your Kakadu installation. Also, you'll  need to add KAKADU_HOME to your system PATH variable.
+  e.g. set KAKADU_HOME=C:\Documents and Settings\208183\adore-djatoka-1.1\bin\Win32
+  e.g. set PATH=%PATH%;%KAKADU_HOME%
+6. Execute the following "compress.bat -i ../etc/test.jpg -o
+../etc/test.jp2" to verify that compression.
+7. Execute the following "extract.sh -i ../etc/test.jp2 -o
+../etc/test-size1.jpg -l 1" to verify that extraction.
+8. Next "cd ../etc/" and perform a "dir" to verify that test-size1.jpg
+exists and can be opened using an image viewer.
+
+Then onto Tomcat...
+9. Set/Verify the follow environment variable:
+CATALINA_HOME   Required: Must point at your Tomcat installation.
+  e.g. set CATALINA_HOME=C:\Documents and Settings\208183\tomcat
+10. Copy ../dist/adore-djatoka.war to $CATALINA_HOME/webapps/
+11. From the adore-djatoka-1.1/bin directory run "tomcat.bat". This should launch Tomcat in a new window.
+12. In a browser, open 'http://localhost:8080/adore-djatoka/'. Verify that the BaseURL is correct, and click the 'Update Image' button.  This will download the an LoC American Memory Image from 'http://memory.loc.gov/gmd/gmd433/g4330/g4330/np000066.jp2' and extract a 500 x 500 region from the JP2 file and return a JPG version on the image in the response.
+
+-------------------------------
+6. Explore
+-------------------------------
+adore-djatoka-*.* 
+|- bin - Contains image compression and extraction utilities and binaries
+|- build.xml - Ant script to compile and create distributions
+|- dist - Contains JAR/WAR distributions
+|- doc - Contains javadoc and reference to online documentation
+|- etc - Sample compression properties file and images
+|- lib - Contains required Java and Native libraries
+|- src - Contains Java source code for adore-djatoka
