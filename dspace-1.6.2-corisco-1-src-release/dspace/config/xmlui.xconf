@@ -60,11 +60,12 @@
     -->
     <aspects>
         <!-- (1) Remove Artifact Browser as Browse/Search is supported in Discovery
-		<aspect name="Artifact Browser" path="resource://aspects/ArtifactBrowser/" />
-		-->
-		<!-- (2) Feedback holds the Contact / Feedback aspects -->
+	<aspect name="Artifact Browser" path="resource://aspects/ArtifactBrowser/" />
+	-->
+	<!-- (2) Feedback holds the Contact / Feedback aspects
         <aspect name="Feedback" path="resource://aspects/Feedback/" />
-		<!-- (3) Discovery holds Both Viewers, Recent Submissions and Search/Browse. -->
+        -->
+	<!-- (3) Discovery holds Both Viewers, Recent Submissions and Search/Browse. -->
         <aspect name="Discovery" path="resource://aspects/Discovery/" />
 
         <aspect name="Administration" path="resource://aspects/Administrative/" />
