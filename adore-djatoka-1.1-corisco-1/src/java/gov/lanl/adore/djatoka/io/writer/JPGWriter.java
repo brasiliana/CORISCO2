@@ -32,14 +32,23 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
+import javax.imageio.stream.ImageOutputStream;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
+
 import org.apache.log4j.Logger;
 
-import com.sun.image.codec.jpeg.ImageFormatException;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import com.sun.media.jai.codec.ImageCodec;
-import com.sun.media.jai.codec.ImageEncoder;
+//import com.sun.image.codec.jpeg.ImageFormatException;
+//import com.sun.image.codec.jpeg.JPEGCodec;
+//import com.sun.image.codec.jpeg.JPEGEncodeParam;
+//import com.sun.image.codec.jpeg.JPEGImageEncoder;
+//import com.sun.media.jai.codec.ImageCodec;
+//import com.sun.media.jai.codec.ImageEncoder;
 
 /**
  * JPG File Writer. Uses JAI to write BufferedImage as JPG
@@ -59,10 +68,12 @@ public class JPGWriter implements IWriter {
 	 * @throws FormatIOException
 	 */
 	public void write(BufferedImage bi, OutputStream os) throws FormatIOException {
-		writeUsingJAI(bi, os);
+		//writeUsingJAI(bi, os);
+        writeUsingImageIO(bi, os);
 	}
 	
 	/* the JAI implementation is a bit faster */
+    /*
 	private void writeUsingJavaAPI(BufferedImage bi, OutputStream os) throws FormatIOException {
 		if (bi != null) {
 			BufferedOutputStream bos = null;
@@ -82,6 +93,7 @@ public class JPGWriter implements IWriter {
 		}
 	}
 	
+    /*
 	private void writeUsingJAI(BufferedImage bi, OutputStream os) throws FormatIOException {
 		if (bi != null) {
 			BufferedOutputStream bos = null;
@@ -95,7 +107,35 @@ public class JPGWriter implements IWriter {
 				logger.error(e);
 			}
 		}
-	}
+	}*/
+
+        private void writeUsingImageIO(BufferedImage bi, OutputStream os) throws FormatIOException {
+                if (bi != null) {
+                        ImageWriter writer = ImageIO.getImageWritersBySuffix("jpeg").next();
+                        JPEGImageWriteParam param = new JPEGImageWriteParam(null);
+                        param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                        param.setCompressionQuality((float)(q/100.0));
+                        ImageOutputStream ios = null;
+                        try{
+                                ios = new MemoryCacheImageOutputStream(os);
+                                writer.setOutput(ios);
+                                writer.write((IIOMetadata)null, new IIOImage(bi, null, null), param);
+                        } catch (IOException e) {
+                                logger.error(e,e);
+                        }
+                        finally {
+                                if (ios != null){
+                                        try{
+                                                ios.flush();
+                                                ios.close();
+                                        } catch (IOException e) {
+                                                logger.error(e,e);
+                                                throw new FormatIOException(e);
+                                        }
+                                }
+                        }
+                }
+        }
 
 	/**
 	 * Set the Writer Implementations Serialization properties. Only JPGWriter.quality_level

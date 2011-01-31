@@ -6,7 +6,7 @@
     </description>
     <context-param>
         <param-name>djatoka-config</param-name>
-        <param-value>/adore-djatoka-1.1/config/djatoka.cfg</param-value>
+        <param-value>/dspace/djatoka/config/djatoka.cfg</param-value>
     </context-param>
     <servlet>
         <servlet-name>resolver</servlet-name>

@@ -5,9 +5,12 @@
 
 package gov.lanl.adore.djatoka.plugin;
 
-import com.sun.image.codec.jpeg.ImageFormatException;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageDecoder;
+//import com.sun.image.codec.jpeg.ImageFormatException;
+//import com.sun.image.codec.jpeg.JPEGCodec;
+//import com.sun.image.codec.jpeg.JPEGImageDecoder;
+
+import javax.imageio.ImageIO;
+
 import gov.lanl.adore.djatoka.DjatokaDecodeParam;
 import gov.lanl.adore.djatoka.DjatokaException;
 import gov.lanl.adore.djatoka.IExtract;
@@ -44,6 +47,7 @@ public class ExtractJPG implements IExtract {
 			throw new DjatokaException("Image Does Not Exist: " + r.toString());
 		
         try {
+            /*
             JPEGImageDecoder decoder = null;
             if (r.getImageFile() != null && new File(r.getImageFile()).exists()) {
                 decoder = JPEGCodec.createJPEGDecoder(new FileInputStream(r.getImageFile()));
@@ -51,13 +55,22 @@ public class ExtractJPG implements IExtract {
                 decoder = JPEGCodec.createJPEGDecoder((InputStream) r.getObject());
             }
             BufferedImage bi = decoder.decodeAsBufferedImage();
+            */
+            BufferedImage bi = null;
+            if (r.getImageFile() != null && new File(r.getImageFile()).exists()) {
+                bi = ImageIO.read(new File(r.getImageFile()));
+            } else {
+                bi = ImageIO.read((InputStream) r.getObject());
+            }
+            if (bi == null)
+                return null;
 
-			r.setWidth(bi.getWidth());
-			r.setHeight(bi.getHeight());
+            r.setWidth(bi.getWidth());
+            r.setHeight(bi.getHeight());
 
             int minLevels = 3; //FIXME
             int djatokaLevels = ImageProcessingUtils.getLevelCount(r.getWidth(), r.getHeight(), 128);
-			r.setDWTLevels((djatokaLevels < minLevels) ? minLevels : djatokaLevels);
+            r.setDWTLevels((djatokaLevels < minLevels) ? minLevels : djatokaLevels);
             r.setLevels((djatokaLevels < minLevels) ? minLevels : djatokaLevels);
 
             r.setBitDepth(bi.getColorModel().getPixelSize());
@@ -149,8 +162,9 @@ public class ExtractJPG implements IExtract {
 	public BufferedImage process(InputStream input, DjatokaDecodeParam params)
             throws DjatokaException {
         try {
-            JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(input);
-            BufferedImage bi = decoder.decodeAsBufferedImage();
+            //JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(input);
+            //BufferedImage bi = decoder.decodeAsBufferedImage();
+            BufferedImage bi = ImageIO.read(input);
 
             ImageRecord r = getMetadata(bi);
             setLevelReduction(r, params);
@@ -180,7 +194,7 @@ public class ExtractJPG implements IExtract {
             return bi;
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(ExtractJPG.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ImageFormatException ex) {
+        } catch (IllegalArgumentException ex) {
             java.util.logging.Logger.getLogger(ExtractJPG.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {

@@ -5,7 +5,6 @@
 
 package gov.lanl.adore.djatoka.plugin;
 
-import com.sun.image.codec.jpeg.ImageFormatException;
 import gov.lanl.adore.djatoka.DjatokaDecodeParam;
 import gov.lanl.adore.djatoka.DjatokaException;
 import gov.lanl.adore.djatoka.IExtract;

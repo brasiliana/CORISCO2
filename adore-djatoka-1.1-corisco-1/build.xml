@@ -68,6 +68,7 @@
            source="1.5"
            optimize="${optimize}"
            nowarn="${nowarn}"
+           includeantruntime="false"
            debug="${debug}">
            <classpath refid="djatoka.classpath"/>
     </javac>
