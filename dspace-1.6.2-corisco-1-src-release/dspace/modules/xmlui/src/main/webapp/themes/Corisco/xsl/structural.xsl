@@ -566,18 +566,12 @@
 
 <!--                <input type="submit" i18n:attr="value" value="xmlui.general.add_filter" name="{concat('submit_',@n,'-filter-controls_add')}"/>-->
 
-                <xsl:call-template name="conteudo-alto">
-                    <xsl:with-param name="body" select="."/>
-                </xsl:call-template>
-                <xsl:call-template name="conteudo-central">
-                    <xsl:with-param name="body" select="."/>
-                </xsl:call-template>
+                <xsl:call-template name="conteudo-alto" />
+                <xsl:call-template name="conteudo-central" />
 
             </form>
 
-            <xsl:call-template name="conteudo-baixo">
-                <xsl:with-param name="body" select="."/>
-            </xsl:call-template>
+            <xsl:call-template name="conteudo-baixo" />
 
 <!--            <xsl:apply-templates />-->
 
@@ -762,25 +756,24 @@
 
 
     <xsl:template name="conteudo-alto">
-        <xsl:param name="body"/>
 
         <div id="conteudo-alto">
             <xsl:choose>
-                <xsl:when test="$body//dri:div[@rend='secondary recent-submission']">
+                <xsl:when test="//dri:body//dri:div[@rend='secondary recent-submission']">
                     <div id="dados-item">
                         <h3>
                             <span id="nome-item">
-                                <xsl:apply-templates select="$body//dri:div[@rend='secondary recent-submission']/dri:head"/>
+                                <xsl:apply-templates select="//dri:body//dri:div[@rend='secondary recent-submission']/dri:head"/>
                             </span>
                         </h3>
                     </div>
                 </xsl:when>
 
                         
-                <xsl:when test="$body//dri:div[@id='aspect.discovery.SimpleSearch.div.search-results']">
+                <xsl:when test="//dri:body//dri:div[@id='aspect.discovery.SimpleSearch.div.search-results']">
                     <div id="dados-item">
                         <h3>
-<!--                            <span id="nome-item"><xsl:apply-templates select="$body//dri:p[@id='aspect.discovery.SimpleSearch.p.result-query']/i18n:translate"/></span>-->
+<!--                            <span id="nome-item"><xsl:apply-templates select="//dri:body//dri:p[@id='aspect.discovery.SimpleSearch.p.result-query']/i18n:translate"/></span>-->
                             <span id="nome-item">
                                 <xsl:choose>
                                     <!-- If query is empty and there is no facet filter, display a possible different header. -->
@@ -793,9 +786,9 @@
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </span>
-<!--                            <span id="autoria-item"><xsl:copy-of select="$body//dri:p[@n='result-query'][@rend='result-query']"/></span>-->
+<!--                            <span id="autoria-item"><xsl:copy-of select="//dri:body//dri:p[@n='result-query'][@rend='result-query']"/></span>-->
                             <span id="autoria-item">
-                                <xsl:value-of select="$body//dri:field[@id='aspect.discovery.SimpleSearch.field.query']/dri:value"/>
+                                <xsl:value-of select="//dri:body//dri:field[@id='aspect.discovery.SimpleSearch.field.query']/dri:value"/>
                                 <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:list[@n='search-query']/dri:item/dri:field[@n='query']" mode="dados-item"/>
                                 <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:list[@n='search-query']/dri:item/dri:field[@n='facet-controls']/dri:field" mode="dados-item"/>
                             </span>
@@ -804,23 +797,23 @@
                 </xsl:when>
 
 
-                <xsl:when test="$body/dri:div[starts-with(@n, 'browse-by')]">
+                <xsl:when test="//dri:body/dri:div[starts-with(@n, 'browse-by')]">
                     <div id="dados-item">
                         <h3>
                             <span id="nome-item">
                                 <i18n:text>xmlui.ArtifactBrowser.AbstractSearch.browse_head</i18n:text>
                             </span>
                             <span id="autoria-item">
-                                <xsl:apply-templates select="$body/dri:div[starts-with(@n, 'browse-by')]/dri:head"/>
+                                <xsl:apply-templates select="//dri:body/dri:div[starts-with(@n, 'browse-by')]/dri:head"/>
                             </span>
                         </h3>
                     </div>
                 </xsl:when>
 
 
-                <xsl:when test="/dri:document/dri:body[@n='item-view']">
+                <xsl:when test="//dri:body//dri:div[@n='item-view']">
 
-                    <xsl:apply-templates select="/dri:document/dri:body/dri:div/dri:referenceSet/dri:reference" mode="headDetailView"/>
+                    <xsl:apply-templates select="//dri:body/dri:div[@n='item-view']/dri:referenceSet/dri:reference" mode="headDetailView"/>
 
                 </xsl:when>
 
@@ -828,7 +821,7 @@
                 <xsl:otherwise>
                     <div id="dados-item">
                         <h3>
-                            <span id="nome-item"></span>
+                            <span id="nome-item"><xsl:comment>No matching primary div.</xsl:comment></span>
 <!--                            <span id="nome-item"><i18n:text>xmlui.ArtifactBrowser.AbstractSearch.result_query_head</i18n:text></span>
                             <span id="autoria-item">palavras utilizadas na busca</span>-->
                         </h3>
@@ -838,17 +831,16 @@
 
 
             <xsl:call-template name="caixa-barra"/>
-<!--            <xsl:apply-templates select="$body/dri:div[@n='search']//dri:table[@n='search-controls']"/>-->
+<!--            <xsl:apply-templates select="//dri:body/dri:div[@n='search']//dri:table[@n='search-controls']"/>-->
         </div>
     </xsl:template>
 
 
     <xsl:template name="conteudo-central">
-        <xsl:param name="body"/>
         <div id="conteudo-central">
             <xsl:choose>
 
-                <xsl:when test="$body[@n='item-view']">
+                <xsl:when test="//dri:body/dri:div[@n='item-view']">
                     <xsl:call-template name="itemViewer"/>
                 </xsl:when>
 
@@ -863,7 +855,7 @@
                         </xsl:if>
 
         <!--                <xsl:call-template name="resultados"/>-->
-                        <xsl:apply-templates select="$body/dri:div"/>
+                        <xsl:apply-templates select="//dri:body/dri:div"/>
                     </div>
 
                     <xsl:apply-templates select="//dri:options"/>
@@ -874,10 +866,9 @@
 
 
     <xsl:template name="conteudo-baixo">
-        <xsl:param name="body"/>
         <div id="conteudo-baixo" class="borda">
             <xsl:call-template name="caixa-barra"/>
-<!--            <xsl:apply-templates select="$body/dri:div[@n='search']//dri:table[@n='search-controls']"/>-->
+<!--            <xsl:apply-templates select="//dri:body/dri:div[@n='search']//dri:table[@n='search-controls']"/>-->
         </div>
     </xsl:template>
 
@@ -897,14 +888,14 @@
 <!--                <xsl:apply-templates select="//dri:body/dri:div[starts-with(@n, 'browse-by-')]//dri:table[@n='browse-controls']"/>-->
                 <xsl:apply-templates select="//dri:body/dri:div[starts-with(@n, 'browse-by-')]/dri:div[@n='browse-controls']"/>
             </xsl:when>
-            <xsl:when test="/dri:document/dri:body[@n='item-view']">
-                <xsl:comment>Empty</xsl:comment>
-<!--                <xsl:apply-templates select="/dri:document/dri:body[@n='item-view']/dri:div" mode="viewControls"/>-->
+            <xsl:when test="/dri:document/dri:body/dri:div[@n='item-view']">
+                <xsl:comment>caixa-barra: empty for item-view.</xsl:comment>
+<!--                <xsl:apply-templates select="/dri:document/dri:body/dri:div[@n='item-view']" mode="viewControls"/>-->
 
 <!--                <xsl:call-template name="viewControls"/>-->
             </xsl:when>
             <xsl:otherwise>
-                <xsl:comment>Empty</xsl:comment>
+                <xsl:comment>caixa-barra: empty for everything else.</xsl:comment>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
