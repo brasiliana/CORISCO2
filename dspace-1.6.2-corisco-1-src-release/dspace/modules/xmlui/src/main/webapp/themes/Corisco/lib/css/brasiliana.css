@@ -2,28 +2,8 @@
 
 
 /*
-CSS desenvolvido para Brasiliana Digital
-
-organização do CSS
-1. tags gerais
-2. classes e ids, por 'ordem de aparição'
-
-propriedades: retirado do aloe studios (http://aloestudios.com/2009/02/order-of-the-day-css-properties/)
-   1. Display & Flow
-   2. Positioning
-   3. Dimensions
-   4. Margins, Padding, Borders, Outline
-   5. Typographic Styles
-   6. Backgrounds
-   7. Opacity, Cursors, Generated Content
-*/
-
-
-/*
-eric meyer css reset
-http://meyerweb.com/eric/tools/css/reset/index.html
-v1.0 | 20080212
-*/
+CSS Brasiliana Digital v.2
+Plataforma Corisco */
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -39,7 +19,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	border: 0;
 	outline: 0;
 	font-size: 100%;
-	/*vertical-align: baseline; modificação do original:*/vertical-align: middle;
+	vertical-align: baseline;
 	background: transparent;
 }
 body {
@@ -77,7 +57,7 @@ table {
 }
 
 /* ---------- para customização ---------- */
-html, body {font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #303030; background: #FFFFFF;}
+html, body {font-family:"lucida grande",lucida,tahoma,helvetica,arial,sans-serif; font-size: 12px; color: #303030; background: #FFFFFF;}
 p {font-size: 12px; line-height: 14px;}
 h2 {font-size: 14px; line-height: 18px; font-weight: normal;}
 h3 {font-size: 18px; font-weight: bold;}
@@ -85,9 +65,9 @@ h4 {font-size: 11px; font-weight: bold;}
 a, a:link, a:visited {text-decoration: none; color:inherit;}
 a:hover {text-decoration: underline; color: inherit;}
 
-.cor1, .cor1 a, td .info-resultado p a, .funcoes-resultado div a:hover {color: #FF0000;}
+.cor1, .cor1 a, td .info-resultado p a, .funcoes-resultado div a:hover {color: #F15A24;}
 .cor2, #cabecalho-barra a, #abas div a {color: #FFFFFF;}
-.funcoes-resultado div a, .dado-item a, li span a {color: #303030;}
+#cabecalho-menu a, .funcoes-resultado div a, .dado-item a, li span a {color: #303030;}
 
 .caixa {background: #E7E7E7;}
 .caixa2 {background: #FFDFDF;}
@@ -105,19 +85,19 @@ a:hover {text-decoration: underline; color: inherit;}
 
 /*classes e ids*/
 
-#pagina {position: relative; width: 950px; margin: 0 auto;}
+#pagina {}
 
-#cabecalho {height: 115px;}
+#cabecalho {height: 115px; width: 950px; margin: 0 auto;}
 
 	#cabecalho-menu {position: relative; height: 40px; font-size: 12px;}
 		#menu-esquerdo {position: absolute; top: 0; left: 0;}
-				#menu-esquerdo ul li {float: left; padding:15px 10px 0; border-top: none; border-left: none; border-bottom: none;}
-				#menu-esquerdo ul li.first {float: left; padding:15px 10px 0 0; border-top: none; border-left: none; border-bottom: none;}
+				#menu-esquerdo ul li {float: left; padding:16px 11px 0 14px; border-top: none; border-left: none; border-bottom: none;}
+				#menu-esquerdo ul li.first {float: left; padding:16px 11px 0 2px; border-top: none; border-left: none; border-bottom: none;}
 
-		#menu-direito {position: absolute; top: 0; right: 0; padding: 10px 0 0; text-align: right;}
+		#menu-direito {position: absolute; top: 0; right: 0; padding: 16px 2px 0 0; text-align: right;}
 		
-	#cabecalho-barra {position: relative; height: 75px;}
-		#detalhes-site {position: absolute; top: 22px; left: 50px; z-index: 1;}
+	#cabecalho-barra {position: relative;height: 75px;background-image:url(../img/cabecalho_background.png);background-repeat:repeat-x;background-position:center}
+		#detalhes-site {position: absolute;top:10px;z-index: 1;}
 		#cabecalho-busca {position: relative; padding: 24px 0 0 475px;}
 
             #formulario-busca-cabecalho {height: 24px;}
@@ -127,14 +107,14 @@ a:hover {text-decoration: underline; color: inherit;}
 						/*#selecionar-filtro input {border: none; background: none;}
 						#selecionar-filtro label {margin: 3px 0 0 5px;}*/
 						.selecionar-display {float: left; position: relative; width: 50px; font-size: 12px;}
-				#botao-enviar {float: left; width: 65px; height: 24px; margin-left: 6px; border: none; text-align: center; background: url(../img/buscar.png) no-repeat; cursor: pointer;}
+				#botao-enviar {float: left; width: 65px; height: 24px; margin-left: 6px; border: none; text-align: center; background: url(../img/buscar.png) no-repeat; cursor: pointer;font-size:13px;}
 					#botao-enviar:hover {background: url(../img/buscar_OVER.png) no-repeat;}
 			
 			#menu-busca {padding: 5px 0 0 5px;}
 			
-#conteudo {position: relative; height: auto; padding: 25px 0 0;}
+#conteudo {position: relative;  width: 950px; height: auto; padding: 25px 0 0; margin: 0 auto;}
 	
-/*	#conteudo-alto {padding: 0 0 25px;}*/
+	#conteudo-alto {padding: 0 0 25px; height: auto;}
 		
 		#dados-item {position: relative; height: auto; padding: 0 80px 15px 0; line-height: 24px;}
 			#autoria-item {font-weight: normal;}
@@ -147,38 +127,40 @@ a:hover {text-decoration: underline; color: inherit;}
 		/* visualizador */ #colecao-item {position: absolute; top: 20px; right: 0; text-align: right;}
 		
 		#conteudo-alto .caixa {position: relative; height: 35px; font-size: 12px; line-height: 25px;}
-		/* visualizador */ #visualizador-barra {background: url(../img/barra-visu-bg.png) center no-repeat;}
-		/* visualizador */ #visualizador-barra2 {background: url(../img/barra-visu-bg.png) center no-repeat;}
-			.modos, .modos_visualizador {float: left; width: 250px; height: 25px; margin-left: 10px; padding: 5px 0;}
+		/* visualizador */ #visualizador-barra {background: url(../img/barra-visu-bg.png) center no-repeat; margin-bottom: -25px;}
+		/* visualizador */ .visualizador-barra {background: url(../img/barra-visu-bg.png) center no-repeat;}
+		/* visualizador */ .visualizador-barra2 {background: url(../img/barra-visu-bg.png) center no-repeat; margin-bottom: -25px;}
+			.modos, .modos_visualizador {float: left; width: auto; min-width: 180px; height: 25px; margin-left: 10px; padding: 5px 5px;}
 				.modos span, .modos_visualizador span {float: left;}
 				.modos span img, .modos_visualizador span img {float: left; width: 25px; margin-left: 3px;}
 				.ocr {padding-left: 10px;}
-			.numero-resultados{float: left; width: 180px; margin: 0; padding: 5px 0;}
+			.numero-resultados{float: left; width: 220px; margin: 0; padding: 5px 0; text-align: center;}
             ul.links-paginacao{display: inline;}
             ul.links-paginacao li{display: inline;}
 			/* visualizador */
             .zoom {float: left; width: 100px; margin: 0; padding: 5px 0; text-align: center;}
             .paginacao {float: left; width: 260px; margin: 0; padding: 5px 0; text-align: center;}
 				.paginacao span {padding: 0 4px;}
-			.resultados-pagina {float: left; width: 140px; margin: 0; padding: 5px 0; text-align: center;}
-			.resultados-ordenar {float: left; width: auto; margin: 0; padding: 5px 0;}
+			.resultados-pagina {float: left; width: auto; margin: 0; padding: 5px 5px; text-align: center;}
+			.resultados-ordenar {float: right; width: auto; margin: 0; padding: 5px 5px;}
 				.resultados-ordenar span {float: left;}
 				.ordenar-crescente {width: 20px; height: 20px; padding: 0 ;}
 				.ordenar-decrescente {position: relative; width: 20px; height: 20px; padding: 0;}
 			/* visualizador */ .funcional {float: right; position: relative; width: auto; margin: 0; padding: 4px 0;}
 				/* visualizador */ .funcional span {float: left; padding: 4px 8px 0 0;}
-				/* visualizador */ #ficha-link {display: none; z-index: 50; position: absolute !important; top: 30px; left: -200px; width: 300px; height: auto !important; padding: 10px;}
+				/* visualizador */ #ficha-link {display: none; z-index: 50; position: absolute !important; top: 30px; left: -200px; width: auto; height: auto !important; padding: 10px;}
 				
 	#conteudo-central {height: auto;}
 		
 		/* -- visualizador -- */
 /*		#visualizador-paginas {height: auto; margin-top: -25px; padding: 0 0 10px; background: #DDDDDD;}*/
 		#visualizador-paginas {background: #DDDDDD;}
-			#caixas {height: 20px; padding: 8px 0;}
+                        #caixas {height: auto; padding: 0px 0 8px; display: inline-block;}
 				#caixas div {float: left; position: relative; height: 12px; margin-right: 5px; padding: 4px 8px; line-height: 12px; background: #000000; cursor: pointer;}
 					#ficha-imagens {z-index: 50; position: absolute !important; top: 20px; left: 0; width: 400px; height: auto !important; padding: 10px; display: none;}
 						.fechar {position: absolute; top: 10px; right: 10px; cursor: pointer;}
-				.info-visualizador {background: none !important;}
+				.info-visualizador {height: auto; background: none !important;}
+				.info-visualizador span {line-height: 1.5em;}
 		
 		#pagina-dupla {position: relative; padding-left: 35px; text-align: center;}
 			.voltar-pagina {position: absolute; left: 5px; top: 0; width: 20px;}
@@ -205,22 +187,23 @@ a:hover {text-decoration: underline; color: inherit;}
         #visualizador-livro {position: relative; min-height: 600px; background: black;
                               margin: 0px; left: 0px; top: 0px; padding: 0px; }
 
-        #IIPMooViewer {overflow: hidden; position: relative; font-family: arial, sans-serif; min-height: 600px;}
+        #IIPMooViewer {overflow: hidden; position: relative; font-family:"lucida grande",lucida,tahoma,helvetica,arial,sans-serif;; min-height: 600px; min-width: 600px; width: 100%;}
 
 		/* -- fim  -- */
 		
 		#coluna-resultados {float: left; width: 678px; height: auto; padding: 0 30px 0 0;}
 		
 			/*--- listas ---*/
-			.alfabeto {padding-bottom: 10px; font-size: 18px; font-weight: bold; text-align: center;}
+			.alfabeto {padding-bottom:10px; font-size: 18px; font-weight: bold; text-align: center;}
 				.alfabeto ul li {float: left; padding: 0 5px;}
 			#lista {clear: both; padding: 20px 50px; margin-bottom: 10px; border-right: none; border-left: none; font-size: 12px; line-height: 18px;}
 			
 			#abas {z-index: 20; position: relative; height: 45px; text-align: center; font-size: 12px; font-weight: bold;}
 				#abas .borda {float: left; width: 110px; height: 32px; margin: 9px 1px 1px 0; line-height: 32px; background: url(../img/aba_inativa.png) repeat-x;}
 				#aba-ativa {height: 45px !important; margin: 0 1px 0 0 !important; border-bottom: none !important; line-height: 45px !important; background: #FFFFFF !important;}
+                                        #aba-ativa a {color: #000000 !important;}
 			
-			#sem-resultados {height: 300px; z-index: 10; position: relative; padding-bottom: 35px; border-right: none; border-bottom: none;}
+			#sem-resultados {height: 200px; z-index: 10; position: relative; padding:80px 0 0 245px; border-right: none; border: none;font-weight:bold;font-size:14px;}
 
             #resultados {z-index: 10; position: relative; padding-bottom: 35px; border-right: none; border-bottom: none;}
 				
@@ -250,7 +233,7 @@ a:hover {text-decoration: underline; color: inherit;}
 							.thumb-resultado {width: 100%; text-align: center;}
 								.thumb-resultado img {max-width: 206px; max-height: 200px; margin: 0 auto;}
 				
-		#coluna-filtros {float: left; width: 242px; height: auto; padding-top: 17px;}
+		#coluna-filtros {float: left; width: 242px; height: auto; padding-top: 17px; padding-bottom: 17px;}
 			#titulo-busca, #titulo-coluna {position: relative; height: 28px; margin-bottom: 10px; line-height: 28px;}
 			#adicionar-busca {position: relative; padding-bottom: 30px;}/* height: 24px;}*/
 				#filtertype {z-index: 30; position: absolute; top: 2px; left: 140px; width: 70px; height: 20px; /*background: url(../img/filtro.png) no-repeat;*/}
@@ -266,15 +249,18 @@ a:hover {text-decoration: underline; color: inherit;}
 				.mais-filtro {position: absolute; top: 0; right: 0; cursor: pointer;}
 				#coluna-filtros div ul {margin-top: 5px; padding: 6px;}
 					.filtro-item {line-height: 14px; padding: 0 0 11px 18px; background: url(../img/mais.png) left top no-repeat;}
-							.ver-mais a {color: #FF0000 !important;}
+							.ver-mais a {color: #F15A24 !important;}
 					.lista-item {line-height: 14px; padding: 0 0 11px 18px; background: url(../img/seta.png) left top no-repeat;}
 
 			#titulo-listar {position: relative; height: 28px; margin-bottom: 0 !important; line-height: 28px;}
 				.caixa-listar {padding: 3px 0; border-bottom: 1px solid #A0A0A0;}
 					.caixa-listar ul {margin-top: 0 !important; padding-bottom: 0 !important; background: #E7E7E7;}
 					
-#conteudo-baixo {clear: both; position: relative; width: 950px; height: auto; padding: 0 0 25px; border-right: none; border-left: none; border-bottom: none;}
+#conteudo-baixo {clear: both; position: relative; width: 950px; height: auto; padding: 0 0 25px; border: none;}
 	#conteudo-baixo .caixa {position: relative; height: 35px; font-size: 12px; line-height: 25px;}
+
+#rodape {border-top:1px solid #A0A0A0;background:url(../img/footer_background.png) repeat scroll 0 0 transparent;height:100px;}
+#rodape p {font-size: 10px;width:950px;margin: 0 auto;padding-top:20px;}
 
 
 /*#iipviewer-help > ul > li > ul {list-style: circle inside !important;}*/
@@ -411,3 +397,5 @@ div#navcontainer {
   text-align: center;
   background: transparent;
 }
+div.numero-resultados li.current-page-link{font-weight:bold;color:#F15A24;}
+#BRpageview div.BRpagedivthumb_highlight{border:2px solid #F15A24;}
