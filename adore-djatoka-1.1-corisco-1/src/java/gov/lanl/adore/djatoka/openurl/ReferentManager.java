@@ -83,7 +83,7 @@ public class ReferentManager {
     
     /**
      * Initialize referent manager w/ resource resolver instance and properties.
-     * Example:ÊReferentManager.init((IReferentResolver) Class.forName(implClass).newInstance(), props);
+     * Example: ReferentManager.init((IReferentResolver) Class.forName(implClass).newInstance(), props);
      * @param referentResolver
      * @param props
      * @throws ResolverException

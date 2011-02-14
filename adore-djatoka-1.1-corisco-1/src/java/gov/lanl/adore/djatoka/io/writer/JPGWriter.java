@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2008  Los Alamos National Security, LLC.
+ * With modifications by Brasiliana Digital Library (http://brasiliana.usp.br), 2010.
  *
  * Los Alamos National Laboratory
  * Research Library
