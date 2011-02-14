@@ -47,8 +47,9 @@
 
     If both ramBufferSizeMB and maxBufferedDocs is set, then Lucene will flush based on whichever limit is hit first.
 
-    -->
     <ramBufferSizeMB>32</ramBufferSizeMB>
+    -->
+    <ramBufferSizeMB>512</ramBufferSizeMB>
     <maxMergeDocs>2147483647</maxMergeDocs>
     <maxFieldLength>10000</maxFieldLength>
     <writeLockTimeout>1000</writeLockTimeout>
@@ -99,7 +100,8 @@
   <mainIndex>
     <!-- options specific to the main on-disk lucene index -->
     <useCompoundFile>false</useCompoundFile>
-    <ramBufferSizeMB>32</ramBufferSizeMB>
+    <!--<ramBufferSizeMB>32</ramBufferSizeMB>-->
+    <ramBufferSizeMB>512</ramBufferSizeMB>
     <mergeFactor>10</mergeFactor>
     <!-- Deprecated -->
     <!--<maxBufferedDocs>1000</maxBufferedDocs>-->
@@ -145,6 +147,10 @@
       <maxTime>1000</maxTime>
     </autoCommit>
     -->
+    <autoCommit>
+      <maxDocs>10000</maxDocs>
+      <maxTime>10000</maxTime>
+    </autoCommit>
 
     <!-- The RunExecutableListener executes an external command.
          exe - the name of the executable to run
@@ -298,7 +304,7 @@
     <!-- Maximum number of searchers that may be warming in the background
       concurrently.  An error is returned if this limit is exceeded. Recommend
       1-2 for read-only slaves, higher for masters w/o cache warming. -->
-    <maxWarmingSearchers>2</maxWarmingSearchers>
+    <maxWarmingSearchers>3</maxWarmingSearchers>
 
   </query>
 
@@ -367,16 +373,20 @@
        <str name="version">2.1</str>
         -->
 
+        <!--
         <str name="hl">true</str>
         <str name="hl.fl">*</str>
         <str name="hl.fragsize">888</str>
         <str name="hl.mergeContiguous">true</str>
         <str name="hl.usePhraseHighLighter">true</str>
         <str name="hl.highlightMultiTerm">true</str>
+        -->
 
         <!--<str name="hl.formatter">simple</str>-->
+        <!--
         <str name="hl.simple.pre">&lt;span class="highlight"&gt;</str>
         <str name="hl.simple.post">&lt;/span&gt;</str>
+        -->
      </lst>
   </requestHandler>
 
@@ -393,16 +403,16 @@
      <str name="echoParams">explicit</str>
      <float name="tie">0.01</float>
      <str name="qf">
-        text^0.5 features^1.0 name^1.2 sku^1.5 id^10.0 manu^1.1 cat^1.4
+        text^0.5 features^1.0 name^1.2
      </str>
      <str name="pf">
-        text^0.2 features^1.1 name^1.5 manu^1.4 manu_exact^1.9
+        text^0.2 features^1.1 name^1.5
      </str>
      <str name="bf">
         ord(popularity)^0.5 recip(rord(price),1,1000,1000)^0.3
      </str>
      <str name="fl">
-        id,name,price,score
+        id,name,score
      </str>
      <str name="mm">
         2&lt;-1 5&lt;-2 6&lt;90%
@@ -410,12 +420,12 @@
      <int name="ps">100</int>
      <str name="q.alt">*:*</str>
      <!-- example highlighter config, enable per-query with hl=true -->
-     <str name="hl.fl">text features name</str>
+     <str name="hl.fl">text title_t</str>
      <!-- for this field, we want no fragmenting, just highlighting -->
      <str name="f.name.hl.fragsize">0</str>
      <!-- instructs Solr to return the field itself if no query terms are
           found -->
-     <str name="f.name.hl.alternateField">name</str>
+     <str name="f.name.hl.alternateField">title_t</str>
      <str name="f.text.hl.fragmenter">regex</str> <!-- defined below -->
     </lst>
   </requestHandler>
@@ -427,7 +437,7 @@
     <lst name="defaults">
      <str name="defType">dismax</str>
      <str name="echoParams">explicit</str>
-     <str name="qf">text^0.5 features^1.0 name^1.2 sku^1.5 id^10.0</str>
+     <str name="qf">text^0.5 id^10.0</str>
      <str name="mm">2&lt;-1 5&lt;-2 6&lt;90%</str>
      <!-- This is an example of using Date Math to specify a constantly
           moving date range in a config...
@@ -475,8 +485,10 @@
   </requestHandler>
 
   <!-- MRD added to support the Collapsing requirements for Dryad -->
-  <searchComponent name="query"
+  <searchComponent name="query" class="org.apache.solr.handler.component.QueryComponent" />
+        <!--
           class="org.apache.solr.handler.component.CollapseComponent" />
+        -->
   <!--
    Search components are registered to SolrCore and used by Search Handlers
 
@@ -597,8 +609,9 @@
   <!-- CSV update handler, loaded on demand -->
   <requestHandler name="/update/csv" class="solr.CSVRequestHandler" startup="lazy" />
 
-
+  <!--
   <requestHandler name="/admin/luke"       class="org.apache.solr.handler.admin.LukeRequestHandler" />
+  -->
 
   <!--
    Admin Handlers - This will register all the standard admin RequestHandlers.  Adding
@@ -705,7 +718,7 @@
 
   <!-- config for the admin interface -->
   <admin>
-    <defaultQuery>solr</defaultQuery>
+    <defaultQuery>brasil</defaultQuery>
 
     <!-- configure a healthcheck file for servers behind a loadbalancer
     <healthcheck type="file">server-enabled</healthcheck>

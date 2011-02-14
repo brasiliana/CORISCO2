@@ -395,10 +395,11 @@ public class ItemExport
                 // make it this far, now start exporting
                 writeMetadata(c, myItem, itemDir, migrate);
                 writeBitstreams(c, myItem, itemDir);
-                if (!migrate)
+                /*if (!migrate)
                 {
                     writeHandle(c, myItem, itemDir);
-                }
+                }*/
+                writeHandle(c, myItem, itemDir);
             }
             else
             {
@@ -514,7 +515,8 @@ public class ItemExport
                      (dcv.element.equals("identifier") && qualifier.equals("uri") &&
                       (dcv.value.startsWith("http://hdl.handle.net/" +
                        ConfigurationManager.getProperty("handle.prefix") + "/"))) ||
-                     (dcv.element.equals("description") && qualifier.equals("provenance")) ||
+                     (dcv.element.equals("description") && qualifier.equals("provenance") &&
+                       dcv.value.startsWith("Made available in DSpace")) ||
                      (dcv.element.equals("format") && qualifier.equals("extent")) ||
                      (dcv.element.equals("format") && qualifier.equals("mimetype")))))
                 {
@@ -534,10 +536,7 @@ public class ItemExport
             }
 
             // When migrating, only keep date.issued if it is different to date.accessioned
-            if ((migrate) &&
-                (dateIssued != null) &&
-                (dateAccessioned != null) &&
-                (!dateIssued.equals(dateAccessioned)))
+            if ((migrate) && (dateIssued != null) && ((dateAccessioned != null && !dateIssued.equals(dateAccessioned)) || dateAccessioned == null))
             {
                 utf8 = ("  <dcvalue element=\"date\" "
                         + "qualifier=\"issued\">"

@@ -84,14 +84,14 @@
     <xsl:variable name="djatoka-path" select="concat($theme-path,'/lib/Djatoka/')"/>
     <xsl:variable name="bookreader-path" select="concat($theme-path,'/lib/BookReader/')"/>
 
-    <xsl:variable name="server-url"
-        select="concat(/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='scheme'],
+    <xsl:variable name="server-url">
+        <xsl:value-of select="concat(/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='scheme'],
           '://',
-          /dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='serverName'],
-          ':',
-          /dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='serverPort']
-          
-          )"/>
+          /dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='serverName'])"/>
+        <xsl:if test="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='serverPort'] != '80'">
+            <xsl:value-of select="concat( ':', /dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='request'][@qualifier='serverPort'])"/>
+        </xsl:if>
+    </xsl:variable>
 
     <xsl:variable name="absolute-base-url" select="concat($server-url, $context-path)"/>
     <xsl:variable name="djatoka-resolver-url" select="concat($server-url, '/djatoka/resolver')"/>

@@ -142,6 +142,7 @@
          default constructor via the class attribute on the analyzer element
     <fieldType name="text_greek" class="solr.TextField">
       <analyzer class="org.apache.lucene.analysis.el.GreekAnalyzer"/>
+      <analyzer class="org.apache.lucene.analysis.br.BrazilianAnalyzer"/>
     </fieldType>
     -->
 
@@ -161,6 +162,10 @@
         -->
     <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
+        <!--
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
+        <tokenizer class="solr.NGramTokenizerFactory" minGramSize="3" maxGramSize="15"/>
+        -->
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
         <!-- in this example, we will only use synonyms at query time
         <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
@@ -173,18 +178,27 @@
         <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1" preserveOriginal="1" splitOnNumerics="0"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.BrazilianStemFilterFactory"/>
+        <!--
         <filter class="solr.EnglishPorterFilterFactory" protected="protwords.txt"/>
+        -->
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+        <filter class="solr.ASCIIFoldingFilterFactory"/>
       </analyzer>
       <analyzer type="query">
+        <!--
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
+        -->
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
         <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
         <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="0" catenateAll="0" splitOnCaseChange="1" preserveOriginal="1" splitOnNumerics="0"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.BrazilianStemFilterFactory"/>
+        <!--
         <filter class="solr.EnglishPorterFilterFactory" protected="protwords.txt"/>
+        -->
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+        <filter class="solr.ASCIIFoldingFilterFactory"/>
       </analyzer>
     </fieldType>
 
@@ -295,10 +309,12 @@
         <filter class="solr.LowerCaseFilterFactory" />
         <!-- The TrimFilter removes any leading or trailing whitespace -->
         <filter class="solr.TrimFilterFactory" />
+        <filter class="solr.ASCIIFoldingFilterFactory"/>
       </analyzer>
     </fieldType>
 
 
+    <!--
     <fieldType name="edgytext" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.KeywordTokenizerFactory"/>
@@ -310,6 +326,7 @@
         <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>
+    -->
 
 
     <!-- since fields of this type are by default not stored or indexed, any data added to
@@ -371,17 +388,24 @@
       -->
     <field name="dateissued.year"  type="sint" indexed="true" stored="true" multiValued="false" omitNorms="true" />
     <field name="dateissued"  type="date" indexed="true" stored="true" multiValued="false" />
-    <copyField source="dc.date.issued" dest="dateissued"/>
     <field name="dateaccessioned.year"  type="sint" indexed="true" stored="true" multiValued="false" omitNorms="true" />
     <field name="dateaccessioned"  type="date" indexed="true" stored="true" multiValued="false" />
-    <copyField source="dc.date.accessioned" dest="dateaccessioned"/>
 
+    <!--
     <field name="title" type="lowerCaseSort" indexed="true" stored="true" multiValued="true" omitNorms="true" />
+    <copyField source="dc.title" dest="title"/>
+    -->
+    <!--
+        "name" is where the titles of communities and collections are stored for indexing.
+    -->
+
     <field name="ispartof" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
 
 
+    <!--
     <field name="dc.title_e" type="edgytext" indexed="true" stored="true" multiValued="true" omitNorms="true" omitTermFreqAndPositions="true" />
     <copyField source="dc.title_t" dest="dc.title_e" />
+    -->
 
      <!--
      DRYAD FACETS
@@ -390,23 +414,15 @@
 
      -->
      <field name="author" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
-     <copyField source="dc.creator" dest="author"/>
-     <copyField source="dc.contributor.author" dest="author"/>
-     <copyField source="dc.contributor*" dest="author_t"/>
 
      <field name="keyword" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
-     <copyField source="dc.subject" dest="keyword"/>
 
      <field name="type" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-     <copyField source="dc.type" dest="type"/>
 
      <field name="taxon" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
-     <copyField source="dwc.ScientificName" dest="taxon"/>
-     <copyField source="dwc.ScientificName" dest="text"/>
      
      
      <field name="publisher" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
-     <copyField source="dc.publisher" dest="publisher"/>
 
 <!--
    dc.coverage.spatial
@@ -419,9 +435,7 @@
 
     <field name="dc.contributor" type="string" indexed="true" stored="true" multiValued="true"/>
     <dynamicField  name="dc.contributor.*" type="string" indexed="true" stored="true" multiValued="true"/>
-    <copyField source="dc.creator" dest="dc.contributor.author"/>
     <field  name="dc.contributor.author_t" type="text" indexed="true" stored="true" multiValued="true"/>
-    <copyField source="dc.contributor.*" dest="dc.contributor.author_t"/>
 
 
     <!-- explicitly defines dc.date.issued, accessioned, available for searching and sorting -->
@@ -487,10 +501,9 @@
         <!-- index all other description fields -->
     <field name="dc.title" type="string" indexed="true" stored="true" multiValued="true"/>
     <dynamicField  name="dc.title.*" type="string" indexed="true" stored="true" multiValued="true"/>
-    <copyField source="dc.title*" dest="dc.title_t"/>
-    <copyField source="dc.title*" dest="dc.title_lc"/>
 
      <!--
+    <field name="dc.title" type="string" indexed="true" stored="true" multiValued="true"/>
 65	dc.title.alternative	Varying (or substitute) form of title proper appearing in item, e.g. abbreviation or translation
 
 64	dc.title	Title statement/title proper.
@@ -562,6 +575,20 @@
    <!--<copyField source="features" dest="text"/>-->
    <!--<copyField source="includes" dest="text"/>-->
 
+    <copyField source="dc.date.issued" dest="dateissued"/>
+    <copyField source="dc.date.accessioned" dest="dateaccessioned"/>
+    <copyField source="name" dest="dc.title"/>
+     <copyField source="dc.creator" dest="author"/>
+     <copyField source="dc.contributor.author" dest="author"/>
+     <copyField source="dc.contributor*" dest="author_t"/>
+     <copyField source="dc.subject" dest="keyword"/>
+     <copyField source="dc.type" dest="type"/>
+     <copyField source="dc.publisher" dest="publisher"/>
+    <copyField source="dc.creator" dest="dc.contributor.author"/>
+    <copyField source="dc.contributor.*" dest="dc.contributor.author_t"/>
+    <copyField source="dc.title*" dest="dc.title_t"/>
+    <copyField source="dc.title" dest="dc.title_lc"/>
+
   <!-- ugh, can't we have regex patterns or something? -->
   <copyField source="t*" dest="text"/>
   <copyField source="a*" dest="text"/>
@@ -583,6 +610,10 @@
   <copyField source="dc.date*" dest="text"/>
   <copyField source="date*" dest="text"/>
   <copyField source="dc.c*" dest="text"/>
+
+  <copyField source="dateissued.year" dest="text"/>
+  <copyField source="dc.title_t" dest="text"/>
+  <copyField source="dc.title" dest="text"/>
 
   <copyField source="*" dest="text"/>
 

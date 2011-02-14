@@ -228,24 +228,6 @@
             </xsl:for-each>
 
 
-            <!-- Add a google analytics script if the key is present -->
-            <xsl:if test="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']">
-                <script type="text/javascript">
-                    <xsl:text>var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");</xsl:text>
-                    <xsl:text>document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</xsl:text>
-                </script>
-
-                <script type="text/javascript">
-                    <xsl:text>try {</xsl:text>
-                    <xsl:text>var pageTracker = _gat._getTracker("</xsl:text>
-                    <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']"/>
-                    <xsl:text>");</xsl:text>
-                    <xsl:text>pageTracker._trackPageview();</xsl:text>
-                    <xsl:text>} catch(err) {}</xsl:text>
-                </script>
-            </xsl:if>
-            
-            
             <!-- Add the title in -->
             <xsl:variable name="page_title" select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='title']" />
             <title>
@@ -265,6 +247,45 @@
                               disable-output-escaping="yes"/>
             </xsl:if>
             
+
+            <!-- Add a google analytics script if the key is present -->
+            <!--
+            <xsl:if test="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']">
+                <script type="text/javascript">
+                    <xsl:text>var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");</xsl:text>
+                    <xsl:text>document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</xsl:text>
+                </script>
+
+                <script type="text/javascript">
+                    <xsl:text>try {</xsl:text>
+                    <xsl:text>var pageTracker = _gat._getTracker("</xsl:text>
+                    <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']"/>
+                    <xsl:text>");</xsl:text>
+                    <xsl:text>pageTracker._trackPageview();</xsl:text>
+                    <xsl:text>} catch(err) {}</xsl:text>
+                </script>
+            </xsl:if>
+            -->
+            <!-- Switching to new asynchronous code. -->
+            <xsl:if test="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']">
+                <script type="text/javascript">
+                    <xsl:text>
+                    var _gaq = _gaq || [];
+                    _gaq.push(['_setAccount', '</xsl:text>
+                    <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='google'][@qualifier='analytics']"/>
+                    <xsl:text>']);
+                    _gaq.push(['_trackPageview']);
+            
+                    (function() {
+                        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                    })();
+                    </xsl:text>
+                </script>
+            </xsl:if>
+            
+            
         </head>
     </xsl:template>
     
@@ -280,7 +301,9 @@
                     <h1 id="site-logo">
                         <a>
                             <xsl:attribute name="href">
+                                <!--
                                 <xsl:value-of select="$context-path"/>
+                                -->
                                 <xsl:text>/</xsl:text>
                             </xsl:attribute>
                             <img id="imagem-logo">
@@ -444,6 +467,7 @@
     <xsl:template name="buildFooter">
         <div id="rodape">
             <i18n:text>xmlui.dri2xhtml.structural.footer-promotional</i18n:text>
+            <!--
             <div id="ds-footer-links">
                 <a>
                     <xsl:attribute name="href">
@@ -461,6 +485,7 @@
                     <i18n:text>xmlui.dri2xhtml.structural.feedback-link</i18n:text>
                 </a>
             </div>
+            -->
             <!--Invisible link to HTML sitemap (for search engines) -->
             <a>
                 <xsl:attribute name="href">
@@ -696,6 +721,7 @@
 
     <xsl:template match="dri:div[@id='aspect.discovery.CommunityViewer.div.community-view']" priority="10">
 <!--        COMMUNITY-VIEW-->
+        <xsl:apply-templates />
     </xsl:template>
 
     <xsl:template match="dri:div[@id='aspect.discovery.CommunityRecentSubmissions.div.community-recent-submission']" priority="10">
@@ -756,9 +782,29 @@
 
 
     <xsl:template name="conteudo-alto">
+        <xsl:variable name="container-handle">
+            <xsl:value-of select="substring-after(/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='focus'][@qualifier='container'], ':')"/>
+        </xsl:variable>
 
         <div id="conteudo-alto">
             <xsl:choose>
+
+                <!-- Render collection metadata, but only if it is not a top level collection. -->
+                <xsl:when test="//dri:body/dri:div[@id='aspect.discovery.CollectionViewer.div.collection-home']
+                                and //dri:options/dri:list[@n='discovery-location']/dri:list[@n='location']/dri:item[@rend='selected']/@n != $container-handle">
+                    <!--
+                    <xsl:apply-templates select="//dri:body/dri:div[@id='aspect.discovery.CollectionViewer.div.collection-home']/dri:head"/>
+                    -->
+                    <xsl:apply-templates select="//dri:body/dri:div/dri:div[@n='collection-view']/dri:referenceSet[@type='detailView']/dri:reference" mode="headDetailView"/>
+                    <div id="dados-item">
+                        <h3>
+                            <span id="nome-item">
+                                <xsl:apply-templates select="//dri:body//dri:div[@rend='secondary recent-submission']/dri:head"/>
+                            </span>
+                        </h3>
+                    </div>
+                </xsl:when>
+
                 <xsl:when test="//dri:body//dri:div[@rend='secondary recent-submission']">
                     <div id="dados-item">
                         <h3>
@@ -769,7 +815,6 @@
                     </div>
                 </xsl:when>
 
-                        
                 <xsl:when test="//dri:body//dri:div[@id='aspect.discovery.SimpleSearch.div.search-results']">
                     <div id="dados-item">
                         <h3>
@@ -867,7 +912,9 @@
 
     <xsl:template name="conteudo-baixo">
         <div id="conteudo-baixo" class="borda">
-            <xsl:call-template name="caixa-barra"/>
+            <xsl:call-template name="caixa-barra">
+                <xsl:with-param name="position" select="'bottom'"/>
+            </xsl:call-template>
 <!--            <xsl:apply-templates select="//dri:body/dri:div[@n='search']//dri:table[@n='search-controls']"/>-->
         </div>
     </xsl:template>
@@ -880,6 +927,7 @@
 
 <!--TODO-->
     <xsl:template name="caixa-barra">
+        <xsl:param name="position" select="'top'"/>
         <xsl:choose>
             <xsl:when test="/dri:document/dri:body/dri:div[@n='search']">
                 <xsl:apply-templates select="//dri:body/dri:div[@n='search']//dri:table[@n='search-controls']"/>
@@ -889,13 +937,14 @@
                 <xsl:apply-templates select="//dri:body/dri:div[starts-with(@n, 'browse-by-')]/dri:div[@n='browse-controls']"/>
             </xsl:when>
             <xsl:when test="/dri:document/dri:body/dri:div[@n='item-view']">
-                <xsl:comment>caixa-barra: empty for item-view.</xsl:comment>
+                <xsl:comment>item-view empty</xsl:comment>
+                <xsl:if test="$position = 'bottom'">
+                    <div class="visualizador-barra caixa"><xsl:comment>item-view</xsl:comment></div>
 <!--                <xsl:apply-templates select="/dri:document/dri:body/dri:div[@n='item-view']" mode="viewControls"/>-->
-
-<!--                <xsl:call-template name="viewControls"/>-->
+                </xsl:if>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:comment>caixa-barra: empty for everything else.</xsl:comment>
+                <xsl:comment>Empty</xsl:comment>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -917,118 +966,10 @@
         <div class="caixa">
             <xsl:apply-templates select="dri:p[@rend='hidden']"/>
             <xsl:apply-templates select="dri:table"/>
+            <!--<xsl:apply-templates select="../dri:div[@n='browse-navigation']/dri:p[@rend='hidden']"/>
+            TESTE8-->
         </div>
     </xsl:template>
-
-
-    <xsl:template name="viewControls">
-        <div class="caixa" id="visualizador-barra">
-            <div class="modos_visualizador">
-                <span class="barra-texto">Modos de visualização:</span>
-                <span class="pagina-unica">
-                    <img>
-                        <xsl:attribute name="src">
-                            <xsl:value-of select="$images-path"/>
-                            <xsl:text>/modo_pg_unicaON.png</xsl:text>
-                        </xsl:attribute>
-                        <xsl:attribute name="onClick">
-                            <xsl:text>br.switchMode(1); return false;</xsl:text>
-                        </xsl:attribute>
-                    </img>
-                </span>
-                <span class="mosaico">
-                    <img>
-                        <xsl:attribute name="src">
-                            <xsl:value-of select="$images-path"/>
-                            <xsl:text>/modo_mosaico.png</xsl:text>
-                        </xsl:attribute>
-                        <xsl:attribute name="onClick">
-                            <xsl:text>br.switchMode(3); return false;</xsl:text>
-                        </xsl:attribute>
-                    </img>
-                </span>
-                <span class="pagina-dupla">
-                    <img>
-                        <xsl:attribute name="src">
-                            <xsl:value-of select="$images-path"/>
-                            <xsl:text>/modo_pg_dupla.png</xsl:text>
-                        </xsl:attribute>
-                        <xsl:attribute name="onClick">
-                            <xsl:text>br.switchMode(2); return false;</xsl:text>
-                        </xsl:attribute>
-                    </img>
-                </span>
-                <!-- adicionei classe OCR -->
-                <span class="ocr">
-                    <img>
-                        <xsl:attribute name="src">
-                            <xsl:value-of select="$images-path"/>
-                            <xsl:text>/modo_ocr.png</xsl:text>
-                        </xsl:attribute>
-<!--                        <xsl:attribute name="onClick">
-                            <xsl:text>br.switchMode(2); return false;</xsl:text>
-                        </xsl:attribute>-->
-                    </img>
-                </span>
-            </div>
-            <div class="paginacao">
-                <span class="barra-texto">Páginas</span>
-						<!-- tirei ul e deixei span pra poder alinhar centralizado e porque não sei se isso consiste em uma lista
-						tirei span paginacao links
-						mudei o modo de navegação... vejam se vocês gostam. achei o outro meio fora do usual -->
-                <span class="primeira-pagina">
-                    <a>&lt;&lt;</a>
-                </span>
-                <span class="pagina-anterior">
-                    <a>&lt;</a>
-                </span>
-                <span class="pagina-link">
-                    <a>5</a>
-                </span>
-                <span class="pagina-link">
-                    <a>6</a>
-                </span>
-                <span class="pagina-atual">
-                    <a>7</a>
-                </span>
-                <span class="pagina-link">
-                    <a>8</a>
-                </span>
-                <span class="proxima-pagina">
-                    <a>&gt;</a>
-                </span>
-                <span class="ultima-pagina">
-                    <a>&gt;&gt;</a>
-                </span>
-            </div>
-					<!-- utilizei classe resultados-pagina, como no resultado de busca -->
-            <div class="resultados-pagina">
-                <span class="barra-texto">Ir à página:</span>
-                <select class="selecionar">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
-            <div class="funcional">
-                <span class="imprimir">
-                    <img src="{$images-path}/func_imprimir.png"/>
-                </span>
-                <span class="baixar">
-                    <img src="{$images-path}/func_baixar.png"/>
-                </span>
-                <span class="citar">
-                    <img src="{$images-path}/func_citar.png"/>
-                </span>
-                <span class="linkar">
-                    <img src="{$images-path}/func_link.png"/>
-                </span>
-            </div>
-        </div>
-    </xsl:template>
-
 
     <xsl:template name="itemViewer">
         <div id="visualizador-paginas">
@@ -1071,11 +1012,42 @@
 
 
     <xsl:template match="dri:item" mode="tabList">
+        <xsl:variable name="title">
+            <xsl:choose>
+                <xsl:when test="@n = '1918/1'">
+                    <!-- Outro título -->
+                    <i18n:text>xmlui.general.main_tab</i18n:text>
+                    <xsl:text> (</xsl:text>
+                    <xsl:value-of select="substring-after(., '(')"/>
+                </xsl:when>
+                <xsl:when test="@n = '1918/5'">
+                    <!-- Esconder (hide/skip) -->
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:choose>
+                        <xsl:when test="string-length(dri:xref) &gt; 0">
+                            <xsl:value-of select="dri:xref"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <!--<i18n:text>xmlui.dri2xhtml.METS-1.0.no-title</i18n:text>-->
+                            <xsl:value-of select="."/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        
+        <xsl:if test="$title != ''">
         <xsl:choose>
             <xsl:when test="@rend='selected'">
                 <div id="aba-ativa" class="borda">
                     <span>
-                        <xsl:value-of select="."/>
+                        <a>
+                            <xsl:attribute name="href">
+                                <xsl:value-of select="dri:xref/@target"/>
+                            </xsl:attribute>
+                            <xsl:copy-of select="$title"/>
+                        </a>
                     </span>
                 </div>
             </xsl:when>
@@ -1083,7 +1055,7 @@
                 <div class="borda">
                     <h4>
                         <span class="cor2" id="zero">
-                            <xsl:value-of select="."/>
+                            <xsl:copy-of select="$title"/>
                         </span>
                     </h4>
                 </div>
@@ -1096,20 +1068,14 @@
                                 <xsl:attribute name="href">
                                     <xsl:value-of select="dri:xref/@target"/>
                                 </xsl:attribute>
-                                <xsl:choose>
-                                    <xsl:when test="string-length(dri:xref) &gt; 0">
-                                        <xsl:value-of select="dri:xref"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <i18n:text>xmlui.dri2xhtml.METS-1.0.no-title</i18n:text>
-                                    </xsl:otherwise>
-                                </xsl:choose>
+                                <xsl:copy-of select="$title"/>
                             </a>
                         </span>
                     </h4>
                 </div>
             </xsl:otherwise>
         </xsl:choose>
+        </xsl:if>
 
 		<!--Display collection strengths (item counts) if they exist-->
 <!--        <span class="total-colecao">
@@ -2807,6 +2773,12 @@
         </h3>
     </xsl:template>-->
     
+    <xsl:template match="dri:list[@n='jump-list']/dri:head" priority="1">
+        <span>
+            <xsl:apply-templates />
+        </span>
+    </xsl:template>
+    
 <!--    <xsl:template match="dri:list/dri:list/dri:head" priority="3" mode="nested">
         <h4>
             <xsl:call-template name="standardAttributes">
@@ -2875,7 +2847,7 @@
         <div class="alfabeto cor1">
             <xsl:apply-templates select="dri:div[@n='browse-navigation']/dri:list"/>
         </div>
-        <div id="lista" class="caixa-borda2 cor1">
+        <div id="lista" class="caixa-borda cor1">
             <xsl:apply-templates select="dri:div[starts-with(@n, 'browse-by-')]/dri:table" />
             <xsl:comment>&#160;</xsl:comment>
         </div>
@@ -3567,7 +3539,10 @@
                 <xsl:attribute name="selected">selected</xsl:attribute>
             </xsl:if>
             <xsl:apply-templates />
-        </option>-->
+        </option>
+
+        <input type="button" onclick="javascript:submit();">
+        -->
 
 
         <input type="submit">
@@ -3594,6 +3569,29 @@
             <xsl:if test="i18n:text">
                 <xsl:attribute name="i18n:attr">title</xsl:attribute>
             </xsl:if>
+        </input>
+
+
+        <!-- If this is the last option in the field, add a hidden input with the currently selected value. -->
+        <xsl:if test="count(preceding-sibling::dri:option)+1 = count(../dri:option)">
+            <!--
+            <xsl:comment><xsl:value-of select="count(preceding-sibling::dri:option)+1"/></xsl:comment>
+            <xsl:comment><xsl:value-of select="count(../dri:option)"/></xsl:comment>
+            -->
+            <xsl:variable name="curOption">
+                <xsl:copy-of select="../dri:option[@returnValue = ../dri:value[@type='option']/@option]"/>
+            </xsl:variable>
+
+            <input type="hidden">
+                <xsl:attribute name="name">
+                    <xsl:value-of select="../@n"/>
+                </xsl:attribute>
+                <xsl:attribute name="value">
+                    <xsl:value-of select="../dri:option[@returnValue = ../dri:value[@type='option']/@option]/@returnValue"/>
+                </xsl:attribute>
+            </input>
+        </xsl:if>
+
 
 <!--            <xsl:choose>
                 <xsl:when test="../dri:value[@type='option'][@option = current()/@returnValue]">
@@ -3610,7 +3608,7 @@
                     </xsl:attribute>
                 </xsl:otherwise>
             </xsl:choose>-->
-        </input>
+
 <!--        <input type="image">
             <xsl:attribute name="name">
                 <xsl:value-of select="../@n"/>
@@ -4454,11 +4452,12 @@
         moved to the list model. A special theme, called TableTheme, has beeen created for the purpose of
         preserving the pioneer model. -->
 <!--CHANGED-->
-    <xsl:template match="dri:referenceSet[@type = 'summaryList'][dri:reference[not(@type='DSpace Item')]]" priority="3">
+    <xsl:template match="dri:referenceSet[@type = 'summaryList'][dri:reference[not(@type='DSpace Item')]]" priority="1">
         <!--NEVER SHOW RESULTS FOR COMMUNITIES AND COLLECTIONS NAMES.-->
     </xsl:template>
 
-    <xsl:template match="dri:referenceSet[@type = 'summaryList' and dri:reference/@type='DSpace Item']" priority="2">
+    <!--<xsl:template match="dri:referenceSet[@type = 'summaryList' and dri:reference/@type='DSpace Item']" priority="2">-->
+    <xsl:template match="dri:referenceSet[@type = 'summaryList']" priority="2">
 <!--        <xsl:apply-templates select="dri:head"/>-->
         <div id="resultados" class="borda">
             <xsl:choose>
@@ -4515,10 +4514,13 @@
 
     <!-- First, the detail list case -->
     <xsl:template match="dri:referenceSet[@type = 'detailList']" priority="2">
+        <xsl:comment>detailList</xsl:comment>
+        <!--
         <xsl:apply-templates select="dri:head"/>
         <ul class="ds-referenceSet-list">
             <xsl:apply-templates select="*[not(name()='head')]" mode="detailList"/>
         </ul>
+        -->
     </xsl:template>
     
     
@@ -4701,7 +4703,8 @@
                 <xsl:apply-templates select="document($externalMetadataURL)" mode="detailView"/>
             </xsl:otherwise>
         </xsl:choose>
-<!--        <xsl:apply-templates />-->
+
+        <xsl:apply-templates />
     </xsl:template>
     
 
