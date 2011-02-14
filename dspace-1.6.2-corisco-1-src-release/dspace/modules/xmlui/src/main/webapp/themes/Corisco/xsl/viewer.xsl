@@ -122,6 +122,7 @@
             <script type="text/javascript">
                 // Read the querystring parameters
                 var qsParm = new Array();
+                qsParm["serverURL"] = "<xsl:value-of select="$djatoka-resolver-url"/>";
                 qsParm["item"] = "<xsl:value-of select="//mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='DSpace Item']//mets:fptr[@FILEID=$fileid]/@FILEINTERNALID"/>";
                 qsParm["alt"] = "Visualizador de livros";
                 qsParm["title"] = "<xsl:value-of select="/mets:METS/mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']/mets:xmlData/dim:dim/dim:field[@element='title' and not(@qualifier)]"/>";

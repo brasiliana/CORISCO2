@@ -280,69 +280,51 @@ public abstract class AbstractSearch extends AbstractFiltersTransformer {
                     lastItemIndex, currentPage, pagesTotal, pageURLMask);
 
             // Look for any communities or collections in the mix
+            // UPDATE: mix everything. It's what is expected from a search.
             ReferenceSet referenceSet = null;
-
-
+            /*
             boolean resultsContainsBothContainersAndItems = false;
-
             for (SolrDocument doc : solrResults) {
+                DSpaceObject resultDSO = SearchUtils.findDSpaceObject(context, doc);
 
-                DSpaceObject resultDSO =
-                        SearchUtils.findDSpaceObject(context, doc);
-
-                if (resultDSO instanceof Community
-                        || resultDSO instanceof Collection) {
+                if (resultDSO instanceof Community || resultDSO instanceof Collection) {
                     if (referenceSet == null) {
                         referenceSet = results.addReferenceSet("search-results-repository",
                                 ReferenceSet.TYPE_SUMMARY_LIST, null, "repository-search-results");
                         // Set a heading showing that we will be listing containers that matched:
                         referenceSet.setHead(T_head2);
                         resultsContainsBothContainersAndItems = true;
-
                     }
                     referenceSet.addReference(resultDSO);
                 }
-            }
-
+            } //*/
 
             // Put in palce top level referenceset
             referenceSet = results.addReferenceSet("search-results-repository",
                     ReferenceSet.TYPE_SUMMARY_LIST, null, "repository-search-results");
 
-
             for (SolrDocument doc : solrResults) {
-
                 DSpaceObject resultDSO = SearchUtils.findDSpaceObject(context, doc);
 
-                if (resultDSO instanceof Item) {
-
+                //if (resultDSO instanceof Item) {
 
                     String group_by = this.getParameterGroup();
-
-
                     // If we are grouping, attempt to acquire the dc.isPartOf parent of the Item and group on it.
                     // Otherwise, Group on the current Item.
-
                     // TODO: this is a hack to always make sure any subItem is grouped under its parent
                     if (!group_by.equals("none")) {
-
                         Item parent = getParent((Item) resultDSO);
-
                         // if parent not null, use parent otherwise use existing item.
                         if (parent != null) {
                             Reference parentRef = referenceSet.addReference(parent);
                             addCollapsedDocuments(parentRef, parent, doc);
-                        }
-                        else
-                        {
-                            referenceSet.addReference(resultDSO);
-                        }
-
                     } else {
                         referenceSet.addReference(resultDSO);
-
+                        }
+                    } else {
+                        referenceSet.addReference(resultDSO);
                     }
-                }
+                //}
             }
 
             // Add hit highlighting information
@@ -613,7 +595,7 @@ public abstract class AbstractSearch extends AbstractFiltersTransformer {
             // TODO: This is a hack to get Publications (Articles) to always be at the top of Groups.
             // TODO: I think the can be more transparently done in the solr solrconfig.xml with DISMAX and boosting
             /** sort in groups to get publications to top */
-            queryArgs.addSortField("dc.type", SolrQuery.ORDER.asc);
+            //queryArgs.addSortField("dc.type", SolrQuery.ORDER.asc);
 
         }
 
@@ -633,6 +615,7 @@ public abstract class AbstractSearch extends AbstractFiltersTransformer {
             filterQueries.addAll(Arrays.asList(fqs));
 
         queryArgs.add("f.location.facet.mincount", "0");
+        queryArgs.add("f.location.facet.limit", "-1");
 
         if (scope instanceof Community) {
             filterQueries.add("{!tag=loc}location:m" + scope.getID());
@@ -646,6 +629,7 @@ public abstract class AbstractSearch extends AbstractFiltersTransformer {
 
 
         // Use mlt
+        /*
          queryArgs.add("mlt", "true");
 
         // The fields to use for similarity. NOTE: if possible, these should have a stored TermVector
@@ -658,6 +642,7 @@ public abstract class AbstractSearch extends AbstractFiltersTransformer {
          queryArgs.add("mlt.mindf", "1");
 
         queryArgs.add("mlt.q", "");
+        */
 
         // mlt.minwl
         // minimum word length below which words will be ignored.

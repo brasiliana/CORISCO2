@@ -157,6 +157,7 @@ and searching the repository.
 			<!-- Search -->
 			<map:match pattern="search">
 				<map:transform type="SimpleSearch"/>
+                <map:transform type="NavigationBrowse"/>
                 <map:transform type="IncludePageMeta">
                     <map:parameter name="stylesheet.screen.discovery#1" value="../../static/css/discovery/style.css"/>
                     
@@ -176,6 +177,7 @@ and searching the repository.
 
 			<map:match pattern="simple-search">
 				<map:transform type="SimpleSearch"/>
+                <map:transform type="NavigationBrowse"/>
 				<map:serialize type="xml"/>
 			</map:match>
 
@@ -216,12 +218,14 @@ and searching the repository.
                         <!-- Simple search -->
 						<map:match pattern="handle/*/*/search">
 							<map:transform type="SimpleSearch"/>
+                            <map:transform type="NavigationBrowse"/>
 							<map:serialize type="xml"/>
 						</map:match>
 
 						<!-- Simple search again, but this time they said it -->
 						<map:match pattern="handle/*/*/simple-search">
 							<map:transform type="SimpleSearch"/>
+                            <map:transform type="NavigationBrowse"/>
 							<map:serialize type="xml"/>
 						</map:match>
 
@@ -276,7 +280,6 @@ and searching the repository.
                                         <map:parameter name="stylesheet.screen.bbreader#1" value="lib/BookReader/BookReader.css"/>
                                         <map:parameter name="javascript.plugin#1" value="lib/BookReader/BookReader.js"/>
                                         <map:parameter name="javascript.plugin#2" value="lib/BookReader/dragscrollable.js"/>
-                                        <map:parameter name="javascript.plugin#3" value="lib/js/jquery.PrintArea.js"/>
 <!--                                        <map:parameter name="javascript.plugin#3" value="lib/BookReader/jquery-ui-1.8.1.custom.min.js"/>-->
         <!--                                <map:parameter name="javascript.static#2" value="static/js/discovery/core/AbstractManager.js"/>-->
                                     </map:transform>
@@ -293,7 +296,6 @@ and searching the repository.
                                         <map:parameter name="javascript.plugin#2" value="lib/Djatoka/javascript/mootools-1.2.4.4-more.js"/>
                                         <map:parameter name="javascript.plugin#3" value="lib/Djatoka/javascript/iipmooviewer-1.1.js"/>
                                         <map:parameter name="javascript.plugin#3" value="lib/Djatoka/javascript/iipmooviewer-1.1.js"/>
-                                        <map:parameter name="javascript.plugin#4" value="lib/js/jquery.PrintArea.js"/>
                                     </map:transform>
                                 </map:when>
                                 <map:when test="image/jpeg">
@@ -306,7 +308,6 @@ and searching the repository.
                                         <map:parameter name="javascript.plugin#1" value="lib/Djatoka/javascript/mootools-1.2.5-core.js"/>
                                         <map:parameter name="javascript.plugin#2" value="lib/Djatoka/javascript/mootools-1.2.4.4-more.js"/>
                                         <map:parameter name="javascript.plugin#3" value="lib/Djatoka/javascript/iipmooviewer-1.1.js"/>
-                                        <map:parameter name="javascript.plugin#4" value="lib/js/jquery.PrintArea.js"/>
                                     </map:transform>
                                 </map:when>
                                 <map:otherwise>

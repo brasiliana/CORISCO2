@@ -121,12 +121,12 @@
     <message key="xmlui.ArtifactBrowser.AbstractSearch.sort_by.dateissued">Ano de Publicação</message>
     <message key="xmlui.ArtifactBrowser.AbstractSearch.sort_by.dateaccessioned">Data de submissão</message>
 	<message key="xmlui.ArtifactBrowser.AbstractSearch.sort_by.relevance">Relevância</message>
-	<message key="xmlui.ArtifactBrowser.AbstractSearch.sort_by">Classificar itens por</message>
+	<message key="xmlui.ArtifactBrowser.AbstractSearch.sort_by">Classificar itens por:</message>
 	<message key="xmlui.ArtifactBrowser.AbstractSearch.order">Em ordem</message>
 	<message key="xmlui.ArtifactBrowser.AbstractSearch.order.asc">Ascendente</message>
 	<message key="xmlui.ArtifactBrowser.AbstractSearch.order.desc">Descendente</message>
-	<message key="xmlui.ArtifactBrowser.AbstractSearch.rpp">Resultados/página</message>
-    <message key="xmlui.ArtifactBrowser.AbstractSearch.view">Modos de visualização</message>
+	<message key="xmlui.ArtifactBrowser.AbstractSearch.rpp">Resultados por página:</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.view">Modos de visualização:</message>
     <message key="xmlui.ArtifactBrowser.AbstractSearch.view.listing">Listagem</message>
     <message key="xmlui.ArtifactBrowser.AbstractSearch.view.grid">Mosaico</message>
     <message key="xmlui.ArtifactBrowser.AbstractSearch.view.list">Lista</message>
@@ -1606,8 +1606,7 @@
 	<!-- structural.xsl -->
 	<message key="xmlui.dri2xhtml.structural.footer-promotional">
         <p>
-            A Brasiliana Digital utiliza a Plataforma Corisco, desenvolvida sobre o DSpace pela Brasiliana USP. A Plataforma Corisco integra busca facetada via Solr, servidor de imagens Djatoka, e visualizadores
-IIPimage e BookReader.
+            A Brasiliana Digital utiliza a Plataforma Corisco, desenvolvida sobre o DSpace pela Brasiliana USP e que integra DSpace com busca facetada via Solr, servidor de imagens Djatoka, e visualizadores IIPimage e BookReader.
         </p>
 	</message>
 <!--		<a href="http://di.tamu.edu" id="ds-logo-link">
@@ -1645,12 +1644,16 @@ IIPimage e BookReader.
 	<message key="xmlui.dri2xhtml.structural.link_original_license">Licença Original License</message>
 
 	
+    <!-- Faz parte do messages do Discovery -->
+	<message key="xmlui.ArtifactBrowser.SimpleSearch.filter.content">Texto</message>
+
 	<!-- DS-METS-1.0-MODS.xsl -->
 	<!-- DS-METS-1.0-DIM.xsl -->
 	<!-- DS-METS-1.0-QDC.xsl -->
 	<message key="xmlui.dri2xhtml.METS-1.0.no-preview">Sem previsualiação disponível</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.no-title">Sem título</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.no-author">Autor desconhecido</message>
+	<message key="xmlui.dri2xhtml.METS-1.0.various-authors">Vários autores</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.non-conformant">
 		Este não é um objeto do DSapce em conformidade com o padrão METS 1.0 e como tal, não pode ser 
         rendered efetivamente. Pode-se sobrescrever o modelo que manipula de forma geral  no dri2xhtml 
@@ -1688,6 +1691,7 @@ IIPimage e BookReader.
     <message key="xmlui.dri2xhtml.METS-1.0.item-title-alternative">Título alternativo</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-title">Título</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-description-provenance">Procedência</message>
+    <message key="xmlui.dri2xhtml.METS-1.0.item-provenance">Procedência</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-description-tableofcontents">Conteúdo</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-description-sponsorship">Patrocínio</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-description-version">Edição</message>
@@ -1701,6 +1705,7 @@ IIPimage e BookReader.
     <message key="xmlui.dri2xhtml.METS-1.0.item-relation-uri">Recurso relacionado</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-isformatof">É formato de</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-identifier-citation">Citação</message>
+    <message key="xmlui.dri2xhtml.METS-1.0.item-identifier-isbn">ISBN</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-subject-lcsh">Subject</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-coverage-spatial">Cobertura geográfica</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-coverage-temporal">Período</message>
@@ -1742,6 +1747,8 @@ IIPimage e BookReader.
 		sobrescrevendo o modelo no dri2xhtml denominado de communitySummaryView.
 	</message>
 	
+	<message key="xmlui.dri2xhtml.METS-1.0.collection-view">Listar itens</message>
+
 	<message key="xmlui.dri2xhtml.METS-1.0.collection-logo-alt">O logotipo da Coleção</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.community-logo-alt">O logotipo da comunidade</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.no-logo-alt">Sem logotipo</message>		

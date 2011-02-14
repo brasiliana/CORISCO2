@@ -4,15 +4,20 @@ br = new BookReader();
 
 //// Make AJAX call here to get an object containing page information
 var metadata = null;
-var baseURL = 'http://' + document.domain + ':8080/djatoka/resolver?url_ver=Z39.88-2004';
 var resolverURL = '/djatoka/resolver?url_ver=Z39.88-2004';
+var baseURL = 'http://' + location.host + resolverURL;
 var getMetadataSVC_ID = 'info:lanl-repo/svc/getMetadata';
 var imagesGetFormat = 'image/png'; //'image/jpeg';
+
+if (qsParm["serverURL"] != "") {
+    baseURL = qsParm["serverURL"] + '?url_ver=Z39.88-2004';
+}
 
 if (qsParm["item"] != "") {
     //http://www.biodiversitylibrary.org/Services/PageSummaryService.ashx?op=PageSummarySelectForViewerByItemID&itemID=36741
     //$.getJSON("http://" + document.domain + ':' + location.port + "/" + qsParm["item"],
-    var url = "http://" + document.domain + ':' + location.port + resolverURL + "&svc_id=" + getMetadataSVC_ID + "&rft_id=" + qsParm["item"];
+    //var url = "http://" + document.domain + ':' + location.port + resolverURL + "&svc_id=" + getMetadataSVC_ID + "&rft_id=" + qsParm["item"];
+    var url = baseURL + "&svc_id=" + getMetadataSVC_ID + "&rft_id=" + qsParm["item"];
     $.getJSON(url,
         function(data) {
             metadata = data;

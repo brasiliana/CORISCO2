@@ -99,6 +99,7 @@
     <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.contributor.author_t">Autor</message>
     <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.subject">Assunto</message>
     <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.subject_t">Assunto</message>
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.subject.lcsh">Assunto</message>
     <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.description">Descrição</message>
     <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.description_t">Descrição</message>
 <!--    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dateissued.year">Ano de Publicação</message>-->
@@ -148,7 +149,7 @@
     <message key="xmlui.Discovery.ItemViewer.toolbar.embed">Embed bookreader</message>
     <message key="xmlui.Discovery.ItemViewer.toolbar.print">Imprimir página</message>
     <message key="xmlui.Discovery.ItemViewer.toolbar.download">Baixar arquivo completo</message>
-    <message key="xmlui.Discovery.ItemViewer.toolbar.cite">Citar documento</message>
+    <message key="xmlui.Discovery.ItemViewer.toolbar.cite">Citar documento (desabilitado)</message>
     <message key="xmlui.Discovery.ItemViewer.toolbar.permalink">Ver link permanente para este documento</message>
     <message key="xmlui.Discovery.ItemViewer.toolbar.permalink_head">Link permanente</message>
     <message key="xmlui.Discovery.ItemViewer.toolbar.book_left">Folhear à esquerda</message>

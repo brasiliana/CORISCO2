@@ -111,6 +111,7 @@ public class CommunityRecentSubmissions extends AbstractFiltersTransformer
         /* Set the communities facet filters */
         queryArgs.setFilterQueries("{!tag=loc}location:m" + scope.getID());
         queryArgs.add("f.location.facet.mincount", "0");
+        queryArgs.add("f.location.facet.limit", "-1");
 
         try {
             queryResults =  getSearchService().search(queryArgs);

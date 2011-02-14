@@ -18,8 +18,9 @@ div#navcontainer {
   background: transparent;
 }
 div#navcontainer div#toolbar {
-  height: 10px;
-  background: url( "../images/toolbar.png" ) repeat-x;
+  height: 17px;
+  background: url( "../images/toolbar.png" ) no-repeat center #000000;
+  border-bottom: 3px solid #FF0000;
   cursor: move;
 }
 div#navwin {

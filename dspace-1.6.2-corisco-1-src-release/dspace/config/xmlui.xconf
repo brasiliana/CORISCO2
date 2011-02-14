@@ -110,8 +110,6 @@
         <!-- <theme name="Test Theme 1" handle="123456789/1" path="theme1/"/> -->
         <!-- <theme name="Test Theme 2" regex="community-list" path="theme2/"/> -->
 
-        <theme name="Default Reference Theme" regex="admin/.*" path="Reference/" />
-
         <!-- Default theme -->
         <!-- <theme name="Default Reference Theme" regex=".*" path="Reference/" /> -->
         <theme name="Corisco" regex=".*" path="Corisco/"/>

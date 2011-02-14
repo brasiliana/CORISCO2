@@ -118,7 +118,7 @@ public class BrowseFacet extends AbstractDSpaceTransformer implements CacheableP
      */
     protected SolrQuery queryArgs;
 
-    private int DEFAULT_PAGE_SIZE = 10;
+    private int DEFAULT_PAGE_SIZE = 50;
     //private String DEFAULT_ORDER = SortOption.ASCENDING;
     private SolrQuery.ORDER DEFAULT_ORDER = SolrQuery.ORDER.asc;
     private String DEFAULT_SORT_BY = "lex";
@@ -289,9 +289,11 @@ public class BrowseFacet extends AbstractDSpaceTransformer implements CacheableP
 
         if (scope != null) /* top level search / community */ {
             if (scope instanceof Community) {
-                queryArgs.setFilterQueries("location:m" + scope.getID());
+                //queryArgs.setFilterQueries("location:m" + scope.getID());
+                queryArgs.addFilterQuery("location:m" + scope.getID());
             } else if (scope instanceof Collection) {
-                queryArgs.setFilterQueries("location:l" + scope.getID());
+                //queryArgs.setFilterQueries("location:l" + scope.getID());
+                queryArgs.addFilterQuery("location:l" + scope.getID());
             }
         }
 
@@ -581,12 +583,13 @@ public class BrowseFacet extends AbstractDSpaceTransformer implements CacheableP
                     int currentPage = getParameterPage(); //(int) (firstItemIndex / getParameterRpp()) + 1;
                     int pagesTotal = (int) ((itemsTotal - 1) / getParameterRpp()) + 1;
 
+                    //log.error("items total: " + itemsTotal + "; first: " + firstItemIndex + "; last: " + lastItemIndex + "; rpp: " + getParameterRpp() + "; cur page: " + currentPage);
+
                     Map<String, String> parameters = new HashMap<String, String>();
                     parameters.put("page", "{pageNum}");
                     String pageURLMask = generateURL(parameters);
 
-                    results.setMaskedPagination(itemsTotal, firstItemIndex,
-                            lastItemIndex, currentPage, pagesTotal, pageURLMask);
+                    results.setMaskedPagination(itemsTotal, firstItemIndex, lastItemIndex, currentPage, pagesTotal, pageURLMask);
                     ////
 
                     Table singleTable = results.addTable("browse-by-" + field.getName() + "-results", lastItemIndex - firstItemIndex + 1, 1);
@@ -686,7 +689,8 @@ public class BrowseFacet extends AbstractDSpaceTransformer implements CacheableP
                     + "/search?"
                     + "&fq="
                     + URLEncoder.encode(filterQuery, "UTF-8")
-                    + (request.getQueryString() != null ? "&" + request.getQueryString() : ""),
+                    //+ (request.getQueryString() != null ? "&" + request.getQueryString() : "")
+                    ,
 //                    displayedValue + " (" + value.getCount() + ")");
                     displayedValue,
                     String.valueOf(value.getCount()));
@@ -755,28 +759,32 @@ public class BrowseFacet extends AbstractDSpaceTransformer implements CacheableP
 //        }
         parameters.put(FACET_FIELD, getParameterField());
 
-        if (parameters.get("page") == null) {
-            parameters.put("page", String.valueOf(getParameterPage()));
+        if (parameters.get(PAGE) == null) {
+            parameters.put(PAGE, String.valueOf(getParameterPage()));
         }
 
-        if (parameters.get("view") == null) {
-            parameters.put("view", String.valueOf(getParameterView()));
+        if (parameters.get(VIEW) == null) {
+            parameters.put(VIEW, String.valueOf(getParameterView()));
         }
 
-        if (parameters.get("rpp") == null) {
-            parameters.put("rpp", String.valueOf(getParameterRpp()));
+        if (parameters.get(RESULTS_PER_PAGE) == null) {
+            parameters.put(RESULTS_PER_PAGE, String.valueOf(getParameterRpp()));
         }
 
 //        if (parameters.get("group_by") == null) {
 //            parameters.put("group_by", String.valueOf(this.getParameterGroup()));
 //        }
 
-        if (parameters.get("sort_by") == null) {
-            parameters.put("sort_by", String.valueOf(getParameterSortBy()));
+        if (parameters.get(SORT_BY) == null) {
+            parameters.put(SORT_BY, String.valueOf(getParameterSortBy()));
         }
 
-        if (parameters.get("order") == null) {
-            parameters.put("order", String.valueOf(getParameterOrder()));
+        if (parameters.get(ORDER) == null) {
+            parameters.put(ORDER, String.valueOf(getParameterOrder()));
+        }
+
+        if (parameters.get(STARTS_WITH) == null) {
+            parameters.put(STARTS_WITH, String.valueOf(getParameterStartsWith()));
         }
 
         // Add the filter queries
@@ -832,6 +840,9 @@ public class BrowseFacet extends AbstractDSpaceTransformer implements CacheableP
         for (String key : parameters.keySet())
             jump.addHidden(key).setValue(parameters.get(key));
 
+        
+        // Remove 'page' parameter from jump list
+        parameters.remove(PAGE);
         
         // If this is a date based browse, render the date navigation
         if (type != null && type.startsWith("date"))

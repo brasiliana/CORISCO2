@@ -108,6 +108,7 @@ public class CollectionRecentSubmissions extends AbstractFiltersTransformer {
         // TODO: make facet.fields options configurable (e.g., {!ex=...}).
         queryArgs.setFilterQueries("{!tag=loc}location:l" + scope.getID());
         queryArgs.add("f.location.facet.mincount", "0");
+        queryArgs.add("f.location.facet.limit", "-1");
 
         try {
             queryResults = getSearchService().search(queryArgs);

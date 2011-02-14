@@ -407,6 +407,7 @@ public abstract class AbstractFiltersTransformer extends AbstractDSpaceTransform
                 java.util.List<FacetField.Count> values = fieldLocation.getValues();
                 if (values != null) {
                     String queryString = request.getQueryString();
+                    //log.error("queryString: " + queryString);
                     queryString = queryString != null ? queryString.replaceAll("&fq=location[:[%3A]+][ml][0-9]+", "") : queryString;
                     // Find selected community/collection.
                     String curCommCollSelectedName = "m1"; // Default
@@ -427,6 +428,7 @@ public abstract class AbstractFiltersTransformer extends AbstractDSpaceTransform
                     Map<String, FacetField.Count> sortedSolrNameLocationWithValues = new TreeMap<String, FacetField.Count>();
                     for (FacetField.Count v : values) {
                         sortedSolrNameLocationWithValues.put(v.getName(), v);
+                        //log.error("v: " + v.getName());
                     }
                     // Default selection is "m1" (community with ID 1).
                     int curCommCollSelectedType = Constants.COMMUNITY;
@@ -435,6 +437,7 @@ public abstract class AbstractFiltersTransformer extends AbstractDSpaceTransform
                         curCommCollSelectedType = curCommCollSelectedName.startsWith("m") ? Constants.COMMUNITY : Constants.COLLECTION;
                         curCommCollSelectedID = Integer.parseInt(curCommCollSelectedName.substring(1));
                     }
+                    //log.error("cur ml: " + curCommCollSelectedName + "; id: " + curCommCollSelectedID + "; type: " + curCommCollSelectedType);
                     Map<Integer, String> sortedHandleWithSolrName = new TreeMap<Integer, String>();
                     Map<String, DSpaceObject> sortedSolrNameWithDSpaceObject = new TreeMap<String, DSpaceObject>();
                     
@@ -477,11 +480,18 @@ public abstract class AbstractFiltersTransformer extends AbstractDSpaceTransform
                             Collection lsel = Collection.find(context, curCommCollSelectedID);
                             Community firstParent = lsel.getCommunities()[0];
                             Community[] parents = firstParent.getAllParents();
-                            if (parents.length <= 1) {
-                                log.error("Something is wrong: this should not happen.");
+                            if (parents.length == 0) {
+                                //log.error("Something is wrong: this should not happen.");
+                                //firstParent is a top community.
+                                curCommCollSelectedName = "m" + firstParent.getID();
+                            } else if (parents.length == 1) {
+                                //firstParent is a second level community.
+                                curCommCollSelectedName = "m" + firstParent.getID();
+                            } else {
+                                // get second level parent
+                                Community topParent = parents[parents.length - 2];
+                                curCommCollSelectedName = "m" + topParent.getID();
                             }
-                            Community topParent = parents[parents.length - 2];
-                            curCommCollSelectedName = "m" + topParent.getID();
                         }
                     }
                     //                            Iterator<FacetField.Count> iter = sortedValues.values().iterator();
@@ -496,17 +506,24 @@ public abstract class AbstractFiltersTransformer extends AbstractDSpaceTransform
                         String solrName = iter.next();
                         DSpaceObject commColl = sortedSolrNameWithDSpaceObject.get(solrName);
                         FacetField.Count value = sortedSolrNameLocationWithValues.get(solrName);
+                        if (value == null) {
+                            // This is probably due to an empty collection, which happens to not be indexed by Solr.
+                            continue;
+                        }
                         String displayedValue = commColl.getName();
                         String itemName = commColl.getHandle();
                         String itemRend = null;
+                        //log.error("iter: solrName: " + solrName + "; " + value + "; handle: " + itemName + "; display: " + displayedValue);
                         //We have a community/collection, resolve it to a dspaceObject
                         //                                    displayedValue = SolrServiceImpl.locationToName(context, field.getName(), displayedValue);
                         //                                int type = fieldLocation.getName().equals("location.comm") ? Constants.COMMUNITY : Constants.COLLECTION;
-                        if (curCommCollSelectedName != null && curCommCollSelectedName.equals(value.getName())) {
-                            facet.addItem(itemName, "selected").addContent(displayedValue + " (" + value.getCount() + ")");
+                        if (curCommCollSelectedName != null && curCommCollSelectedName.equals(solrName)) {
+                            //facet.addItem(itemName, "selected").addContent(displayedValue + " (" + value.getCount() + ")");
+                            itemRend = "selected";
                         } else if (curCommCollSelectedName == null && value.getName().equals("m1")) {
-                            facet.addItem(itemName, "selected").addContent(displayedValue + " (" + value.getCount() + ")");
-                        } else {
+                            //facet.addItem(itemName, "selected").addContent(displayedValue + " (" + value.getCount() + ")");
+                            itemRend = "selected";
+                        }
                             if (value.getCount() > 0) {
                                 String URI = null;
                                 try {
@@ -519,9 +536,10 @@ public abstract class AbstractFiltersTransformer extends AbstractDSpaceTransform
                                 }
                                 facet.addItem(itemName, itemRend).addXref(contextPath + (commColl == null ? "" : "/handle/" + commColl.getHandle()) + "/" + (URI != null ? URI : "") + (queryString != null ? "?" + queryString : ""), displayedValue + " (" + "" + value.getCount() + ")");
                             } else {
+                            //itemRend = "disabled";
                                 facet.addItem(itemName, "disabled").addContent(displayedValue + " (" + value.getCount() + ")");
                             }
-                        }
+                        
                     }
                 }
             }

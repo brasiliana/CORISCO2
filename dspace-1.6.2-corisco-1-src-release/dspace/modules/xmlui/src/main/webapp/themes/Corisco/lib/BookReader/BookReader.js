@@ -1658,7 +1658,8 @@ BookReader.prototype.prepareOCRView = function() {
 //    var startLeaf = this.currentIndex();
 
     $('#BRcontainer').empty();
-    $('#BRcontainer').css('overflow', 'auto');
+    $('#BRcontainer').css('overflow-x', 'auto');
+    $('#BRcontainer').css('overflow-y', 'hidden');
 
     $("#BRcontainer").append("<div id='BRocrview'></div>");
 
@@ -3106,7 +3107,7 @@ BookReader.prototype.printPage = function() {
 }
 
 // Get print URI from current indices and mode
-/*BookReader.prototype.getPrintURI = function() {
+BookReader.prototype.getPrintURI = function() {
     var indexToPrint;
     if (this.constMode2up == this.mode) {
         indexToPrint = this.twoPage.currentIndexL;        
@@ -3114,6 +3115,12 @@ BookReader.prototype.printPage = function() {
         indexToPrint = this.firstIndex; // $$$ the index in the middle of the viewport would make more sense
     }
     
+    var rotate = 0;
+    var imageURL = this._getPageURI(indexToPrint, 1, rotate);
+
+    return imageURL;
+
+    /*
     var options = 'id=' + this.subPrefix + '&server=' + this.server + '&zip=' + this.zip
         + '&format=' + this.imageFormat + '&file=' + this._getPageFile(indexToPrint)
         + '&width=' + this._getPageWidth(indexToPrint) + '&height=' + this._getPageHeight(indexToPrint);
@@ -3127,7 +3134,8 @@ BookReader.prototype.printPage = function() {
     }
 
     return '/bookreader/print.php?' + options;
-}*/
+    */
+}
 
 //* iframe implementation
 BookReader.prototype.getPrintFrameContent = function(index) {    
@@ -3502,10 +3510,12 @@ BookReader.prototype.bindToolbarNavHandlers = function(jToolbar) {
         return false;
     });
 
+    if (this.addToolbar == true) {
     jToolbar.find('.print').bind('click', function(e) {
         self.printPage();
         return false;
     });
+    }
         
     jToolbar.find('.embed').bind('click', function(e) {
         self.showEmbedCode();

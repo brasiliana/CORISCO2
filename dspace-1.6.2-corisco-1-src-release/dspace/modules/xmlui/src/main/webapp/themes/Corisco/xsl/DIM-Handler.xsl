@@ -55,12 +55,19 @@
                     <xsl:with-param name="position" select="$position"/>
                 </xsl:call-template>
             </xsl:when>
-<!--            <xsl:when test="@LABEL='DSpace Collection'">
-                <xsl:call-template name="collectionSummaryGrid-DIM"/>
+            <xsl:when test="@LABEL='DSpace Collection'">
+                <xsl:call-template name="collectionSummaryGrid-DIM">
+                    <xsl:with-param name="position" select="$position"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:when test="@LABEL='DSpace Community'">
+                <!--
                 <xsl:call-template name="communitySummaryGrid-DIM"/>
-            </xsl:when>                -->
+                -->
+                <xsl:call-template name="collectionSummaryGrid-DIM">
+                    <xsl:with-param name="position" select="$position"/>
+                </xsl:call-template>
+            </xsl:when>
             <xsl:otherwise>
                 <i18n:text>xmlui.dri2xhtml.METS-1.0.non-conformant</i18n:text>
             </xsl:otherwise>
@@ -78,7 +85,9 @@
         <xsl:param name="position"/>
         <!-- Generate the thumbnail, if present, from the file section -->
         <div class="thumb-resultado">
-            <xsl:apply-templates select="./mets:fileSec" mode="artifact-preview"/>
+            <xsl:apply-templates select="./mets:fileSec" mode="artifact-preview">
+                <xsl:with-param name="primaryBitstream" select="./mets:structMap/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID"/>
+            </xsl:apply-templates>
         </div>
 <!--                
                     <a>
@@ -116,9 +125,11 @@
                         </xsl:choose>
                     </xsl:attribute>
                     <span class="Z3988">
+                        <!--
                         <xsl:attribute name="title">
                             <xsl:call-template name="renderCOinS"/>
                         </xsl:attribute>
+                        -->
                         <xsl:choose>
                             <xsl:when test="dim:field[@element='title']">
                                 <xsl:value-of select="dim:field[@element='title'][1]/node()"/>
@@ -148,10 +159,17 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="@LABEL='DSpace Collection'">
-                <xsl:call-template name="collectionSummaryList-DIM"/>
+                <xsl:call-template name="collectionSummaryList-DIM">
+                    <xsl:with-param name="position" select="$position"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:when test="@LABEL='DSpace Community'">
-                <xsl:call-template name="communitySummaryList-DIM"/>
+                <!--
+                <xsl:call-template name="communitySummaryList-DIM">
+                -->
+                <xsl:call-template name="collectionSummaryList-DIM">
+                    <xsl:with-param name="position" select="$position"/>
+                </xsl:call-template>
             </xsl:when>                
             <xsl:otherwise>
                 <i18n:text>xmlui.dri2xhtml.METS-1.0.non-conformant</i18n:text>
@@ -170,7 +188,9 @@
         <xsl:param name="position"/>
         <!-- Generate the thumbnail, if present, from the file section -->
         <div class="caixa">
-            <xsl:apply-templates select="./mets:fileSec" mode="artifact-preview"/>
+            <xsl:apply-templates select="./mets:fileSec" mode="artifact-preview">
+                <xsl:with-param name="primaryBitstream" select="./mets:structMap/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID"/>
+            </xsl:apply-templates>
         </div>
         <!-- Generate the info about the item from the metadata section -->
         <xsl:apply-templates select="./mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']/mets:xmlData/dim:dim" mode="itemSummaryList-DIM">
@@ -241,9 +261,11 @@
                             </xsl:choose>
                         </xsl:attribute>
                         <span class="Z3988">
+                            <!--
                             <xsl:attribute name="title">
                                 <xsl:call-template name="renderCOinS"/>
                             </xsl:attribute>
+                            -->
                             <xsl:choose>
                                 <xsl:when test="dim:field[@element='title']">
                                     <xsl:value-of select="dim:field[@element='title'][1]/node()"/>
@@ -334,12 +356,24 @@
                 </a>
             </div>
             <div class="baixar-item">
+                <xsl:variable name="primaryBitstream" select="//mets:structMap/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID"/>
+                <xsl:variable name="fileid">
+                    <xsl:choose>
+                        <xsl:when test="$primaryBitstream != ''">
+                            <xsl:value-of select="$primaryBitstream"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[1]/@ID"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+
                 <a>
                     <xsl:attribute name="href">
-                        <xsl:value-of select="$mets-context/mets:fileSec/mets:fileGrp[@USE='CONTENT']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
+                        <xsl:value-of select="substring-before($mets-context/mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[@ID=$fileid]/mets:FLocat[@LOCTYPE='URL']/@xlink:href, '?')"/>
                     </xsl:attribute>
                     <xsl:attribute name="title">
-                        <xsl:value-of select="$mets-context/mets:fileSec/mets:fileGrp[@USE='CONTENT']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:title"/>
+                        <xsl:value-of select="$mets-context/mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[@ID=$fileid]/mets:FLocat[@LOCTYPE='URL']/@xlink:title"/>
                     </xsl:attribute>
 
                     <img>
@@ -424,6 +458,8 @@
                 or
                 (@element='subject')
                 or
+                (@element='identifier' and @qualifier='uri')
+                or
                 (@element='type' and not(@qualifier))
                 or
                 (@qualifier='tableofcontents')
@@ -437,6 +473,9 @@
                 <xsl:apply-templates select="dim:field[@element='subject' and @qualifier='lcsh']" mode="itemSummaryList-DIM"/>
             </xsl:if>
             <!--<xsl:apply-templates select="dim:field[@element='subject' and not(@qualifier)]" mode="itemSummaryList-DIM"/>-->
+            <xsl:if test="dim:field[@element='identifier' and @qualifier='uri']">
+                <xsl:apply-templates select="dim:field[@element='identifier' and @qualifier='uri']" mode="itemSummaryList-DIM"/>
+            </xsl:if>
             <xsl:apply-templates select="dim:field[@element='type' and not(@qualifier)]" mode="itemSummaryList-DIM"/>
             <xsl:apply-templates select="dim:field[@element='description' and @qualifier='tableofcontents']" mode="itemSummaryList-DIM"/>
 <!--        </div>-->
@@ -451,14 +490,6 @@
                     <xsl:call-template name="dimField-DcAuthorContributorCreator">
                         <xsl:with-param name="field" select="."/>
                     </xsl:call-template>
-                </xsl:when>
-
-                <xsl:when test="./@element='identifier' and ./@qualifier='uri'">
-                    <!-- @kepler 2009-07-08 Tirando o handle.net, já que não funciona.
-                    <xsl:call-template name="dimField-DcIdentifierUri">
-                        <xsl:with-param name="field" select="."/>
-                    </xsl:call-template>
-                    -->
                 </xsl:when>
 
                 <xsl:otherwise>
@@ -551,7 +582,7 @@
                         <!-- Colocando link no nome de autor.
                         <xsl:copy-of select="node()"/>-->
                         <xsl:call-template name="makeBrowseLink">
-                            <xsl:with-param name="type">author</xsl:with-param>
+                            <xsl:with-param name="type">dc.contributor.author</xsl:with-param>
                             <xsl:with-param name="value" select="node()"/>
                         </xsl:call-template>
                         <xsl:if test="count(following-sibling::dim:field[@element='contributor'][@qualifier='author']) != 0">
@@ -563,7 +594,7 @@
                     <xsl:for-each select="$field[@element='creator']">
                         <!--<xsl:copy-of select="node()"/>-->
                         <xsl:call-template name="makeBrowseLink">
-                            <xsl:with-param name="type">author</xsl:with-param>
+                            <xsl:with-param name="type">dc.creator</xsl:with-param>
                             <xsl:with-param name="value" select="node()"/>
                         </xsl:call-template>
                         <xsl:if test="count(following-sibling::dim:field[@element='creator']) != 0">
@@ -575,7 +606,7 @@
                     <xsl:for-each select="$field[@element='contributor'][@qualifier='other']">
                         <!--<xsl:copy-of select="node()"/>-->
                         <xsl:call-template name="makeBrowseLink">
-                            <xsl:with-param name="type">author</xsl:with-param>
+                            <xsl:with-param name="type">dc.contributor.other</xsl:with-param>
                             <xsl:with-param name="value" select="node()"/>
                         </xsl:call-template>
                         <xsl:if test="count(following-sibling::dim:field[@element='contributor'][@qualifier='other']) != 0">
@@ -601,10 +632,15 @@
         <a>
             <xsl:attribute name="href">
                 <xsl:value-of select="$context-path"/>
-                <xsl:text>/browse?type=</xsl:text>
+                <xsl:text>/search?fq=</xsl:text>
                 <xsl:value-of select="$type"/>
-                <xsl:text>&amp;value=</xsl:text>
-                <xsl:copy-of select="$value"/>
+                <xsl:text>:"</xsl:text>
+                <xsl:call-template name="replace-string">
+                    <xsl:with-param name="text" select="$value"/>
+                    <xsl:with-param name="replace" select="' '"/>
+                    <xsl:with-param name="with" select="'+'"/>
+                </xsl:call-template>
+                <xsl:text>"</xsl:text>
             </xsl:attribute>
             <xsl:copy-of select="$value"/>
         </a>
@@ -613,24 +649,61 @@
 
     <!-- @kepler 2009-06-01 15:33:07 -->
     <!-- Adiciona o URI como link na visualização de registro completo. -->
-    <xsl:template name="dimField-DcIdentifierUri">
+    <xsl:template match="dim:field[@element='identifier' and @qualifier='uri']" mode="itemSummaryList-DIM" priority="10">
         <xsl:param name="field" select="."/>
+        <xsl:choose>
+        <xsl:when test="position() = 1">
+            <xsl:variable name="uri">
+                <xsl:choose>
+                    <xsl:when test="contains(string(.), 'handle.net/')">
+                        <xsl:value-of select="$absolute-base-url"/>
+                        <xsl:text>/handle/</xsl:text>
+                        <xsl:value-of select="substring-after(./node(), 'handle.net/')"/>
+                    </xsl:when>
+                    <xsl:when test="contains(string(.), '/handle/')">
+                        <xsl:value-of select="$absolute-base-url"/>
+                        <xsl:text>/handle/</xsl:text>
+                        <xsl:value-of select="substring-after(./node(), '/handle/')"/>
+                    </xsl:when>
+                    <xsl:when test="fn:matches(string(.), '[0-9]{4}/[0-9-]+')">
+                        <xsl:value-of select="$absolute-base-url"/>
+                        <xsl:text>/handle/</xsl:text>
+                        <xsl:value-of select="."/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!--<xsl:copy-of select="./node()"/>-->
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+
+            <xsl:if test="$uri != ''">
+                <p>
         <span class="tipo-dado">
             <i18n:text>xmlui.dri2xhtml.METS-1.0.item-uri</i18n:text>:
         </span>
         <span class="dado-item">
-            <xsl:for-each select="$field[@element='identifier' and @qualifier='uri']">
                 <a>
                     <xsl:attribute name="href">
-                        <xsl:copy-of select="./node()"/>
-                    </xsl:attribute>
-                    <xsl:copy-of select="./node()"/>
+                                <xsl:value-of select="$uri"/>
+                            </xsl:attribute>
+                            <xsl:value-of select="$uri"/>
                 </a>
+                    </span>
+                </p>
+            </xsl:if>
+            <!--
                 <xsl:if test="count(following-sibling::dim:field[@element='identifier' and @qualifier='uri']) != 0">
                     <br/>
                 </xsl:if>
+            -->
+            <!--
+            <xsl:for-each select="following-sibling::dim:field[@element='subject' and not(@qualifier)]">
+                <br/>
+                <xsl:apply-templates select="." mode="DcSubject-DIM"/>
             </xsl:for-each>
-        </span>
+            -->
+        </xsl:when>
+        </xsl:choose>
     </xsl:template>
 
 
@@ -653,9 +726,17 @@
                     <!-- @kepler 2009-12-09
                         Verifica se o campo contém algo no padrão 0000/0+, o que significa que é um handle.
                     -->
-                    <xsl:if test="fn:matches(string(.), '[0-9]{4}/[0-9]+')">
+                    <xsl:choose>
+                        <xsl:when test="contains(string(.), 'handle.net/')">
+                            <xsl:value-of select="substring-after(./node(), 'handle.net/')"/>
+                        </xsl:when>
+                        <xsl:when test="fn:matches(string(.), '[0-9]{4}/[0-9-]+')">
                         <xsl:value-of select="."/>
-                    </xsl:if>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <!--<xsl:copy-of select="./node()"/>-->
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:variable>
                 <xsl:variable name="ispartof-mets_path">
                     <xsl:value-of select="$absolute-base-url"/>
@@ -679,7 +760,7 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:value-of select="$context-path"/>
-                                <xsl:text>/advanced-search?field1=title&amp;query1=</xsl:text>
+                                <xsl:text>/search?query=</xsl:text>
                                 <xsl:copy-of select="./node()"/>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -750,7 +831,7 @@
                 Verifica se o campo contém algo no padrão 0000/0+, o que significa que é um handle.
             -->
             <xsl:choose>
-                <xsl:when test="fn:matches(string(.), '[0-9]{4}/[0-9]+')">
+                <xsl:when test="fn:matches(string(.), '[0-9]{4}/[0-9-]+')">
                     <xsl:variable name="title">
                         <xsl:call-template name="getItemTitleFromHandle">
                             <xsl:with-param name="handle" select="."/>
@@ -782,6 +863,7 @@
     </xsl:template>
 
 
+
     <!-- @kepler 2009-10-29 14:07:57 -->
     <!--
         Adiciona o assunto como link na visualização de registro simples e completo.
@@ -795,14 +877,18 @@
                     <br/>
                 </span>
                 <span class="dado-item">
-                    <a>
+                    <!--<a>
                         <xsl:attribute name="href">
                             <xsl:value-of select="$context-path"/>
                             <xsl:text>/browse?type=subject&amp;value=</xsl:text>
                             <xsl:copy-of select="./node()"/>
                         </xsl:attribute>
                         <xsl:copy-of select="./node()"/>
-                    </a>
+                    </a>-->
+                    <xsl:call-template name="makeBrowseLink">
+                        <xsl:with-param name="type">dc.subject</xsl:with-param>
+                        <xsl:with-param name="value" select="."/>
+                    </xsl:call-template>
                     <xsl:for-each select="following-sibling::dim:field[@element='subject' and not(@qualifier)]">
                         <br/>
                         <xsl:apply-templates select="." mode="DcSubject-DIM"/>
@@ -822,14 +908,18 @@
                     <br/>
                 </span>
                 <span class="dado-item">
-                    <a>
+                    <!--<a>
                         <xsl:attribute name="href">
                             <xsl:value-of select="$context-path"/>
                             <xsl:text>/browse?type=subject&amp;value=</xsl:text>
                             <xsl:copy-of select="./node()"/>
                         </xsl:attribute>
                         <xsl:copy-of select="./node()"/>
-                    </a>
+                    </a>-->
+                    <xsl:call-template name="makeBrowseLink">
+                        <xsl:with-param name="type">dc.subject.lcsh</xsl:with-param>
+                        <xsl:with-param name="value" select="."/>
+                    </xsl:call-template>
                     <xsl:for-each select="following-sibling::dim:field[@element='subject' and @qualifier='lcsh']">
                         <br/>
                         <xsl:apply-templates select="." mode="DcSubject-DIM"/>
@@ -841,14 +931,20 @@
     </xsl:template>
 
     <xsl:template match="dim:field[@element='subject' and (not(@qualifier) or @qualifier='lcsh')]" mode="DcSubject-DIM">
-            <a>
-                <xsl:attribute name="href">
-                    <xsl:value-of select="$context-path"/>
-                    <xsl:text>/browse?type=subject&amp;value=</xsl:text>
-                    <xsl:copy-of select="./node()"/>
-                </xsl:attribute>
-                <xsl:copy-of select="./node()"/>
-            </a>
+            <!--
+                    <a>
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="$context-path"/>
+                            <xsl:text>/browse?type=subject&amp;value=</xsl:text>
+                            <xsl:copy-of select="./node()"/>
+                        </xsl:attribute>
+                        <xsl:copy-of select="./node()"/>
+                    </a>
+            -->
+        <xsl:call-template name="makeBrowseLink">
+            <xsl:with-param name="type">dc.subject<xsl:if test="@qualifier">.<xsl:value-of select="@qualifier"/></xsl:if></xsl:with-param>
+            <xsl:with-param name="value" select="."/>
+        </xsl:call-template>
     </xsl:template>
 
 
@@ -865,13 +961,10 @@
                     <span class="tipo-dado">
                         <xsl:choose>
                             <xsl:when test="./@qualifier">
-                                <i18n:text>xmlui.dri2xhtml.METS-1.0.item-<xsl:value-of select="./@element"/>-<xsl:value-of select="./@qualifier"/></i18n:text>
-                                <xsl:text>:</xsl:text>
+                                <i18n:text>xmlui.dri2xhtml.METS-1.0.item-<xsl:value-of select="./@element"/>-<xsl:value-of select="./@qualifier"/></i18n:text>:
                             </xsl:when>
                             <xsl:otherwise>
-                                <i18n:text>xmlui.dri2xhtml.METS-1.0.item-
-                                    <xsl:value-of select="./@element"/>
-                                </i18n:text>:
+                                <i18n:text>xmlui.dri2xhtml.METS-1.0.item-<xsl:value-of select="./@element"/></i18n:text>:
                             </xsl:otherwise>
                         </xsl:choose>
                     </span>
@@ -891,12 +984,57 @@
 
 
 
+    <xsl:template match="dim:field[@element='description' and not(@qualifier)]" mode="itemSummaryList-DIM" priority="10">
+        <xsl:choose>
+            <xsl:otherwise>
+                <p>
+                    <!-- Header column -->
+                    <span class="tipo-dado">
+                        <xsl:choose>
+                            <xsl:when test="./@qualifier">
+                                <i18n:text>xmlui.dri2xhtml.METS-1.0.item-<xsl:value-of select="./@element"/>-<xsl:value-of select="./@qualifier"/></i18n:text>:
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <i18n:text>xmlui.dri2xhtml.METS-1.0.item-<xsl:value-of select="./@element"/></i18n:text>:
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </span>
+                    <!-- Content column -->
+                    <span class="dado-item">
+                        <xsl:copy-of select="./node()"/>
+
+                        <!--
+                        <xsl:copy>
+                            <xsl:call-template name="getHTML">
+                                <xsl:with-param name="content" select="."/>
+                            </xsl:call-template>
+                        </xsl:copy>
+                        <xsl:variable name="content">
+                            <xsl:call-template name="replaceNewLines">
+                                <xsl:with-param name="stringIn" select="."/>
+                            </xsl:call-template>
+                        <xsl:value-of select="$content" disable-output-escaping="yes"/>
+                        <xsl:copy-of select="$content"/>
+                        </xsl:variable>
+                        -->
+                    </span>
+                </p>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="getHTML">
+        <xsl:param name="content"/>
+        <xsl:copy-of select="$content"/>
+    </xsl:template>
+
+
     <xsl:template name="dimSpecialField-DcDescriptionTableofcontents-pictures">
         <xsl:param name="field" select="."/>
 
         <table id="item-tableofcontents">
             <tr>
-                <th class="cor1"><i18n:text>xmlui.dri2xhtml.METS-1.0.item-description-tableofcontents.pictures-head1</i18n:text></th>
+                <th class="cor1" style="padding: 5px 2px;"><i18n:text>xmlui.dri2xhtml.METS-1.0.item-description-tableofcontents.pictures-head1</i18n:text></th>
                 <th class="cor1"><i18n:text>xmlui.dri2xhtml.METS-1.0.item-description-tableofcontents.pictures-head2</i18n:text></th>
             </tr>
             <xsl:call-template name="putLinksInGravuras">
@@ -927,10 +1065,31 @@
     </xsl:template>
 
 
+    <xsl:template name="replace-string">
+        <xsl:param name="text"/>
+        <xsl:param name="replace"/>
+        <xsl:param name="with"/>
+        <xsl:choose>
+            <xsl:when test="contains($text,$replace)">
+                <xsl:value-of select="substring-before($text,$replace)"/>
+                <xsl:value-of select="$with"/>
+                <xsl:call-template name="replace-string">
+                    <xsl:with-param name="text" select="substring-after($text,$replace)"/>
+                    <xsl:with-param name="replace" select="$replace"/>
+                    <xsl:with-param name="with" select="$with"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="$text"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+
     <xsl:template name="getItemTitleFromHandle">
         <xsl:param name="handle"/>
 
-        <xsl:if test="fn:matches(string($handle), '[0-9]{4}/[0-9]+')">
+        <xsl:if test="fn:matches(string($handle), '[0-9]{4}/[0-9-]+')">
             <xsl:variable name="ispartof-mets_path">
                 <xsl:value-of select="$absolute-base-url"/>
                 <xsl:text>/metadata/handle/</xsl:text>
@@ -949,7 +1108,7 @@
         <xsl:param name="element"/>
         <xsl:param name="qualifier"/>
 
-        <xsl:if test="fn:matches(string($handle), '[0-9]{4}/[0-9]+')">
+        <xsl:if test="fn:matches(string($handle), '[0-9]{4}/[0-9-]+')">
             <xsl:variable name="ispartof-mets_path">
                 <xsl:value-of select="$absolute-base-url"/>
                 <xsl:text>/metadata/handle/</xsl:text>
@@ -966,7 +1125,7 @@
     <xsl:template name="getItemFirstImageBitstreamURL">
         <xsl:param name="handle"/>
 
-        <xsl:if test="fn:matches(string($handle), '[0-9]{4}/[0-9]+')">
+        <xsl:if test="fn:matches(string($handle), '[0-9]{4}/[0-9-]+')">
             <xsl:variable name="ispartof-mets_path">
                 <xsl:value-of select="$absolute-base-url"/>
                 <xsl:text>/metadata/handle/</xsl:text>
@@ -982,7 +1141,7 @@
 
     <xsl:template name="putLinksInGravuras">
         <xsl:param name="stringIn"/>
-        <xsl:variable name="gravuraPattern" select="'\(Gravura [0-9]+\) - [0-9]{4}/[0-9]+'"/>
+        <xsl:variable name="gravuraPattern" select="'\(Gravura [0-9]+\) - [0-9]{4}/[0-9-]+'"/>
         <xsl:variable name="br" select="';'"/>
 
         <xsl:variable name="gravura" select="normalize-space(substring-before($stringIn, $br))"/>
@@ -990,7 +1149,7 @@
         <tr>
             <xsl:choose>
                 <xsl:when test="fn:matches($gravura, $gravuraPattern)">
-                    <td>
+                    <td style="text-align: center;">
                         <xsl:value-of select="substring-before(substring-after(normalize-space(substring-before($gravura, ' - ')), 'Gravura '), ')')"/>
                     </td>
 
@@ -1069,8 +1228,21 @@
 <!--CHANGED-->
     <!-- A collection rendered in the summaryList pattern. Encountered on the community-list page -->
     <xsl:template name="collectionSummaryList-DIM">
+        <xsl:param name="position" select="''"/>
         <xsl:variable name="data" select="./mets:dmdSec/mets:mdWrap/mets:xmlData/dim:dim"/>
 <!--        <span>cole&ccedil;&atilde;o 1 </span><span class="total-colecao">(100)</span>-->
+
+        <!-- Generate the thumbnail, if present, from the file section -->
+        <div class="caixa">
+            <xsl:comment>collectionSummaryList-DIM</xsl:comment>
+            <xsl:apply-templates select="./mets:fileSec" mode="artifact-preview"/>
+        </div>
+        <!-- Generate the info about the item from the metadata section -->
+        <xsl:apply-templates select="./mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']/mets:xmlData/dim:dim" mode="communityCollectionSummaryList-DIM">
+            <xsl:with-param name="position" select="$position"/>
+        </xsl:apply-templates>
+
+        <!--
         <span>
             <a href="{@OBJID}">
                 <xsl:choose>
@@ -1083,7 +1255,9 @@
                 </xsl:choose>
             </a>
         </span>
+        -->
 		<!--Display collection strengths (item counts) if they exist-->
+        <!--
         <span class="total-colecao">
             <xsl:if test="string-length($data/dim:field[@element='format'][@qualifier='extent'][1]) &gt; 0">
                 <xsl:text>(</xsl:text>
@@ -1091,6 +1265,7 @@
                 <xsl:text>)</xsl:text>
             </xsl:if>
         </span>
+        -->
     </xsl:template>
 
 <!--CHANGED-->
@@ -1125,8 +1300,272 @@
     
 
 
+    <!-- Generate the info about the item from the metadata section -->
+    <xsl:template match="dim:dim" mode="communityCollectionSummaryList-DIM">
+        <xsl:param name="position" select="''"/>
+        <!-- adicionei uma div para separar a coluna do thumb com a coluna das informações -->
+        <div class="info">
+            <xsl:call-template name="commColl-info-resultado">
+                <xsl:with-param name="position" select="$position"/>
+            </xsl:call-template>
+
+            <xsl:call-template name="commColl-funcoes-resultado">
+                <xsl:with-param name="mets-context" select="ancestor::mets:METS"/>
+            </xsl:call-template>
+
+            <xsl:call-template name="commColl-colecao-resultado"/>
+
+            <div class="borda">
+                <p>
+                    <img>
+                        <xsl:attribute name="src">
+                            <xsl:value-of select="$images-path"/>
+                            <xsl:text>mais.png</xsl:text>
+                        </xsl:attribute>
+                    </img>
+                    <i18n:text>xmlui.ArtifactBrowser.ItemViewer.show_full</i18n:text>
+                </p>
+            </div>
+
+            <div class="caixa-borda">
+<!--                <xsl:call-template name="ficha-metadados"/>-->
+                <xsl:apply-templates select="." mode="communityCollectionMetadata" />
+            </div>
+
+        </div>
+
+        <!-- div para dar um clear no float -->
+        <div class="clear">
+            <xsl:comment>Empty</xsl:comment>
+        </div>
+    </xsl:template>
 
 
+
+    <xsl:template name="commColl-info-resultado">
+        <xsl:param name="position" select="''"/>
+        <xsl:variable name="itemWithdrawn" select="@withdrawn" />
+        <div class="info-resultado">
+            <!-- inseri span classe "numero-resultado" e coloquei texto pra visualizar-->
+            <h2 class="titulo-resultado">
+                <span class="numero-resultado"><xsl:if test="$position != ''"><xsl:value-of select="$position"/>. </xsl:if></span>
+<!--                    <a>título do resultado</a>-->
+                <span class="cor1">
+                    <xsl:element name="a">
+                        <xsl:attribute name="href">
+                            <xsl:choose>
+                                <xsl:when test="$itemWithdrawn">
+                                    <xsl:value-of select="ancestor::mets:METS/@OBJEDIT" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="ancestor::mets:METS/@OBJID" />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                        <span class="Z3988">
+                            <!--
+                            <xsl:attribute name="title">
+                                <xsl:call-template name="renderCOinS"/>
+                            </xsl:attribute>
+                            -->
+                            <xsl:choose>
+                                <xsl:when test="dim:field[@element='title']">
+                                    <xsl:value-of select="dim:field[@element='title'][1]/node()"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <i18n:text>xmlui.dri2xhtml.METS-1.0.no-title</i18n:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+
+                            <span class="total-colecao">
+                                <xsl:if test="string-length(dim:field[@element='format'][@qualifier='extent'][1]) &gt; 0">
+                                    <xsl:text> (</xsl:text>
+                                    <xsl:value-of select="dim:field[@element='format'][@qualifier='extent'][1]"/>
+                                    <xsl:text>)</xsl:text>
+                                </xsl:if>
+                            </span>
+
+                        </span>
+                    </xsl:element>
+                </span>
+            </h2>
+
+            <p class="autor-resultado">
+                <xsl:choose>
+                    <xsl:when test="dim:field[@element='contributor'][@qualifier='author']">
+                        <xsl:for-each select="dim:field[@element='contributor'][@qualifier='author']">
+                            <span>
+                              <xsl:if test="@authority">
+                                <xsl:attribute name="class"><xsl:text>ds-dc_contributor_author-authority</xsl:text></xsl:attribute>
+                              </xsl:if>
+                              <xsl:copy-of select="node()"/>
+                            </span>
+                            <xsl:if test="count(following-sibling::dim:field[@element='contributor'][@qualifier='author']) != 0">
+                                <xsl:text>; </xsl:text>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:when>
+                    <xsl:when test="dim:field[@element='creator']">
+                        <xsl:for-each select="dim:field[@element='creator']">
+                            <xsl:copy-of select="node()"/>
+                            <xsl:if test="count(following-sibling::dim:field[@element='creator']) != 0">
+                                <xsl:text>; </xsl:text>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:when>
+                    <xsl:when test="dim:field[@element='contributor']">
+                        <xsl:for-each select="dim:field[@element='contributor']">
+                            <xsl:copy-of select="node()"/>
+                            <xsl:if test="count(following-sibling::dim:field[@element='contributor']) != 0">
+                                <xsl:text>; </xsl:text>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <i18n:text>xmlui.dri2xhtml.METS-1.0.various-authors</i18n:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </p>
+
+            <p class="local-resultado">
+                <xsl:if test="dim:field[@element='date' and @qualifier='issued'] or dim:field[@element='publisher']">
+                    <span class="publisher-date">
+                        <xsl:text>(</xsl:text>
+                        <xsl:if test="dim:field[@element='publisher']">
+                            <span class="publisher">
+                                <xsl:copy-of select="dim:field[@element='publisher']/node()"/>
+                            </span>
+                            <xsl:text>, </xsl:text>
+                        </xsl:if>
+                        <span class="date">
+                            <xsl:value-of select="substring(dim:field[@element='date' and @qualifier='issued']/node(),1,10)"/>
+                        </span>
+                        <xsl:text>)</xsl:text>
+                    </span>
+                </xsl:if>
+            </p>
+        </div>
+    </xsl:template>
+
+
+    <xsl:template name="commColl-funcoes-resultado">
+        <xsl:param name="mets-context"/>
+        
+        <div class="funcoes-resultado">
+            <div class="visualizar-item">
+                <a>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$mets-context/@OBJID" />
+                    </xsl:attribute>
+                    <img>
+                        <xsl:attribute name="src">
+                            <xsl:value-of select="$images-path"/>
+                            <xsl:text>visualizar.png</xsl:text>
+                        </xsl:attribute>
+                    </img>
+                    <i18n:text>xmlui.dri2xhtml.METS-1.0.collection-view</i18n:text>
+                </a>
+            </div>
+        </div>
+    </xsl:template>
+
+
+    <xsl:template name="commColl-colecao-resultado">
+        <div class="colecao-resultado">
+            <span class="tipo-documento">
+                <xsl:choose>
+                    <xsl:when test="dim:field[@element='type' and not(@qualifier)]">
+                        <xsl:value-of select="dim:field[@element='type' and not(@qualifier)]"/>
+                        <xsl:call-template name="getDocumentTypeThumbnail">
+                            <xsl:with-param name="document_type_name" select="dim:field[@element='type' and not(@qualifier)]"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                </xsl:choose>
+            </span>
+        </div>
+    </xsl:template>
+
+
+<!--    <xsl:template name="ficha-metadados">-->
+    <xsl:template match="dim:dim" mode="communityCollectionMetadata">
+        <xsl:if test="dim:field[@element='description' and not(@qualifier)] != ''">
+            <xsl:apply-templates select="dim:field[@element='description' and not(@qualifier)]" mode="itemSummaryList-DIM"/>
+        </xsl:if>
+        <xsl:if test="dim:field[@element='description' and @qualifier='abstract'] != ''">
+            <xsl:apply-templates select="dim:field[@element='description' and @qualifier='abstract']" mode="itemSummaryList-DIM"/>
+        </xsl:if>
+        <xsl:if test="dim:field[@element='description' and @qualifier='tableofcontents'] != ''">
+            <xsl:apply-templates select="dim:field[@element='description' and @qualifier='tableofcontents']" mode="itemSummaryList-DIM"/>
+        </xsl:if>
+        <xsl:if test="dim:field[@element='identifier' and @qualifier='uri'] != ''">
+            <xsl:apply-templates select="dim:field[@element='identifier' and @qualifier='uri']" mode="itemSummaryList-DIM"/>
+        </xsl:if>
+        <xsl:if test="dim:field[@element='provenance' and not(@qualifier)] != ''">
+            <xsl:apply-templates select="dim:field[@element='provenance' and not(@qualifier)]" mode="itemSummaryList-DIM"/>
+        </xsl:if>
+        <xsl:if test="dim:field[@element='rights' and not(@qualifier)] != ''">
+            <xsl:apply-templates select="dim:field[@element='rights' and not(@qualifier)]" mode="itemSummaryList-DIM"/>
+        </xsl:if>
+        <xsl:if test="dim:field[@element='rights' and @qualifier='license'] != ''">
+            <xsl:apply-templates select="dim:field[@element='rights' and @qualifier='license']" mode="itemSummaryList-DIM"/>
+        </xsl:if>
+    </xsl:template>
+
+
+    
+    <xsl:template name="collectionSummaryGrid-DIM">
+        <xsl:param name="position"/>
+        <!-- Generate the thumbnail, if present, from the file section -->
+        <!-- Generate the thumbnail, if present, from the file section -->
+        <div class="caixa">
+            <xsl:comment>collectionSummaryList-DIM</xsl:comment>
+            <xsl:apply-templates select="./mets:fileSec" mode="artifact-preview"/>
+        </div>
+
+        <!-- Generate the info about the item from the metadata section -->
+        <xsl:apply-templates select="./mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']/mets:xmlData/dim:dim" mode="collectionSummaryGrid-DIM">
+            <xsl:with-param name="position" select="$position"/>
+        </xsl:apply-templates>
+    </xsl:template>
+    
+
+    <xsl:template match="dim:dim" mode="collectionSummaryGrid-DIM">
+        <xsl:param name="position"/>
+        <xsl:variable name="itemWithdrawn" select="@withdrawn" />
+        <div class="info-resultado">
+            <p class="titulo-resultado">
+                <span class="numero-resultado"><xsl:value-of select="$position"/>. </span>
+<!--                    <a>título do resultado</a>-->
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:choose>
+                            <xsl:when test="$itemWithdrawn">
+                                <xsl:value-of select="ancestor::mets:METS/@OBJEDIT" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="ancestor::mets:METS/@OBJID" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <span>
+                        <!-- class="Z3988">
+                        <xsl:attribute name="title">
+                            <xsl:call-template name="renderCOinS"/>
+                        </xsl:attribute>
+                        -->
+                        <xsl:choose>
+                            <xsl:when test="dim:field[@element='title']">
+                                <xsl:value-of select="dim:field[@element='title'][1]/node()"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <i18n:text>xmlui.dri2xhtml.METS-1.0.no-title</i18n:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </span>
+                </xsl:element>
+            </p>
+        </div>
+    </xsl:template>
     
     
     
@@ -1355,9 +1794,11 @@
                 <td><span class="bold"><i18n:text>xmlui.dri2xhtml.METS-1.0.item-title</i18n:text>: </span></td>
                 <td>
                     <span class="Z3988">
+                        <!--
                         <xsl:attribute name="title">
                             <xsl:call-template name="renderCOinS"/>
                         </xsl:attribute>
+                        -->
                         <xsl:choose>
                             <xsl:when test="count(dim:field[@element='title'][not(@qualifier)]) &gt; 1">
                                 <xsl:for-each select="dim:field[@element='title'][not(@qualifier)]">
@@ -1605,6 +2046,14 @@
             <xsl:when test="@LABEL='DSpace Item'">
                 <xsl:call-template name="itemHeadDetailView-DIM"/>
             </xsl:when>
+            <xsl:when test="@LABEL='DSpace Collection'">
+                <xsl:call-template name="collectionHeadDetailView-DIM"/>
+            </xsl:when>
+            <!--
+            <xsl:when test="@LABEL='DSpace Community'">
+                <xsl:call-template name="communityDetailView-DIM"/>
+            </xsl:when>
+            -->
             <xsl:otherwise>
                 <i18n:text>xmlui.dri2xhtml.METS-1.0.non-conformant</i18n:text>
             </xsl:otherwise>
@@ -1667,10 +2116,22 @@
 		<!-- Generate the bitstream information from the file section -->
         <xsl:choose>
             <xsl:when test="./mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']">
+                <xsl:choose>
+                    <xsl:when test="./mets:structMap/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID">
+                        <xsl:variable name="primaryBitstream" select="./mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID"/>
+
+                        <xsl:apply-templates select="./mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[@ID=$primaryBitstream]" mode="image-viewer">
+                            <xsl:with-param name="context" select="."/>
+                        </xsl:apply-templates>
+                    </xsl:when>
+
+                    <xsl:otherwise>
                 <xsl:apply-templates select="./mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[1]" mode="image-viewer">
                     <xsl:with-param name="context" select="."/>
 <!--                    <xsl:with-param name="primaryBitstream" select="./mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID"/>-->
                 </xsl:apply-templates>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
                 <h2><i18n:text>xmlui.dri2xhtml.METS-1.0.item-files-head</i18n:text></h2>
@@ -1688,11 +2149,24 @@
 		<!-- Generate the bitstream information from the file section -->
         <xsl:choose>
             <xsl:when test="./mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']">
+                <xsl:choose>
+                    <xsl:when test="./mets:structMap/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID">
+                        <xsl:variable name="primaryBitstream" select="./mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID"/>
+
+                        <xsl:apply-templates select="./mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[@ID=$primaryBitstream]" mode="book-viewer">
+                            <xsl:with-param name="context" select="."/>
+                        </xsl:apply-templates>
+                    </xsl:when>
+
+                    <xsl:otherwise>
                 <xsl:apply-templates select="./mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[1]" mode="book-viewer">
                     <xsl:with-param name="context" select="."/>
 <!--                    <xsl:with-param name="primaryBitstream" select="./mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID"/>-->
                 </xsl:apply-templates>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
+
             <xsl:otherwise>
                 <h2><i18n:text>xmlui.dri2xhtml.METS-1.0.item-files-head</i18n:text></h2>
             </xsl:otherwise>
@@ -1748,7 +2222,8 @@
 
 
         <xsl:if test="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')] or //dim:field[@element='relation' and @qualifier='ispartof']">
-        <div id="caixas">&#160;
+        <div id="caixas">
+            <xsl:comment>Info</xsl:comment>
                     <!-- tirei classe modos, troquei span por div, adicionei tags span e h4 e adicionei img -->
 <!--                    <div class="sumario"><span class="cor2"><a>sumário <img src="{$images-path}/mais2.png"/></a></span></div>-->
 <!--                    <div class="pesquisa-interna"><span class="cor2"><a>pesquisa neste item <img src="{$images-path}/mais2.png"/></a></span></div>-->
@@ -1775,16 +2250,29 @@
                     </span>
                     <span class="info-item cor1">
                         <a>
-                            <xsl:attribute name="href">
+                            <xsl:variable name="handle">
                                 <xsl:choose>
-                                    <xsl:when test="fn:matches(string(//dim:field[@element='relation' and @qualifier='ispartof']), '[0-9]{4}/[0-9]+')">
-                                        <xsl:value-of select="$context-path"/>
-                                        <xsl:text>/handle/</xsl:text>
+                                    <xsl:when test="contains(string(//dim:field[@element='relation' and @qualifier='ispartof']), 'handle.net/')">
+                                        <xsl:value-of select="substring-after(//dim:field[@element='relation' and @qualifier='ispartof'], 'handle.net/')"/>
+                                    </xsl:when>
+                                    <xsl:when test="fn:matches(string(//dim:field[@element='relation' and @qualifier='ispartof']), '[0-9]{4}/[0-9-]+')">
                                         <xsl:value-of select="//dim:field[@element='relation' and @qualifier='ispartof']"/>
                                     </xsl:when>
                                     <xsl:otherwise>
+
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:variable>
+                            <xsl:attribute name="href">
+                                <xsl:choose>
+                                    <xsl:when test="$handle != ''">
                                         <xsl:value-of select="$context-path"/>
-                                        <xsl:text>/advanced-search?field1=title&amp;query1=</xsl:text>
+                                        <xsl:text>/handle/</xsl:text>
+                                        <xsl:value-of select="$handle"/>                                        
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="$context-path"/>
+                                        <xsl:text>/search?query=</xsl:text>
                                         <xsl:copy-of select="//dim:field[@element='relation' and @qualifier='ispartof']/node()"/>
                                     </xsl:otherwise>
                                 </xsl:choose>
@@ -1792,7 +2280,7 @@
 
                             <xsl:variable name="title">
                                 <xsl:call-template name="getItemTitleFromHandle">
-                                    <xsl:with-param name="handle" select="//dim:field[@element='relation' and @qualifier='ispartof']"/>
+                                    <xsl:with-param name="handle" select="$handle"/>
                                 </xsl:call-template>
                             </xsl:variable>
                             <xsl:choose>
@@ -1822,10 +2310,22 @@
             <div class='paginacao'>&#160;</div>
             <div class='resultados-pagina'>&#160;</div>
 
+            <xsl:variable name="primaryBitstream" select="//mets:structMap/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID"/>
+            <xsl:variable name="fileid">
+                <xsl:choose>
+                    <xsl:when test="$primaryBitstream != ''">
+                        <xsl:value-of select="$primaryBitstream"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[1]/@ID"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+
             <div class="funcional">
                 <span class="imprimir">
 <!--                    <a class="icone_barra print rollover" onclick='printElement("#visualizador-imagem #target");'>-->
-                    <a class="icone_barra print rollover" onclick='printURL(iip.getCompleteImageOpenURL());'>
+                    <a class="icone_barra print rollover">
 <!--                    <a class="icone_barra print rollover">-->
                         <xsl:attribute name="title">
                             <xsl:text>xmlui.Discovery.ItemViewer.toolbar.print</xsl:text>
@@ -1833,19 +2333,55 @@
                         <xsl:attribute name="i18n:attr">
                             <xsl:text>title</xsl:text>
                         </xsl:attribute>
+
+                        <xsl:variable name="action">
+                            <xsl:value-of select="//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[@ID=$fileid]/@MIMETYPE"/>
+                        </xsl:variable>
+
+                        <xsl:variable name="event">
+                            <xsl:text>_gaq.push(['_trackEvent',</xsl:text>
+                            <xsl:text>'Item prints','</xsl:text>
+                            <xsl:value-of select="$action"/>
+                            <xsl:text>','</xsl:text>
+                            <xsl:value-of select="//dim:dim/dim:field[@element='title'][1]"/>
+                            <xsl:text>']);</xsl:text>
+                        </xsl:variable>
+                    
+                        <xsl:attribute name="onClick">
+                            <xsl:value-of select="$event"/>
+                            <xsl:value-of select="'printURL(iip.getCompleteImageOpenURL()); return false;'"/>
+                        </xsl:attribute>
                         &#160;
                     </a>
                 </span>
                 <span class="baixar">
                     <a class="icone_barra rollover download">
                         <xsl:attribute name="href">
-                            <xsl:value-of select="substring-before(//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[1]/mets:FLocat[@LOCTYPE='URL']/@xlink:href, '?')"/>
+                            <xsl:value-of select="substring-before(//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[@ID=$fileid]/mets:FLocat[@LOCTYPE='URL']/@xlink:href, '?')"/>
                         </xsl:attribute>
+
                         <xsl:attribute name="title">
                             <xsl:text>xmlui.Discovery.ItemViewer.toolbar.download</xsl:text>
                         </xsl:attribute>
                         <xsl:attribute name="i18n:attr">
                             <xsl:text>title</xsl:text>
+                        </xsl:attribute>
+
+                        <xsl:variable name="action">
+                            <xsl:value-of select="//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[@ID=$fileid]/@MIMETYPE"/>
+                        </xsl:variable>
+
+                        <xsl:variable name="event">
+                            <xsl:text>_gaq.push(['_trackEvent',</xsl:text>
+                            <xsl:text>'Item downloads','</xsl:text>
+                            <xsl:value-of select="$action"/>
+                            <xsl:text>','</xsl:text>
+                            <xsl:value-of select="//dim:dim/dim:field[@element='title'][1]"/>
+                            <xsl:text>']);</xsl:text>
+                        </xsl:variable>
+                    
+                        <xsl:attribute name="onClick">
+                            <xsl:value-of select="$event"/>
                         </xsl:attribute>
                         &#160;
                     </a>
@@ -2086,11 +2622,23 @@
             </div>
 
             <div class="resultados-pagina">
-                <form class="BRpageform" action="javascript:" onsubmit="br.jumpToPage(this.elements[0].value)">
+                <form class="BRpageform" action="javascript:" onsubmit="br.jumpToPage(this.elements[1].value);">
                     <span class="barra-texto label"><i18n:text>xmlui.Discovery.ItemViewer.toolbar.jump_to_page</i18n:text></span>
-                    <input id="BRpagenum" type="text" size="3" onfocus="br.autoStop();"></input>
+                    <input id="BRpagenum" type="text" size="3" onfocus="br.autoStop();" onblur="br.jumpToPage(this.value);" onkeydown="e = event || window.event; var unicode = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0; if (unicode == 13) {{ br.jumpToPage(this.value); return false; }} else return true;"></input>
                 </form>
             </div>
+
+            <xsl:variable name="primaryBitstream" select="//mets:structMap/mets:div[@TYPE='DSpace Item']/mets:fptr/@FILEID"/>
+            <xsl:variable name="fileid">
+                <xsl:choose>
+                    <xsl:when test="$primaryBitstream != ''">
+                        <xsl:value-of select="$primaryBitstream"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[1]/@ID"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
 
             <div class="funcional">
                 <span class="imprimir">
@@ -2101,19 +2649,55 @@
                         <xsl:attribute name="i18n:attr">
                             <xsl:text>title</xsl:text>
                         </xsl:attribute>
+
+                        <xsl:variable name="action">
+                            <xsl:value-of select="//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[@ID=$fileid]/@MIMETYPE"/>
+                        </xsl:variable>
+
+                        <xsl:variable name="event">
+                            <xsl:text>_gaq.push(['_trackEvent',</xsl:text>
+                            <xsl:text>'Item prints','</xsl:text>
+                            <xsl:value-of select="$action"/>
+                            <xsl:text>','</xsl:text>
+                            <xsl:value-of select="//dim:dim/dim:field[@element='title'][1]"/>
+                            <xsl:text>']);</xsl:text>
+                        </xsl:variable>
+                    
+                        <xsl:attribute name="onClick">
+                            <xsl:value-of select="$event"/>
+                            <xsl:value-of select="'; printURL(br.getPrintURI()); return false;'"/>
+                        </xsl:attribute>
                         &#160;
                     </a>
                 </span>
                 <span class="baixar">
                     <a class="icone_barra rollover download">
                         <xsl:attribute name="href">
-                            <xsl:value-of select="substring-before(//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[1]/mets:FLocat[@LOCTYPE='URL']/@xlink:href, '?')"/>
+                            <xsl:value-of select="substring-before(//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[@ID=$fileid]/mets:FLocat[@LOCTYPE='URL']/@xlink:href, '?')"/>
                         </xsl:attribute>
+
                         <xsl:attribute name="title">
                             <xsl:text>xmlui.Discovery.ItemViewer.toolbar.download</xsl:text>
                         </xsl:attribute>
                         <xsl:attribute name="i18n:attr">
                             <xsl:text>title</xsl:text>
+                        </xsl:attribute>
+
+                        <xsl:variable name="action">
+                            <xsl:value-of select="//mets:fileSec/mets:fileGrp[@USE='CONTENT' or @USE='ORIGINAL']/mets:file[@ID=$fileid]/@MIMETYPE"/>
+                        </xsl:variable>
+
+                        <xsl:variable name="event">
+                            <xsl:text>_gaq.push(['_trackEvent',</xsl:text>
+                            <xsl:text>'Item downloads','</xsl:text>
+                            <xsl:value-of select="$action"/>
+                            <xsl:text>','</xsl:text>
+                            <xsl:value-of select="//dim:dim/dim:field[@element='title'][1]"/>
+                            <xsl:text>']);</xsl:text>
+                        </xsl:variable>
+                    
+                        <xsl:attribute name="onClick">
+                            <xsl:value-of select="$event"/>
                         </xsl:attribute>
                         &#160;
                     </a>
@@ -2161,11 +2745,14 @@
 
     <!-- The block of templates used to render the complete DIM contents of a DRI object -->
     <xsl:template match="dim:dim" mode="itemDetailView-DIM">
+        <!--
         <span class="Z3988">
             <xsl:attribute name="title">
                  <xsl:call-template name="renderCOinS"/>
             </xsl:attribute>
+
         </span>                
+        -->
 		<table class="ds-includeSet-table">
 		    <xsl:apply-templates mode="itemDetailView-DIM"/>
 		</table>
@@ -2214,6 +2801,112 @@
                 mode="collectionDetailView-DIM"/>
         </div>
     </xsl:template>
+    
+    <xsl:template name="collectionHeadDetailView-DIM">
+        <div id="dados-item">
+            <h3>
+                <span id="nome-item">
+                    <xsl:value-of select="//dim:field[@element='title' and not(@qualifier)]"/>
+                    <xsl:text>.</xsl:text>
+                </span>
+                <span id="mais-metadados" onclick="alternarMaisMetadados();">
+                    <img src="{$images-path}/mais_filtro.png"/>
+                </span>
+            </h3>
+        </div>
+
+
+        <div class="caixa-borda3 fichas" id="ficha-meta">
+            <img class="icone_peq fechar" id="fechar-meta" />
+<!--             <img class='icone_peq fechar' id='fechar-link'/>-->
+            <xsl:apply-templates select="mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']/mets:xmlData/dim:dim" mode="communityCollectionMetadata"/>
+<!--            <xsl:call-template name="ficha-metadados"/>-->
+        </div>
+
+
+        <div id="colecao-item">
+            <xsl:variable name="type">
+<!--                            <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='type']"/>-->
+                <xsl:value-of select="//dim:dim/dim:field[@element='type' and not(@qualifier)]"/>
+            </xsl:variable>
+                    <!-- estruturei de forma semelhante ao tipo-documento do resultado de busca -->
+            <span id="nome-colecao">
+                <xsl:value-of select="$type"/>
+<!--                        <img src="{$images-path}/livro.png"/>-->
+            </span>
+            <xsl:call-template name="getDocumentTypeThumbnail">
+                <xsl:with-param name="document_type_name" select="$type"/>
+            </xsl:call-template>
+        </div>
+
+
+        <xsl:if test="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')] or //dim:field[@element='relation' and @qualifier='ispartof']">
+        <div id="caixas">&#160;
+                    <!-- tirei classe modos, troquei span por div, adicionei tags span e h4 e adicionei img -->
+<!--                    <div class="sumario"><span class="cor2"><a>sumário <img src="{$images-path}/mais2.png"/></a></span></div>-->
+<!--                    <div class="pesquisa-interna"><span class="cor2"><a>pesquisa neste item <img src="{$images-path}/mais2.png"/></a></span></div>-->
+
+<!--            <xsl:if test="contains(string(//dim:field[@element='description' and @qualifier='tableofcontents']), '(Gravura')">-->
+            <xsl:if test="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')]">
+                <div class="imagens-item">
+                    <span class="cor2" id="mais-imagens">
+                        <i18n:text>xmlui.dri2xhtml.METS-1.0.item-description-tableofcontents.pictures</i18n:text><img src="{$images-path}/mais2.png"/>
+                    </span>
+                    <div class="caixa-borda3 fichas" id="ficha-imagens">
+                        <img src="{$images-path}/fechar.png" class="fechar" id="fechar-imagens" />
+                        <xsl:call-template name="dimSpecialField-DcDescriptionTableofcontents-pictures">
+                            <xsl:with-param name="field" select="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')]"/>
+                        </xsl:call-template>
+                    </div>
+                </div>
+            </xsl:if>
+            
+            <xsl:if test="//dim:field[@element='relation' and @qualifier='ispartof']">
+                <div class="info-visualizador">
+                    <span class="barra-texto">
+                        <i18n:text>xmlui.dri2xhtml.METS-1.0.item-relation-ispartof.long</i18n:text>
+                    </span>
+                    <span class="info-item cor1">
+                        <a>
+                            <xsl:attribute name="href">
+                                <xsl:choose>
+                                    <xsl:when test="fn:matches(string(//dim:field[@element='relation' and @qualifier='ispartof']), '[0-9]{4}/[0-9-]+')">
+                                        <xsl:value-of select="$context-path"/>
+                                        <xsl:text>/handle/</xsl:text>
+                                        <xsl:value-of select="//dim:field[@element='relation' and @qualifier='ispartof']"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="$context-path"/>
+                                        <xsl:text>/search?fq=dc.title_t:</xsl:text>
+                                        <xsl:copy-of select="//dim:field[@element='relation' and @qualifier='ispartof']/node()"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:attribute>
+
+                            <xsl:variable name="title">
+                                <xsl:call-template name="getItemTitleFromHandle">
+                                    <xsl:with-param name="handle" select="//dim:field[@element='relation' and @qualifier='ispartof']"/>
+                                </xsl:call-template>
+                            </xsl:variable>
+                            <xsl:choose>
+                                <xsl:when test="$title != ''">
+                                    <xsl:value-of select="$title"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:copy-of select="//dim:field[@element='relation' and @qualifier='ispartof']/node()"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </a>
+<!--                        <xsl:if test="count(following-sibling::dim:field[@element='relation' and @qualifier='ispartof']) != 0">
+                            <br/>
+                        </xsl:if>-->
+                    </span>
+                </div>
+            </xsl:if>
+        </div>
+        </xsl:if>
+    </xsl:template>
+
     
     <!-- Generate the info about the collection from the metadata section -->
     <xsl:template match="dim:dim" mode="collectionDetailView-DIM"> 
@@ -2352,7 +3045,8 @@
     
     <!-- A community rendered in the detailView pattern; default way of viewing a community. -->
     <xsl:template name="communityDetailView-DIM">
-        <div class="detail-view">&#160;
+        <div class="detail-view">
+            <xsl:comment>communityDetailView-DIM</xsl:comment>
             <!-- Generate the logo, if present, from the file section -->
             <xsl:apply-templates select="./mets:fileSec/mets:fileGrp[@USE='LOGO']"/>
             <!-- Generate the info about the collections from the metadata section -->
@@ -2433,3 +3127,4 @@
     
     
 </xsl:stylesheet>
+

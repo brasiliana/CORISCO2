@@ -26,14 +26,46 @@
 
     <!-- Generate the thunbnail, if present, from the file section -->
     <xsl:template match="mets:fileSec" mode="artifact-preview">
+        <xsl:param name="primaryBitstream" select="-1"/>
+        <xsl:comment><xsl:value-of select="$primaryBitstream"/></xsl:comment>
+
         <a href="{ancestor::mets:METS/@OBJID}">
             <xsl:choose>
+                <xsl:when test="$primaryBitstream != -1">
+                    <xsl:choose>
+                        <xsl:when test="mets:fileGrp[@USE='THUMBNAIL']/mets:file[@ID=$primaryBitstream]">
+                            <img class="preview-thumbnail" alt="Thumbnail">
+                                <xsl:attribute name="src">
+                                    <xsl:value-of select="mets:fileGrp[@USE='THUMBNAIL']/mets:file[@ID=$primaryBitstream]/mets:FLocat[@LOCTYPE='URL']/@xlink:href" />
+                                </xsl:attribute>
+                            </img>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:variable name="thumbnail-path">
+                                <xsl:value-of select="$djatoka-thumbnail-base-url"/>
+                                <xsl:value-of select="//mets:structMap[@TYPE='LOGICAL']/mets:div[@TYPE='DSpace Item']//mets:fptr[@FILEID=$primaryBitstream]/@FILEINTERNALID"/>
+                            </xsl:variable>
+        
+                            <img class="preview-thumbnail" alt="Thumbnail" onerror="this.onerror=null;this.src='{$bookreader-path}/images/transparent.png';">
+                                <xsl:attribute name="src">
+                                    <xsl:value-of select="$thumbnail-path"/>
+                                </xsl:attribute>
+                            </img>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+
                 <xsl:when test="mets:fileGrp[@USE='THUMBNAIL']">
-                    <img alt="Thumbnail">
+                    <img class="preview-thumbnail" alt="Thumbnail">
                         <xsl:attribute name="src">
                             <xsl:value-of select="mets:fileGrp[@USE='THUMBNAIL']/mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href" />
                         </xsl:attribute>
                     </img>
+                </xsl:when>
+
+                <xsl:when test="mets:fileGrp[@USE='LOGO']">
+                    <xsl:comment>@USE='LOGO' preview-thumbnail</xsl:comment>
+                    <xsl:apply-templates select="mets:fileGrp[@USE='LOGO']"/>
                 </xsl:when>
 
                 <xsl:otherwise>
@@ -268,12 +300,21 @@
 
     <!-- Generate the logo, if present, from the file section -->
     <xsl:template match="mets:fileGrp[@USE='LOGO']">
+        <!--
         <div class="ds-logo-wrapper">
             <img src="{mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href}" class="logo">
                 <xsl:attribute name="alt">xmlui.dri2xhtml.METS-1.0.collection-logo-alt</xsl:attribute>
                 <xsl:attribute name="attr" namespace="http://apache.org/cocoon/i18n/2.1">alt</xsl:attribute>
             </img>
         </div>
+        -->
+                    <img class="preview-thumbnail" alt="Thumbnail" onerror="this.onerror=null;this.src='{$bookreader-path}/images/transparent.png';">
+                        <xsl:attribute name="src">
+                            <xsl:value-of select="mets:file/mets:FLocat[@LOCTYPE='URL']/@xlink:href"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="alt">xmlui.dri2xhtml.METS-1.0.collection-logo-alt</xsl:attribute>
+                        <xsl:attribute name="attr" namespace="http://apache.org/cocoon/i18n/2.1">alt</xsl:attribute>
+                    </img>
     </xsl:template>
 
 
