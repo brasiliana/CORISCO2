@@ -44,13 +44,6 @@ import javax.imageio.stream.MemoryCacheImageOutputStream;
 
 import org.apache.log4j.Logger;
 
-//import com.sun.image.codec.jpeg.ImageFormatException;
-//import com.sun.image.codec.jpeg.JPEGCodec;
-//import com.sun.image.codec.jpeg.JPEGEncodeParam;
-//import com.sun.image.codec.jpeg.JPEGImageEncoder;
-//import com.sun.media.jai.codec.ImageCodec;
-//import com.sun.media.jai.codec.ImageEncoder;
-
 /**
  * JPG File Writer. Uses JAI to write BufferedImage as JPG
  * @author Ryan Chute

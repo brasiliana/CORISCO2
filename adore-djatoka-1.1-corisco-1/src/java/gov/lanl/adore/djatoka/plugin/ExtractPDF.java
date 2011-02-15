@@ -56,8 +56,8 @@ import org.im4java.core.PDFInfo;
 import org.im4java.core.Stream2BufferedImage;
 
 /**
- * Uses im4java library to extract PDF pages.  
- * @author Fabio Kepler
+ * Uses im4java library to extract PDF pages as PNG.  
+ * @author Fabio N. Kepler
  *
  */
 public class ExtractPDF implements IExtract {
