@@ -3,10 +3,47 @@
 <!--
   structural.xsl
 
+  Version: 1
+ 
+  Date: 2011-02-15 09:30:00 -0200 (Tue, 15 Feb 2011)
+ 
+  Copyright (c) 2010-2011, Brasiliana Digital Library (http://brasiliana.usp.br).
+  Copyright (c) 2002-2005, Hewlett-Packard Company and Massachusetts
+  Institute of Technology.  All rights reserved.
+ 
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are
+  met:
+ 
+  - Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+ 
+  - Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+ 
+  - Neither the name of the Hewlett-Packard Company nor the name of the
+  Massachusetts Institute of Technology nor the names of their
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+ 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+  DAMAGE.
 -->
 
 <!--
-    TODO: Describe this XSL file
+    Based on the Reference theme (copied and modified).
+    Author: Fabio N. Kepler
 -->
 
 <xsl:stylesheet xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
@@ -301,9 +338,9 @@
                     <h1 id="site-logo">
                         <a>
                             <xsl:attribute name="href">
-                                <!--
+                                <!-- -->
                                 <xsl:value-of select="$context-path"/>
-                                -->
+                                <!-- -->
                                 <xsl:text>/</xsl:text>
                             </xsl:attribute>
                             <img id="imagem-logo">
@@ -353,7 +390,7 @@
                         <xsl:apply-templates select="/dri:document/dri:options/dri:list[@n='top-search']" mode="header"/>
 
 
-<!-- Changing search type: instead of scoped search by collection, we're going to do scoped search by filter.
+                        <!-- Changing search type: instead of scoped search by collection, we're going to do scoped search by filter.
                         <fieldset>
                             <input id="caixa-busca" type="text">
                                 <xsl:attribute name="name">
@@ -558,11 +595,6 @@
         templates of the body's child elements (which consists entirely of dri:div tags).
     -->
     <xsl:template match="dri:body">
-<!--            <form id="formulario-busca" method="post">
-                <xsl:attribute name="action">
-                    <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='simpleURL']"/>
-                </xsl:attribute>-->
-
         <div id="conteudo">
             <xsl:if test="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='alert'][@qualifier='message']">
                 <div id="ds-system-wide-alert">
@@ -572,42 +604,21 @@
                 </div>
             </xsl:if>
 
-<!--            STOP-->
-
             <form>
                 <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']" mode="formAttributes" />
                 <xsl:attribute name="id">formulario-busca</xsl:attribute>
                 <xsl:attribute name="method">GET</xsl:attribute>
 
-
-<!--                <xsl:for-each select="//dri:div[@interactive='yes'][@n='general-query']/*[not(name()='head')]">
-                    <xsl:value-of select="name()"/>
-                    <xsl:apply-templates select="."/>
-                </xsl:for-each>-->
-
-<!--                <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:list"/>-->
-<!--                <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:table"/>-->
-<!--                <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:p"/>-->
-
-<!--                <input type="submit" i18n:attr="value" value="xmlui.general.add_filter" name="{concat('submit_',@n,'-filter-controls_add')}"/>-->
-
                 <xsl:call-template name="conteudo-alto" />
                 <xsl:call-template name="conteudo-central" />
-
             </form>
 
             <xsl:call-template name="conteudo-baixo" />
-
-<!--            <xsl:apply-templates />-->
-
         </div>
-<!--        </form>-->
     </xsl:template>
 
 
     <xsl:template match="dri:div[@interactive='yes'][@n='general-query']" mode="formAttributes" priority="2">
-<!--        <xsl:apply-templates select="dri:head"/>-->
-<!--        <form>-->
             <xsl:call-template name="standardAttributes">
                 <xsl:with-param name="class">ds-interactive-div</xsl:with-param>
             </xsl:call-template>
@@ -621,16 +632,15 @@
                 <xsl:attribute name="method">post</xsl:attribute>
                 <xsl:attribute name="enctype">multipart/form-data</xsl:attribute>
             </xsl:if>
-<!--            <xsl:attribute name="onsubmit">javascript:tSubmit(this);</xsl:attribute>-->
 
-                        <!--For Item Submission process, disable ability to submit a form by pressing 'Enter'-->
+<!--            <xsl:attribute name="onsubmit">javascript:tSubmit(this);</xsl:attribute>-->
+            <!--For Item Submission process, disable ability to submit a form by pressing 'Enter'-->
 <!--            <xsl:if test="starts-with(@n,'submit')">
                 <xsl:attribute name="onkeydown">javascript:return disableEnterKey(event);</xsl:attribute>
-            </xsl:if>-->
+                </xsl:if>-->
 
 <!--            <xsl:apply-templates select="*[not(name()='head')]"/>-->
 
-<!--        </form>-->
         <!-- JS to scroll form to DIV parent of "Add" button if jump-to -->
         <xsl:if test="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='page'][@qualifier='jumpTo']">
             <script type="text/javascript">
@@ -666,10 +676,8 @@
     -->
     <!-- TODO: figure out why i18n tags break the go button -->
     <xsl:template match="dri:options">
-<!--        <div id="ds-options">-->
         <div id="coluna-filtros">
             <xsl:apply-templates />
-<!--            <xsl:call-template name="coluna-filtros"/>-->
         </div>
     </xsl:template>
 
@@ -697,7 +705,6 @@
 <!--        <xsl:apply-templates select="dri:head"/>-->
         <xsl:apply-templates select="*[not(name()='head')]"/>
     </xsl:template>
-
 
     <xsl:template match="dri:div[@id='aspect.discovery.CommunitySearch.div.community-search-browse']">
         <xsl:apply-templates select="dri:div[@id='aspect.discovery.CommunitySearch.div.community-search']"/>
@@ -781,6 +788,7 @@
 
 
 
+    <!-- Top content -->
     <xsl:template name="conteudo-alto">
         <xsl:variable name="container-handle">
             <xsl:value-of select="substring-after(/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='focus'][@qualifier='container'], ':')"/>
@@ -818,7 +826,6 @@
                 <xsl:when test="//dri:body//dri:div[@id='aspect.discovery.SimpleSearch.div.search-results']">
                     <div id="dados-item">
                         <h3>
-<!--                            <span id="nome-item"><xsl:apply-templates select="//dri:body//dri:p[@id='aspect.discovery.SimpleSearch.p.result-query']/i18n:translate"/></span>-->
                             <span id="nome-item">
                                 <xsl:choose>
                                     <!-- If query is empty and there is no facet filter, display a possible different header. -->
@@ -831,7 +838,6 @@
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </span>
-<!--                            <span id="autoria-item"><xsl:copy-of select="//dri:body//dri:p[@n='result-query'][@rend='result-query']"/></span>-->
                             <span id="autoria-item">
                                 <xsl:value-of select="//dri:body//dri:field[@id='aspect.discovery.SimpleSearch.field.query']/dri:value"/>
                                 <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:list[@n='search-query']/dri:item/dri:field[@n='query']" mode="dados-item"/>
@@ -867,8 +873,6 @@
                     <div id="dados-item">
                         <h3>
                             <span id="nome-item"><xsl:comment>No matching primary div.</xsl:comment></span>
-<!--                            <span id="nome-item"><i18n:text>xmlui.ArtifactBrowser.AbstractSearch.result_query_head</i18n:text></span>
-                            <span id="autoria-item">palavras utilizadas na busca</span>-->
                         </h3>
                     </div>
                 </xsl:otherwise>
@@ -881,6 +885,7 @@
     </xsl:template>
 
 
+    <!-- Central/main content -->
     <xsl:template name="conteudo-central">
         <div id="conteudo-central">
             <xsl:choose>
@@ -893,13 +898,10 @@
                     <div id="coluna-resultados">
                         <xsl:if test="//dri:options/dri:list[@n='discovery-location']">
                             <div id="abas">
-        <!--                    <xsl:apply-templates select="//dri:referenceSet[@type = 'summaryList'][@n = 'community-browser']"/>-->
-        <!--                    <xsl:call-template name="abas"/>-->
                                 <xsl:apply-templates select="//dri:options/dri:list[@n='discovery-location']" mode="tabList"/>
                             </div>
                         </xsl:if>
 
-        <!--                <xsl:call-template name="resultados"/>-->
                         <xsl:apply-templates select="//dri:body/dri:div"/>
                     </div>
 
@@ -910,6 +912,7 @@
     </xsl:template>
 
 
+    <!-- Bottom content -->
     <xsl:template name="conteudo-baixo">
         <div id="conteudo-baixo" class="borda">
             <xsl:call-template name="caixa-barra">
@@ -933,7 +936,6 @@
                 <xsl:apply-templates select="//dri:body/dri:div[@n='search']//dri:table[@n='search-controls']"/>
             </xsl:when>
             <xsl:when test="/dri:document/dri:body/dri:div[starts-with(@n, 'browse-by-')]">
-<!--                <xsl:apply-templates select="//dri:body/dri:div[starts-with(@n, 'browse-by-')]//dri:table[@n='browse-controls']"/>-->
                 <xsl:apply-templates select="//dri:body/dri:div[starts-with(@n, 'browse-by-')]/dri:div[@n='browse-controls']"/>
             </xsl:when>
             <xsl:when test="/dri:document/dri:body/dri:div[@n='item-view']">
@@ -944,7 +946,7 @@
                 </xsl:if>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:comment>Empty</xsl:comment>
+                <xsl:comment>caixa-barra: empty for everything else.</xsl:comment>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -953,10 +955,7 @@
     <xsl:template match="dri:table[@n='search-controls']" priority="4">
         <div class="caixa">
             <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:table//dri:cell[dri:field[@n='view']]" mode="searchControls"/>
-
-<!--            <xsl:call-template name="numero-resultados"/>-->
-                <xsl:apply-templates select="//dri:div[@n='search-results']/@pagination"/>
-
+            <xsl:apply-templates select="//dri:div[@n='search-results']/@pagination"/>
             <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:table//dri:cell[not(dri:field[@n='view'])]" mode="searchControls"/>
         </div>
     </xsl:template>
@@ -966,35 +965,25 @@
         <div class="caixa">
             <xsl:apply-templates select="dri:p[@rend='hidden']"/>
             <xsl:apply-templates select="dri:table"/>
-            <!--<xsl:apply-templates select="../dri:div[@n='browse-navigation']/dri:p[@rend='hidden']"/>
-            TESTE8-->
         </div>
     </xsl:template>
 
     <xsl:template name="itemViewer">
         <div id="visualizador-paginas">
             <!--Different types of viewers-->
-<!--            <div id="pagina-unica" style="display: block; ">-->
-                <xsl:apply-templates select="/dri:document/dri:body/dri:div/dri:referenceSet"/>
-<!--                <div id="trilho-pagina" class="borda">
-                </div>-->
-<!--            </div>-->
+            <xsl:apply-templates select="/dri:document/dri:body/dri:div/dri:referenceSet"/>
         </div>
     </xsl:template>
 
 
 
-    
 
     <xsl:template match="dri:table[@n='browse-controls']" priority="1">
             <xsl:apply-templates select="dri:row/dri:cell[dri:field[@n='view']]" mode="browseControls"/>
-
-<!--            <xsl:call-template name="numero-resultados"/>-->
-<!--            <xsl:apply-templates select="//dri:div[starts-with(@n, 'browse-by-')][fn:ends-with(fn:string(@n), '-results')]/@pagination"/>-->
             <xsl:apply-templates select="//dri:div[fn:matches(string(@n), '^browse-by-.+-results$')]/@pagination"/>
-
             <xsl:apply-templates select="dri:row/dri:cell[not(dri:field[@n='view'])]" mode="browseControls"/>
     </xsl:template>
+
 
     <xsl:template match="dri:table[starts-with(@n, 'browse-by-')]">
         <ul>
@@ -1015,14 +1004,16 @@
         <xsl:variable name="title">
             <xsl:choose>
                 <xsl:when test="@n = '1918/1'">
-                    <!-- Outro título -->
+                    <!-- Use another title instead of comm/coll title. -->
                     <i18n:text>xmlui.general.main_tab</i18n:text>
                     <xsl:text> (</xsl:text>
                     <xsl:value-of select="substring-after(., '(')"/>
                 </xsl:when>
+                <!--
                 <xsl:when test="@n = '1918/5'">
-                    <!-- Esconder (hide/skip) -->
+                    <xsl:comment>(hide/skip)</xsl:comment>
                 </xsl:when>
+                -->
                 <xsl:otherwise>
                     <xsl:choose>
                         <xsl:when test="string-length(dri:xref) &gt; 0">
@@ -1089,35 +1080,10 @@
 
 
     <xsl:template match="dri:list" mode="tabList">
-<!--        <xsl:variable name="current-tab">
-            <xsl:value-of select="substring-after(/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='focus'][@qualifier='container'], ':')"/>
-        </xsl:variable>
-        <xsl:comment>cur-tab: <xsl:copy-of select="$current-tab"/></xsl:comment>-->
-
         <xsl:for-each select="dri:list[@n='location']/dri:item">
             <xsl:apply-templates select="." mode="tabList"/>
-<!--            <xsl:choose>
-                <xsl:when test="$current-tab = '' and substring-after(@n, '/') = 1">
-                    <div id="aba-ativa" class="borda">
-                        <xsl:apply-templates select="." mode="tabList"/>
-                    </div>
-                </xsl:when>
-                <xsl:when test="@n = $current-tab">
-                    <div id="aba-ativa" class="borda">
-                        <xsl:apply-templates select="." mode="tabList"/>
-                    </div>
-                </xsl:when>
-                <xsl:otherwise>
-                    <div class="borda">
-                        <h4><span class="cor2">
-                        <xsl:apply-templates select="." mode="tabList"/>
-                        </span></h4>
-                    </div>
-                </xsl:otherwise>
-            </xsl:choose>-->
         </xsl:for-each>
     </xsl:template>
-
 
 
 <!--TODO-->
@@ -1130,7 +1096,6 @@
                 <xsl:apply-templates select="//dri:referenceSet[@rend='repository-search-results']"/>
             </xsl:when>
             <xsl:otherwise>
-<!--                NONONO-->
                 <div id="sem-resultados" class="borda">
                     <p>
                         <i18n:text>xmlui.ArtifactBrowser.AbstractSearch.no_results</i18n:text>
@@ -1138,25 +1103,17 @@
                 </div>
             </xsl:otherwise>
         </xsl:choose>
-
     </xsl:template>
 
 
     <xsl:template name="numero-resultados">
-<!--        <div class="numero-resultados">-->
-<!--            <span class="barra-texto">Resultados </span>
-            <span class="mostrando-resultados-inicio">12</span> ~
-            <span class="mostrando-resultados-fim">24</span> de
-            <span class="total-resultados">126</span>-->
             <xsl:choose>
                 <xsl:when test="//dri:div[@n='search-results']">
                     <xsl:apply-templates select="//dri:div[@n='search-results']/@pagination"/>
                 </xsl:when>
                 <xsl:otherwise>
-<!--                    &#160;-->
                 </xsl:otherwise>
             </xsl:choose>
-<!--        </div>-->
     </xsl:template>
 
 
@@ -1174,23 +1131,8 @@
 
 
     <xsl:template name="options-search-box">
-                    <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:list[@n='search-query']/dri:item[@n='search-filter-list']"
-                                         mode="Corisco"
-                                         />
-<!--/dri:field[@n='search-filter-controls'] mode="compositeComponent"-->
-<!--STOP-->
-
-<!--                    <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:p/dri:field[@type='button']"/>-->
-                    
-<!--            <a>
-                <xsl:attribute name="href">
-                    <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='search'][@qualifier='advancedURL']"/>
-                </xsl:attribute>
-                <i18n:text>xmlui.dri2xhtml.structural.search-advanced</i18n:text>
-            </a>-->
-<!--        </div>-->
+        <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:list[@n='search-query']/dri:item[@n='search-filter-list']" mode="Corisco" />
     </xsl:template>
-
 
 
 
@@ -1202,9 +1144,6 @@
         <xsl:comment>METS: /dri:document/dri:meta/dri:repositoryMeta/dri:repository[@repositoryID=$handle-prefix]</xsl:comment>
         <xsl:variable name="repository-mets" select="/dri:document/dri:meta/dri:repositoryMeta/dri:repository[@repositoryID=$handle-prefix]"/>
         <xsl:value-of select="$repository-mets/@url"/>
-<!--        <xsl:for-each select="$repository-mets">
-            <xsl:value-of select="@url"/>
-        </xsl:for-each>-->
     </xsl:template>
 
 
@@ -1219,6 +1158,7 @@
         </xsl:variable>
         <xsl:value-of select="$title"/>
     </xsl:template>
+
 
     <xsl:template name="getMetsID">
         <xsl:param name="mets-URL"/>
@@ -1259,7 +1199,6 @@
 
         <xsl:for-each select="exsl:node-set($sub-groups)/*">
             <xsl:variable name="cocoon-url">
-<!--                <xsl:text>cocoon:/</xsl:text>-->
                 <xsl:value-of select="."/>
                 <xsl:text>?sections=dmdSec</xsl:text>
             </xsl:variable>
@@ -1288,23 +1227,19 @@
         <dri:referenceSet rend="tabs" type="anyList">
             <dri:reference type="DSpace Community">
                 <xsl:attribute name="url">
-<!--                    <xsl:text>cocoon:/</xsl:text>-->
                     <xsl:value-of select="$struct-map/mets:div[@TYPE='DSpace Repository']/mets:div[@TYPE='DSpace Community']/mets:mptr[@LOCTYPE='URL']/@xlink:href"/>
                 </xsl:attribute>
                 &#160;
             </dri:reference>
             <xsl:for-each select="$struct-map/mets:div[@TYPE='DSpace Repository']/mets:div[@TYPE='DSpace Community']/mets:div">
                 <xsl:element name="dri:reference">
-<!--                <dri:reference>-->
                     <xsl:attribute name="type">
                         <xsl:value-of select="@TYPE"/>
                     </xsl:attribute>
                     <xsl:attribute name="url">
-<!--                        <xsl:text>cocoon:/</xsl:text>-->
                         <xsl:value-of select="mets:mptr[@LOCTYPE='URL']/@xlink:href"/>
                     </xsl:attribute>
                     &#160;
-<!--                </dri:reference>-->
                 </xsl:element>
             </xsl:for-each>
         </dri:referenceSet>
@@ -1385,17 +1320,6 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1758,15 +1682,9 @@
                     <span class="barra-texto"><xsl:apply-templates select="child::*[1]"/></span>
                     <span class="listagem">
                         <xsl:apply-templates select="dri:field[@n='view']/dri:option[@returnValue='listing']" mode="searchControlsImage"/>
-<!--                            <xsl:with-param name="selected" select="'modo_listagemON.png'"/>
-                            <xsl:with-param name="deselected" select="'modo_listagem.png'"/>
-                        </xsl:apply-templates>-->
                     </span>
                     <span class="mosaico">
                         <xsl:apply-templates select="dri:field[@n='view']/dri:option[@returnValue='grid']" mode="searchControlsImage"/>
-<!--                            <xsl:with-param name="selected" select="'modo_mosaicoON.png'"/>
-                            <xsl:with-param name="deselected" select="'modo_mosaico.png'"/>
-                        </xsl:apply-templates>-->
                     </span>
                 </div>
             </xsl:when>
@@ -1777,9 +1695,11 @@
         </xsl:choose>
     </xsl:template>
 
+
     <xsl:template match="dri:table" mode="browseControls">
         <xsl:apply-templates select="dri:row" mode="browseControls"/>
     </xsl:template>
+
 
     <!-- Normal row, most likely filled with data cells -->
     <xsl:template match="dri:row" priority="1" mode="browseControls">
@@ -1819,9 +1739,6 @@
                     <span class="barra-texto"><xsl:apply-templates select="child::*[1]"/></span>
                     <span class="listagem">
                         <xsl:apply-templates select="dri:field[@n='view']/dri:option[@returnValue='list']" mode="searchControlsImage"/>
-<!--                            <xsl:with-param name="selected" select="'modo_listaON.png'"/>
-                            <xsl:with-param name="deselected" select="'modo_lista.png'"/>
-                        </xsl:apply-templates>-->
                     </span>
                     <!-- FIXME TODO: sem nuvem por enquanto. -->
 <!--                    <span class="nuvem">
@@ -1843,8 +1760,8 @@
             <xsl:otherwise>
             </xsl:otherwise>
         </xsl:choose>
-
     </xsl:template>
+
 
 
     <!-- Second, the p element, used for display of text. The p element is a rich text container, meaning it
@@ -1951,6 +1868,7 @@
         </ul>
     </xsl:template>
     
+
     <xsl:template match="dri:list[@type='progress']/dri:item" priority="2">
         <li>
             <xsl:attribute name="class">
@@ -1988,12 +1906,14 @@
         </dl>
     </xsl:template>
     
+
     <xsl:template match="dri:list[@type='gloss']/dri:item" priority="2" mode="nested">
         <dd>
             <xsl:apply-templates />
         </dd>
     </xsl:template>
     
+
     <xsl:template match="dri:list[@type='gloss']/dri:label" priority="2" mode="nested">
         <dt>
             <span>
@@ -2006,6 +1926,7 @@
             </span>
         </dt>
     </xsl:template>
+
     
     <xsl:template match="dri:list[@type='gloss']/dri:list" priority="3" mode="nested">
         <dd>
@@ -2039,6 +1960,7 @@
         </xsl:if>
     </xsl:template>
     
+
     <xsl:template match="dri:list[not(@type)]/dri:item" priority="2" mode="labeled">
         <tr>
             <xsl:attribute name="class">
@@ -2055,6 +1977,7 @@
             </td>
         </tr>
     </xsl:template>
+
     
     <xsl:template match="dri:list[not(@type)]/dri:label" priority="2" mode="labeled">
         <td>
@@ -2070,6 +1993,7 @@
             </xsl:if>
         </td>
     </xsl:template>
+
     
     <xsl:template match="dri:list[not(@type)]/dri:item" priority="2" mode="nested">
         <li>
@@ -2195,6 +2119,7 @@
 <!--        </li>-->
     </xsl:template>
 
+
     <xsl:template match="dri:list[@type='form']/dri:item" priority="3" mode="Corisco">
         <xsl:choose>
             <xsl:when test="dri:field[@type='composite']">
@@ -2246,6 +2171,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
 
     <!-- An item in a nested "form" list -->
     <xsl:template match="dri:list[@type='form']//dri:list[@type='form']/dri:item" priority="3">
@@ -2361,6 +2287,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
     
     <xsl:template match="dri:list[@type='form']/dri:label" priority="3">
         <xsl:attribute name="class">
@@ -2386,12 +2313,14 @@
     <xsl:template match="dri:field/dri:label" mode="formComposite">
         <xsl:apply-templates />
     </xsl:template>
+
          
     <xsl:template match="dri:list[@type='form']/dri:head" priority="5">
         <legend>
             <xsl:apply-templates />
         </legend>
     </xsl:template>
+
     
     <!-- NON-instance composite fields (i.e. not repeatable) -->
     <xsl:template match="dri:field[@type='composite']" mode="formComposite">
@@ -2433,15 +2362,8 @@
 
     
     <xsl:template match="dri:field" mode="dados-item">
-<!--        <div id="adicionar-busca" class="ds-form-content3">-->
-<!--            <xsl:apply-templates select="dri:field" mode="compositeComponent"/>-->
-<!--            <xsl:apply-templates select="dri:help" mode="compositeComponent"/>-->
-<!--        </div>-->
         <xsl:choose>
             <xsl:when test="@type='checkbox' or @type='radio'">
-<!--                <xsl:attribute name="id">
-                    <xsl:value-of select="generate-id()"/>
-                </xsl:attribute>-->
                 <xsl:if test="dri:label">
                     <legend>
                         <xsl:apply-templates select="dri:label" mode="compositeComponent" />
@@ -2497,37 +2419,21 @@
     </xsl:template>
 
 
-<!-- CHANGED -->
     <xsl:template match="dri:options/dri:list[dri:list][@n='discovery']" priority="4">
 <!--        <xsl:apply-templates select="dri:head"/>-->
 
-<!--TESTE-->
-<!--        <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:list"/>-->
-<!--                <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:table"/>-->
-<!--                <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:p"/>-->
-
-
-        <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:list[@n='search-query']/dri:item[@n='search-filter-list']"
-                             />
+        <xsl:apply-templates select="//dri:div[@interactive='yes'][@n='general-query']/dri:list[@n='search-query']/dri:item[@n='search-filter-list']" />
 <!--                             mode="Corisco"-->
-
-<!--        <xsl:call-template name="options-search-box"/>-->
 
         <!-- Once the search box is built, the other parts of the options are added -->
 
-<!--        <div>
-            <xsl:call-template name="standardAttributes">
-                <xsl:with-param name="class">ds-option-set</xsl:with-param>
-            </xsl:call-template>
-            <ul class="ds-options-list">-->
         <div id="titulo-refinar" class="borda">
             <h3><i18n:text>xmlui.dri2xhtml.structural.search-filter</i18n:text></h3>
         </div>
 
         <xsl:apply-templates select="*[not(name()='head')]" mode="nested"/>
-<!--            </ul>
-        </div>-->
     </xsl:template>
+
 
     <xsl:template match="dri:options/dri:list/dri:list[@n='global']" priority="3">
         <!-- Only show global browse list if there is no context list. -->
@@ -2561,8 +2467,9 @@
         </div>
     </xsl:template>
 
+
     <!-- coluna-filtros -->
-<!--    TODO-->
+    <!-- TODO-->
     <xsl:template match="dri:options/dri:list" priority="3">
         <xsl:apply-templates select="dri:head"/>
         <div>
@@ -2575,13 +2482,16 @@
         </div>
     </xsl:template>
 
+
     <xsl:template match="dri:options/dri:list[@n='discovery-location']" priority="10">
         <!-- HIDE -->
     </xsl:template>
 
+
     <xsl:template match="dri:options/dri:list[@n='top-search']" priority="10">
         <!-- HIDE -->
     </xsl:template>
+
 
     <xsl:template match="dri:options/dri:list[@n='top-search']" mode="header" priority="1">
         <fieldset>
@@ -2616,27 +2526,19 @@
     <xsl:template match="dri:options//dri:list[count(child::*)=0]" priority="5">
     </xsl:template>
     
+
     <xsl:template match="dri:options/dri:list/dri:head" priority="3">
         <div id="titulo-listar" class="borda">
-<!--            <xsl:call-template name="standardAttributes">
-                <xsl:with-param name="class">ds-option-set-head</xsl:with-param>
-            </xsl:call-template>-->
             <h3>
-<!--                <i18n:text>xmlui.dri2xhtml.structural.search-filter</i18n:text>-->
                 <xsl:apply-templates />
             </h3>
         </div>
     </xsl:template>
+
     
     <!-- Items inside option lists are excluded from the "orphan roundup" mechanism -->
     <xsl:template match="dri:options//dri:item" mode="nested" priority="3">
         <li class="filtro-item">
-<!--            <img>
-                <xsl:attribute name="src">
-                    <xsl:value-of select="$images-path"/>
-                    <xsl:text>mais.png</xsl:text>
-                </xsl:attribute>
-            </img>-->
             <span>
                 <xsl:if test="@rend='view-more'">
                     <xsl:attribute name="class">
@@ -2773,11 +2675,12 @@
         </h3>
     </xsl:template>-->
     
+    <!-- Needed?
     <xsl:template match="dri:list[@n='jump-list']/dri:head" priority="1">
         <span>
             <xsl:apply-templates />
         </span>
-    </xsl:template>
+    </xsl:template>-->
     
 <!--    <xsl:template match="dri:list/dri:list/dri:head" priority="3" mode="nested">
         <h4>
@@ -2791,9 +2694,6 @@
 
     <xsl:template match="dri:list/dri:list/dri:head" priority="4" mode="nested">
         <span>
-<!--            <xsl:call-template name="standardAttributes">
-                <xsl:with-param name="class">ds-sublist-head</xsl:with-param>
-            </xsl:call-template>-->
             <xsl:apply-templates />
         </span>
         <span class="mais-filtro">
@@ -2804,8 +2704,8 @@
                 </xsl:attribute>
             </img>
         </span>
-
     </xsl:template>
+
 
     <!-- The fourth case is the header on referenceSets, to be discussed below, which creates an HTML h2 element
         for all cases. The reason for this simplistic approach has to do with referenceSets being handled
@@ -2820,6 +2720,7 @@
             <xsl:apply-templates />
         </h3>
     </xsl:template>-->
+    
     
     <!-- Finally, the generic header element template, given the lowest priority, is there for cases not
         covered above. It assumes nothing about the parent element and simply generates an HTML h3 tag -->
@@ -2861,7 +2762,6 @@
         divs, field. All these can mix freely with text as well as contain text of their own. The templates for
         the first three elements are fairly straightforward, as they simply create HTML span, a, and img tags,
         respectively. -->
-    
     <xsl:template match="dri:hi">
         <span>
             <xsl:attribute name="class">emphasis</xsl:attribute>
@@ -2874,6 +2774,7 @@
         </span>
     </xsl:template>
     
+
     <xsl:template match="dri:xref">
         <a>
             <xsl:attribute name="href">
@@ -2913,11 +2814,6 @@
             </img>
         </xsl:if>
     </xsl:template>
-    
-    
-    
-    
-    
     
     
     
@@ -3239,6 +3135,7 @@
         </xsl:choose>
     </xsl:template>
     
+
     <xsl:template match="dri:field[@type='text' or @type='textarea']" mode="compositeField">
         <xsl:param name="position">1</xsl:param>
         <xsl:if test="not(position()=1)">
@@ -3303,6 +3200,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
     
     <!-- TODO: make this work? Maybe checkboxes and radio buttons should not be instanced... -->
     <xsl:template match="dri:field[@type='checkbox' or @type='radio']" mode="compositeField">
@@ -3312,7 +3210,6 @@
         </xsl:if>
         <span class="ds-interpreted-field">Checkbox</span>
     </xsl:template>
-    
     
     
 <!--    <xsl:template match="dri:field[@type='button' and @n='submit']">-->
@@ -3339,11 +3236,9 @@
             <xsl:attribute name="name">submit-button</xsl:attribute>
 <!--            <xsl:apply-templates />-->
         </input>
-
     </xsl:template>
+    
 
-    
-    
     
     
     
@@ -3444,10 +3339,12 @@
         </xsl:choose>
     </xsl:template>
     
+
     <xsl:template match="dri:error" mode="compositeComponent">
         <xsl:apply-templates select="." mode="error"/>
     </xsl:template>
     
+
     <xsl:template match="dri:help" mode="compositeComponent">
         <span class="composite-help">
             <xsl:apply-templates />
@@ -3539,10 +3436,7 @@
                 <xsl:attribute name="selected">selected</xsl:attribute>
             </xsl:if>
             <xsl:apply-templates />
-        </option>
-
-        <input type="button" onclick="javascript:submit();">
-        -->
+        </option>-->
 
 
         <input type="submit">
@@ -5194,7 +5088,6 @@
             </div>
         </xsl:for-each>
     </xsl:template>
-
 
 
 

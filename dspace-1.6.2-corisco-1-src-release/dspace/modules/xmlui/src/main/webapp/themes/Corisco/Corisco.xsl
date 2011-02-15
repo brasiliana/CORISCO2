@@ -3,9 +3,34 @@
 <!--
   Corisco.xsl
 
-  Version: $Revision: 1 $
+  Version: 1
+ 
+  Date: 2011-02-15 09:30:00 -0200 (Tue, 15 Feb 2011)
+ 
+  Copyright (c) 2011, Brasiliana Digital Library (http://brasiliana.usp.br).
+  All rights reserved. Modified BSD License.
 
-  Date: $Date: 2010-08-09 10:40:00 -0300 (Mon, 09 Aug 2010) $
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+      * Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above copyright
+        notice, this list of conditions and the following disclaimer in the
+        documentation and/or other materials provided with the distribution.
+      * Neither the name of the <organization> nor the
+        names of its contributors may be used to endorse or promote products
+        derived from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  DISCLAIMED. IN NO EVENT SHALL Brasiliana Digital Library BE LIABLE FOR ANY
+  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 -->
 
@@ -19,9 +44,7 @@
     preceding and sometimes inside the template.
 
     Author: Fabio N. Kepler
-
     Based on a lot of other themes (including Kubrick and dri2xhtml).
-
 -->
 
 <xsl:stylesheet xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
@@ -96,14 +119,10 @@
     <xsl:variable name="absolute-base-url" select="concat($server-url, $context-path)"/>
     <xsl:variable name="djatoka-resolver-url" select="concat($server-url, '/djatoka/resolver')"/>
 
-<!--
-http://143.107.81.8:8080/djatoka/resolver?url_ver=Z39.88-2004&rft_id=22491844881151006007500538804168084980&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:pdf&svc.format=image/png&svc.clayer=0&svc.level=0
--->
     <xsl:variable name="djatoka-thumbnail-base-url">
         <xsl:value-of select="$djatoka-resolver-url"/>
         <xsl:text>?url_ver=Z39.88-2004&amp;svc_id=info:lanl-repo/svc/getRegion&amp;svc_val_fmt=info:ofi/fmt:kev:mtx:jpg&amp;svc.format=image/png&amp;svc.clayer=0&amp;svc.level=1</xsl:text>
         <xsl:text>&amp;rft_id=</xsl:text>
-<!--        &rft_id=22491844881151006007500538804168084980-->
     </xsl:variable>
 
 </xsl:stylesheet>

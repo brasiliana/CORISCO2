@@ -1163,7 +1163,7 @@ this.IIP = new Class({
     // Move the zone to the new size and position
     $('zone').morph({
 	left: pleft,
-	top: ptop + 17, // 10px for the toolbar
+	top: ptop + 17, // 17px for the toolbar
 	width: width - border/2,
 	height: height - border/2
     });

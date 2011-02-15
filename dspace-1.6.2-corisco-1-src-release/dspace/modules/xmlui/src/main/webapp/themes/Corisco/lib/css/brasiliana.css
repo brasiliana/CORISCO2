@@ -65,7 +65,7 @@ h4 {font-size: 11px; font-weight: bold;}
 a, a:link, a:visited {text-decoration: none; color:inherit;}
 a:hover {text-decoration: underline; color: inherit;}
 
-.cor1, .cor1 a, td .info-resultado p a, .funcoes-resultado div a:hover {color: #FF0000;}
+.cor1, .cor1 a, td .info-resultado p a, .funcoes-resultado div a:hover {color: #F15A24;}
 .cor2, #cabecalho-barra a, #abas div a {color: #FFFFFF;}
 #cabecalho-menu a, .funcoes-resultado div a, .dado-item a, li span a {color: #303030;}
 
@@ -97,7 +97,7 @@ a:hover {text-decoration: underline; color: inherit;}
 		#menu-direito {position: absolute; top: 0; right: 0; padding: 16px 2px 0 0; text-align: right;}
 		
 	#cabecalho-barra {position: relative;height: 75px;background-image:url(../img/cabecalho_background.png);background-repeat:repeat-x;background-position:center}
-		#detalhes-site {position: absolute;top:21px;left:65px;z-index: 1;}
+		#detalhes-site {position: absolute;top:10px;z-index: 1;}
 		#cabecalho-busca {position: relative; padding: 24px 0 0 475px;}
 
             #formulario-busca-cabecalho {height: 24px;}
@@ -249,7 +249,7 @@ a:hover {text-decoration: underline; color: inherit;}
 				.mais-filtro {position: absolute; top: 0; right: 0; cursor: pointer;}
 				#coluna-filtros div ul {margin-top: 5px; padding: 6px;}
 					.filtro-item {line-height: 14px; padding: 0 0 11px 18px; background: url(../img/mais.png) left top no-repeat;}
-							.ver-mais a {color: #FF0000 !important;}
+							.ver-mais a {color: #F15A24 !important;}
 					.lista-item {line-height: 14px; padding: 0 0 11px 18px; background: url(../img/seta.png) left top no-repeat;}
 
 			#titulo-listar {position: relative; height: 28px; margin-bottom: 0 !important; line-height: 28px;}
@@ -397,5 +397,5 @@ div#navcontainer {
   text-align: center;
   background: transparent;
 }
-div.numero-resultados li.current-page-link{font-weight:bold;color:#FF0000;}
-#BRpageview div.BRpagedivthumb_highlight{border:2px solid #FF0000;}
+div.numero-resultados li.current-page-link{font-weight:bold;color:#F15A24;}
+#BRpageview div.BRpagedivthumb_highlight{border:2px solid #F15A24;}

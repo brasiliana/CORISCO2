@@ -14,7 +14,6 @@ if (qsParm["serverURL"] != "") {
 }
 
 if (qsParm["item"] != "") {
-    //http://www.biodiversitylibrary.org/Services/PageSummaryService.ashx?op=PageSummarySelectForViewerByItemID&itemID=36741
     //$.getJSON("http://" + document.domain + ':' + location.port + "/" + qsParm["item"],
     //var url = "http://" + document.domain + ':' + location.port + resolverURL + "&svc_id=" + getMetadataSVC_ID + "&rft_id=" + qsParm["item"];
     var url = baseURL + "&svc_id=" + getMetadataSVC_ID + "&rft_id=" + qsParm["item"];

@@ -23,6 +23,11 @@ div#navcontainer div#toolbar {
   border-bottom: 3px solid #FF0000;
   cursor: move;
 }
+/*div#navcontainer div#toolbar {
+  height: 10px;
+  background: url( "../images/toolbar.png" ) repeat-x;
+  cursor: move;
+}*/
 div#navwin {
   font-size: 90%;
   left: 0px;
