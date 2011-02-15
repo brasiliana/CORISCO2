@@ -2675,12 +2675,11 @@
         </h3>
     </xsl:template>-->
     
-    <!-- Needed?
     <xsl:template match="dri:list[@n='jump-list']/dri:head" priority="1">
         <span>
             <xsl:apply-templates />
         </span>
-    </xsl:template>-->
+    </xsl:template>
     
 <!--    <xsl:template match="dri:list/dri:list/dri:head" priority="3" mode="nested">
         <h4>
