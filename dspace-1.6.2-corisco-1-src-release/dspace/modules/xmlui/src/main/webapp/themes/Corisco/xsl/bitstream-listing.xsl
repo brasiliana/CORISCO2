@@ -42,8 +42,8 @@
 -->
 
 <!--
-    Author: Fabio N. Kepler
     Description: Specialization of 'General-Handler.xsl', of the Reference theme.
+    Author: Fabio N. Kepler
 -->
 
 <xsl:stylesheet xmlns:i18n="http://apache.org/cocoon/i18n/2.1"

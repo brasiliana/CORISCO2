@@ -1555,7 +1555,6 @@
     <xsl:template name="collectionSummaryGrid-DIM">
         <xsl:param name="position"/>
         <!-- Generate the thumbnail, if present, from the file section -->
-        <!-- Generate the thumbnail, if present, from the file section -->
         <div class="caixa">
             <xsl:comment>collectionSummaryList-DIM</xsl:comment>
             <xsl:apply-templates select="./mets:fileSec" mode="artifact-preview"/>
@@ -2088,11 +2087,11 @@
             <xsl:when test="@LABEL='DSpace Collection'">
                 <xsl:call-template name="collectionHeadDetailView-DIM"/>
             </xsl:when>
-            <!--
+            <!-- -->
             <xsl:when test="@LABEL='DSpace Community'">
-                <xsl:call-template name="communityDetailView-DIM"/>
+                <xsl:call-template name="communityHeadDetailView-DIM"/>
             </xsl:when>
-            -->
+            <!-- -->
             <xsl:otherwise>
                 <i18n:text>xmlui.dri2xhtml.METS-1.0.non-conformant</i18n:text>
             </xsl:otherwise>
@@ -2833,6 +2832,7 @@
     <!-- A collection rendered in the detailView pattern; default way of viewing a collection. -->
     <xsl:template name="collectionDetailView-DIM">
         <div class="detail-view">&#160;
+            <xsl:comment>collectionDetailView-DIM</xsl:comment>
             <!-- Generate the logo, if present, from the file section -->
             <xsl:apply-templates select="./mets:fileSec/mets:fileGrp[@USE='LOGO']"/>
             <!-- Generate the info about the collections from the metadata section -->
@@ -2840,113 +2840,8 @@
                 mode="collectionDetailView-DIM"/>
         </div>
     </xsl:template>
-    
-    <xsl:template name="collectionHeadDetailView-DIM">
-        <div id="dados-item">
-            <h3>
-                <span id="nome-item">
-                    <xsl:value-of select="//dim:field[@element='title' and not(@qualifier)]"/>
-                    <xsl:text>.</xsl:text>
-                </span>
-                <span id="mais-metadados" onclick="alternarMaisMetadados();">
-                    <img src="{$images-path}/mais_filtro.png"/>
-                </span>
-            </h3>
-        </div>
 
 
-        <div class="caixa-borda3 fichas" id="ficha-meta">
-            <img class="icone_peq fechar" id="fechar-meta" />
-<!--             <img class='icone_peq fechar' id='fechar-link'/>-->
-            <xsl:apply-templates select="mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']/mets:xmlData/dim:dim" mode="communityCollectionMetadata"/>
-<!--            <xsl:call-template name="ficha-metadados"/>-->
-        </div>
-
-
-        <div id="colecao-item">
-            <xsl:variable name="type">
-<!--                            <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='type']"/>-->
-                <xsl:value-of select="//dim:dim/dim:field[@element='type' and not(@qualifier)]"/>
-            </xsl:variable>
-                    <!-- estruturei de forma semelhante ao tipo-documento do resultado de busca -->
-            <span id="nome-colecao">
-                <xsl:value-of select="$type"/>
-<!--                        <img src="{$images-path}/livro.png"/>-->
-            </span>
-            <xsl:call-template name="getDocumentTypeThumbnail">
-                <xsl:with-param name="document_type_name" select="$type"/>
-            </xsl:call-template>
-        </div>
-
-
-        <xsl:if test="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')] or //dim:field[@element='relation' and @qualifier='ispartof']">
-        <div id="caixas">&#160;
-                    <!-- tirei classe modos, troquei span por div, adicionei tags span e h4 e adicionei img -->
-<!--                    <div class="sumario"><span class="cor2"><a>sumário <img src="{$images-path}/mais2.png"/></a></span></div>-->
-<!--                    <div class="pesquisa-interna"><span class="cor2"><a>pesquisa neste item <img src="{$images-path}/mais2.png"/></a></span></div>-->
-
-<!--            <xsl:if test="contains(string(//dim:field[@element='description' and @qualifier='tableofcontents']), '(Gravura')">-->
-            <xsl:if test="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')]">
-                <div class="imagens-item">
-                    <span class="cor2" id="mais-imagens">
-                        <i18n:text>xmlui.dri2xhtml.METS-1.0.item-description-tableofcontents.pictures</i18n:text><img src="{$images-path}/mais2.png"/>
-                    </span>
-                    <div class="caixa-borda3 fichas" id="ficha-imagens">
-                        <img src="{$images-path}/fechar.png" class="fechar" id="fechar-imagens" />
-                        <xsl:call-template name="dimSpecialField-DcDescriptionTableofcontents-pictures">
-                            <xsl:with-param name="field" select="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')]"/>
-                        </xsl:call-template>
-                    </div>
-                </div>
-            </xsl:if>
-            
-            <xsl:if test="//dim:field[@element='relation' and @qualifier='ispartof']">
-                <div class="info-visualizador">
-                    <span class="barra-texto">
-                        <i18n:text>xmlui.dri2xhtml.METS-1.0.item-relation-ispartof.long</i18n:text>
-                    </span>
-                    <span class="info-item cor1">
-                        <a>
-                            <xsl:attribute name="href">
-                                <xsl:choose>
-                                    <xsl:when test="fn:matches(string(//dim:field[@element='relation' and @qualifier='ispartof']), '[0-9]{4}/[0-9-]+')">
-                                        <xsl:value-of select="$context-path"/>
-                                        <xsl:text>/handle/</xsl:text>
-                                        <xsl:value-of select="//dim:field[@element='relation' and @qualifier='ispartof']"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="$context-path"/>
-                                        <xsl:text>/search?fq=dc.title_t:</xsl:text>
-                                        <xsl:copy-of select="//dim:field[@element='relation' and @qualifier='ispartof']/node()"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:attribute>
-
-                            <xsl:variable name="title">
-                                <xsl:call-template name="getItemTitleFromHandle">
-                                    <xsl:with-param name="handle" select="//dim:field[@element='relation' and @qualifier='ispartof']"/>
-                                </xsl:call-template>
-                            </xsl:variable>
-                            <xsl:choose>
-                                <xsl:when test="$title != ''">
-                                    <xsl:value-of select="$title"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:copy-of select="//dim:field[@element='relation' and @qualifier='ispartof']/node()"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </a>
-<!--                        <xsl:if test="count(following-sibling::dim:field[@element='relation' and @qualifier='ispartof']) != 0">
-                            <br/>
-                        </xsl:if>-->
-                    </span>
-                </div>
-            </xsl:if>
-        </div>
-        </xsl:if>
-    </xsl:template>
-
-    
     <!-- Generate the info about the collection from the metadata section -->
     <xsl:template match="dim:dim" mode="collectionDetailView-DIM"> 
         <xsl:if test="string-length(dim:field[@element='description'][not(@qualifier)])&gt;0">
@@ -2972,6 +2867,95 @@
 		            </p>
 		        </xsl:if>
         	</div>
+        </xsl:if>
+    </xsl:template>
+
+    
+    <xsl:template name="collectionHeadDetailView-DIM">
+        <div id="dados-item">
+            <h3>
+                <span id="nome-item">
+                    <xsl:value-of select="//dim:field[@element='title' and not(@qualifier)]"/>
+                    <xsl:text>.</xsl:text>
+                </span>
+                <span id="mais-metadados" onclick="alternarMaisMetadados();">
+                    <img src="{$images-path}/mais_filtro.png"/>
+                </span>
+            </h3>
+        </div>
+        <div class="caixa-borda3 fichas" id="ficha-meta">
+            <img class="icone_peq fechar" id="fechar-meta" />
+            <xsl:apply-templates select="mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']/mets:xmlData/dim:dim" mode="communityCollectionMetadata"/>
+        </div>
+        <div id="colecao-item">
+            <xsl:variable name="type">
+                <xsl:value-of select="//dim:dim/dim:field[@element='type' and not(@qualifier)]"/>
+            </xsl:variable>
+            <!-- estruturei de forma semelhante ao tipo-documento do resultado de busca -->
+            <span id="nome-colecao">
+                <xsl:value-of select="$type"/>
+            </span>
+            <xsl:call-template name="getDocumentTypeThumbnail">
+                <xsl:with-param name="document_type_name" select="$type"/>
+            </xsl:call-template>
+        </div>
+
+        <xsl:if test="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')] or //dim:field[@element='relation' and @qualifier='ispartof']">
+            <div id="caixas">&#160;
+                <xsl:if test="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')]">
+                    <div class="imagens-item">
+                        <span class="cor2" id="mais-imagens">
+                            <i18n:text>xmlui.dri2xhtml.METS-1.0.item-description-tableofcontents.pictures</i18n:text><img src="{$images-path}/mais2.png"/>
+                        </span>
+                        <div class="caixa-borda3 fichas" id="ficha-imagens">
+                            <img src="{$images-path}/fechar.png" class="fechar" id="fechar-imagens" />
+                            <xsl:call-template name="dimSpecialField-DcDescriptionTableofcontents-pictures">
+                                <xsl:with-param name="field" select="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')]"/>
+                            </xsl:call-template>
+                        </div>
+                    </div>
+                </xsl:if>
+            
+                <xsl:if test="//dim:field[@element='relation' and @qualifier='ispartof']">
+                    <div class="info-visualizador">
+                        <span class="barra-texto">
+                            <i18n:text>xmlui.dri2xhtml.METS-1.0.item-relation-ispartof.long</i18n:text>
+                        </span>
+                        <span class="info-item cor1">
+                            <a>
+                                <xsl:attribute name="href">
+                                    <xsl:choose>
+                                        <xsl:when test="fn:matches(string(//dim:field[@element='relation' and @qualifier='ispartof']), '[0-9]{4}/[0-9-]+')">
+                                            <xsl:value-of select="$context-path"/>
+                                            <xsl:text>/handle/</xsl:text>
+                                            <xsl:value-of select="//dim:field[@element='relation' and @qualifier='ispartof']"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="$context-path"/>
+                                            <xsl:text>/search?fq=dc.title_t:</xsl:text>
+                                            <xsl:copy-of select="//dim:field[@element='relation' and @qualifier='ispartof']/node()"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+
+                                <xsl:variable name="title">
+                                    <xsl:call-template name="getItemTitleFromHandle">
+                                        <xsl:with-param name="handle" select="//dim:field[@element='relation' and @qualifier='ispartof']"/>
+                                    </xsl:call-template>
+                                </xsl:variable>
+                                <xsl:choose>
+                                    <xsl:when test="$title != ''">
+                                        <xsl:value-of select="$title"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:copy-of select="//dim:field[@element='relation' and @qualifier='ispartof']/node()"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </a>
+                        </span>
+                    </div>
+                </xsl:if>
+            </div>
         </xsl:if>
     </xsl:template>
     
@@ -3084,7 +3068,7 @@
     
     <!-- A community rendered in the detailView pattern; default way of viewing a community. -->
     <xsl:template name="communityDetailView-DIM">
-        <div class="detail-view">
+        <div class="detail-view">&#160;
             <xsl:comment>communityDetailView-DIM</xsl:comment>
             <!-- Generate the logo, if present, from the file section -->
             <xsl:apply-templates select="./mets:fileSec/mets:fileGrp[@USE='LOGO']"/>
@@ -3093,7 +3077,8 @@
                 mode="communityDetailView-DIM"/>
         </div>
     </xsl:template>
-    
+
+
     <!-- Generate the info about the community from the metadata section -->
     <xsl:template match="dim:dim" mode="communityDetailView-DIM"> 
         <xsl:if test="string-length(dim:field[@element='description'][not(@qualifier)])&gt;0">
@@ -3121,6 +3106,95 @@
     </xsl:template>
    
     
+    <xsl:template name="communityHeadDetailView-DIM">
+        <div id="dados-item">
+            <h3>
+                <span id="nome-item">
+                    <xsl:value-of select="//dim:field[@element='title' and not(@qualifier)]"/>
+                    <xsl:text>.</xsl:text>
+                </span>
+                <span id="mais-metadados" onclick="alternarMaisMetadados();">
+                    <img src="{$images-path}/mais_filtro.png"/>
+                </span>
+            </h3>
+        </div>
+        <div class="caixa-borda3 fichas" id="ficha-meta">
+            <img class="icone_peq fechar" id="fechar-meta" />
+            <xsl:apply-templates select="mets:dmdSec/mets:mdWrap[@OTHERMDTYPE='DIM']/mets:xmlData/dim:dim" mode="communityCollectionMetadata"/>
+        </div>
+        <div id="colecao-item">
+            <xsl:variable name="type">
+                <xsl:value-of select="//dim:dim/dim:field[@element='type' and not(@qualifier)]"/>
+            </xsl:variable>
+            <!-- estruturei de forma semelhante ao tipo-documento do resultado de busca -->
+            <span id="nome-colecao">
+                <xsl:value-of select="$type"/>
+            </span>
+            <xsl:call-template name="getDocumentTypeThumbnail">
+                <xsl:with-param name="document_type_name" select="$type"/>
+            </xsl:call-template>
+        </div>
+
+        <xsl:if test="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')] or //dim:field[@element='relation' and @qualifier='ispartof']">
+            <div id="caixas">&#160;
+                <xsl:if test="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')]">
+                    <div class="imagens-item">
+                        <span class="cor2" id="mais-imagens">
+                            <i18n:text>xmlui.dri2xhtml.METS-1.0.item-description-tableofcontents.pictures</i18n:text><img src="{$images-path}/mais2.png"/>
+                        </span>
+                        <div class="caixa-borda3 fichas" id="ficha-imagens">
+                            <img src="{$images-path}/fechar.png" class="fechar" id="fechar-imagens" />
+                            <xsl:call-template name="dimSpecialField-DcDescriptionTableofcontents-pictures">
+                                <xsl:with-param name="field" select="//dim:field[@element='description' and @qualifier='tableofcontents'][contains(text(), '(Gravura')]"/>
+                            </xsl:call-template>
+                        </div>
+                    </div>
+                </xsl:if>
+            
+                <xsl:if test="//dim:field[@element='relation' and @qualifier='ispartof']">
+                    <div class="info-visualizador">
+                        <span class="barra-texto">
+                            <i18n:text>xmlui.dri2xhtml.METS-1.0.item-relation-ispartof.long</i18n:text>
+                        </span>
+                        <span class="info-item cor1">
+                            <a>
+                                <xsl:attribute name="href">
+                                    <xsl:choose>
+                                        <xsl:when test="fn:matches(string(//dim:field[@element='relation' and @qualifier='ispartof']), '[0-9]{4}/[0-9-]+')">
+                                            <xsl:value-of select="$context-path"/>
+                                            <xsl:text>/handle/</xsl:text>
+                                            <xsl:value-of select="//dim:field[@element='relation' and @qualifier='ispartof']"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="$context-path"/>
+                                            <xsl:text>/search?fq=dc.title_t:</xsl:text>
+                                            <xsl:copy-of select="//dim:field[@element='relation' and @qualifier='ispartof']/node()"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+
+                                <xsl:variable name="title">
+                                    <xsl:call-template name="getItemTitleFromHandle">
+                                        <xsl:with-param name="handle" select="//dim:field[@element='relation' and @qualifier='ispartof']"/>
+                                    </xsl:call-template>
+                                </xsl:variable>
+                                <xsl:choose>
+                                    <xsl:when test="$title != ''">
+                                        <xsl:value-of select="$title"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:copy-of select="//dim:field[@element='relation' and @qualifier='ispartof']/node()"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </a>
+                        </span>
+                    </div>
+                </xsl:if>
+            </div>
+        </xsl:if>
+    </xsl:template>
+
+
     
        <!--  
     *********************************************

@@ -35,8 +35,8 @@
 -->
 
 <!--
-    Author: Fabio N. Kepler
     Description: Templates to render static links.
+    Author: Fabio N. Kepler
 -->
 
 <xsl:stylesheet xmlns:i18n="http://apache.org/cocoon/i18n/2.1"

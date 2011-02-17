@@ -727,8 +727,11 @@
     </xsl:template>
 
     <xsl:template match="dri:div[@id='aspect.discovery.CommunityViewer.div.community-view']" priority="10">
-<!--        COMMUNITY-VIEW-->
-        <xsl:apply-templates />
+        <!--COMMUNITY-VIEW-->
+        <xsl:comment>COMMUNITY-VIEW</xsl:comment>
+        <!--<xsl:apply-templates />-->
+        <!-- Skip rendering community metadata since it is rendered previously in the page (headDetailView). -->
+        <xsl:apply-templates select="dri:referenceSet[@n='community-view']/dri:reference/dri:referenceSet[@type='summaryList']"/>
     </xsl:template>
 
     <xsl:template match="dri:div[@id='aspect.discovery.CommunityRecentSubmissions.div.community-recent-submission']" priority="10">
@@ -759,7 +762,9 @@
     </xsl:template>
 
     <xsl:template match="dri:div[@id='aspect.discovery.CollectionViewer.div.collection-view']" priority="10">
-<!--        COLLECTION-VIEW-->
+        <!--COLLECTION-VIEW-->
+        <xsl:comment>COLLECTION-VIEW</xsl:comment>
+        <!--<xsl:apply-templates />-->
     </xsl:template>
 
     <xsl:template match="dri:div[@id='aspect.discovery.CollectionRecentSubmissions.div.collection-recent-submission']" priority="10">
@@ -797,13 +802,28 @@
         <div id="conteudo-alto">
             <xsl:choose>
 
+                <!-- Rendering metadata for all communities. -->
+                <xsl:when test="//dri:body/dri:div[@n='community-home']">
+                    <xsl:apply-templates select="//dri:body/dri:div[@n='community-home']/dri:div[@n='community-view']/dri:referenceSet[@type='detailView']/dri:reference" mode="headDetailView"/>
+                    <div id="dados-item">
+                        <h3>
+                            <span id="nome-item">
+                                <xsl:apply-templates select="//dri:body//dri:div[@rend='secondary recent-submission']/dri:head"/>
+                            </span>
+                        </h3>
+                    </div>
+                </xsl:when>
+
                 <!-- Render collection metadata, but only if it is not a top level collection. -->
-                <xsl:when test="//dri:body/dri:div[@id='aspect.discovery.CollectionViewer.div.collection-home']
+                <!--<xsl:when test="//dri:body/dri:div[@n='collection-home']
                                 and //dri:options/dri:list[@n='discovery-location']/dri:list[@n='location']/dri:item[@rend='selected']/@n != $container-handle">
+                -->
+                <!-- Rendering metadata for all collections. -->
+                <xsl:when test="//dri:body/dri:div[@n='collection-home']">
                     <!--
                     <xsl:apply-templates select="//dri:body/dri:div[@id='aspect.discovery.CollectionViewer.div.collection-home']/dri:head"/>
                     -->
-                    <xsl:apply-templates select="//dri:body/dri:div/dri:div[@n='collection-view']/dri:referenceSet[@type='detailView']/dri:reference" mode="headDetailView"/>
+                    <xsl:apply-templates select="//dri:body/dri:div[@n='collection-home']/dri:div[@n='collection-view']/dri:referenceSet[@type='detailView']/dri:reference" mode="headDetailView"/>
                     <div id="dados-item">
                         <h3>
                             <span id="nome-item">
@@ -863,9 +883,7 @@
 
 
                 <xsl:when test="//dri:body//dri:div[@n='item-view']">
-
                     <xsl:apply-templates select="//dri:body/dri:div[@n='item-view']/dri:referenceSet/dri:reference" mode="headDetailView"/>
-
                 </xsl:when>
 
 
@@ -1000,6 +1018,8 @@
     </xsl:template>
 
 
+    <!-- FIXME: Problems will happen if a community or collection title contains the '(' character
+        (besides the one before the comm/coll strength/count). -->
     <xsl:template match="dri:item" mode="tabList">
         <xsl:variable name="title">
             <xsl:choose>
@@ -1017,11 +1037,31 @@
                 <xsl:otherwise>
                     <xsl:choose>
                         <xsl:when test="string-length(dri:xref) &gt; 0">
-                            <xsl:value-of select="dri:xref"/>
+                            <xsl:choose>
+                                <!-- Trim titles longer than a given number of characters. -->
+                                <xsl:when test="string-length(substring-before(dri:xref, ' (')) &gt; 12">
+                                    <xsl:value-of select="substring(dri:xref, 1, 12)"/>
+                                    <xsl:text>... (</xsl:text>
+                                    <xsl:value-of select="substring-after(dri:xref, '(')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="dri:xref"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:when>
                         <xsl:otherwise>
                             <!--<i18n:text>xmlui.dri2xhtml.METS-1.0.no-title</i18n:text>-->
-                            <xsl:value-of select="."/>
+                                <!-- Trim titles longer than a given number of characters. -->
+                            <xsl:choose>
+                                <xsl:when test="string-length(substring-before(., ' (')) &gt; 12">
+                                    <xsl:value-of select="substring(., 1, 12)"/>
+                                    <xsl:text>... (</xsl:text>
+                                    <xsl:value-of select="substring-after(., '(')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="."/>
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:otherwise>
@@ -1047,6 +1087,13 @@
                     <h4>
                         <span class="cor2" id="zero">
                             <xsl:copy-of select="$title"/>
+	                        <!-- No link for disabled tab. If wanted, source code must be changed to include the link (@target).
+	                        <a>
+	                            <xsl:attribute name="href">
+	                                <xsl:value-of select="dri:xref/@target"/>
+	                            </xsl:attribute>
+	                            <xsl:copy-of select="$title"/>
+	                        </a>-->
                         </span>
                     </h4>
                 </div>

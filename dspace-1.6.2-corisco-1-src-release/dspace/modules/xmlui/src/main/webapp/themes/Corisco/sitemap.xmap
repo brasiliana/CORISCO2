@@ -100,54 +100,54 @@
                 <map:select type="browser">
                     <map:when test="explorer6">
                         <map:transform type="IncludePageMeta">
-                            <map:parameter name="stylesheet.screen#1" value="lib/css/brasiliana.css"/>
+                            <map:parameter name="stylesheet.screen#1" value="lib/css/corisco.css"/>
                             <map:parameter name="stylesheet.screen#2" value="lib/css/style-ie6.css"/>
 <!--                            <map:parameter name="javascript#1" value="lib/jquery-1.2.min.js"/>-->
 <!--                            <map:parameter name="javascript#2" value="lib/kubrick-jquery.js"/>-->
-                            <map:parameter name="javascript#3" value="lib/js/brasiliana.js"/>
+                            <map:parameter name="javascript#3" value="lib/js/corisco.js"/>
                             <map:parameter name="theme.path" value="{global:theme-path}"/>
                             <map:parameter name="theme.name" value="{global:theme-name}"/>
                         </map:transform>
                     </map:when>
                     <map:when test="explorer7">
                         <map:transform type="IncludePageMeta">
-                            <map:parameter name="stylesheet.screen#1" value="lib/css/brasiliana.css"/>
+                            <map:parameter name="stylesheet.screen#1" value="lib/css/corisco.css"/>
                             <map:parameter name="stylesheet.screen#2" value="lib/css/style-ie7.css"/>
 <!--                            <map:parameter name="javascript#1" value="lib/jquery-1.2.min.js"/>-->
 <!--                            <map:parameter name="javascript#2" value="lib/kubrick-jquery.js"/>-->
-                            <map:parameter name="javascript#3" value="lib/js/brasiliana.js"/>
+                            <map:parameter name="javascript#3" value="lib/js/corisco.js"/>
                             <map:parameter name="theme.path" value="{global:theme-path}"/>
                             <map:parameter name="theme.name" value="{global:theme-name}"/>
                         </map:transform>
                     </map:when>
                     <map:when test="safari2">
                         <map:transform type="IncludePageMeta">
-                            <map:parameter name="stylesheet.screen#1" value="lib/css/brasiliana.css"/>
+                            <map:parameter name="stylesheet.screen#1" value="lib/css/corisco.css"/>
                             <map:parameter name="stylesheet.screen#3" value="lib/css/style-safari2.css"/>
 <!--                            <map:parameter name="javascript#1" value="lib/jquery-1.2.min.js"/>-->
 <!--                            <map:parameter name="javascript#2" value="lib/kubrick-jquery.js"/>-->
-                            <map:parameter name="javascript#3" value="lib/js/brasiliana.js"/>
+                            <map:parameter name="javascript#3" value="lib/js/corisco.js"/>
                             <map:parameter name="theme.path" value="{global:theme-path}"/>
                             <map:parameter name="theme.name" value="{global:theme-name}"/>
                         </map:transform>
                     </map:when>
                     <map:when test="safari3">
                         <map:transform type="IncludePageMeta">
-                            <map:parameter name="stylesheet.screen#1" value="lib/css/brasiliana.css"/>
+                            <map:parameter name="stylesheet.screen#1" value="lib/css/corisco.css"/>
                             <map:parameter name="stylesheet.screen#3" value="lib/css/style-safari3.css"/>
 <!--                            <map:parameter name="javascript#1" value="lib/jquery-1.2.min.js"/>-->
 <!--                            <map:parameter name="javascript#2" value="lib/kubrick-jquery.js"/>-->
-                            <map:parameter name="javascript#3" value="lib/js/brasiliana.js"/>
+                            <map:parameter name="javascript#3" value="lib/js/corisco.js"/>
                             <map:parameter name="theme.path" value="{global:theme-path}"/>
                             <map:parameter name="theme.name" value="{global:theme-name}"/>
                         </map:transform>
                     </map:when>
                     <map:otherwise>
                         <map:transform type="IncludePageMeta">
-                            <map:parameter name="stylesheet.screen" value="lib/css/brasiliana.css"/>
+                            <map:parameter name="stylesheet.screen" value="lib/css/corisco.css"/>
 <!--                            <map:parameter name="javascript#1" value="lib/jquery-1.2.min.js"/>-->
 <!--                            <map:parameter name="javascript#2" value="lib/kubrick-jquery.js"/>-->
-                            <map:parameter name="javascript#3" value="lib/js/brasiliana.js"/>
+                            <map:parameter name="javascript#3" value="lib/js/corisco.js"/>
                             <map:parameter name="theme.path" value="{global:theme-path}"/>
                             <map:parameter name="theme.name" value="{global:theme-name}"/>
                         </map:transform>
