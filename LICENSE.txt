@@ -1,9 +1,9 @@
 Corisco Platform for DSpace
-Brasiliana Digital Library (http://brasiliana.usp.br) - 2010
+Brasiliana Digital Library (http://brasiliana.usp.br) - 2011
 
 This package contains code written and modified by the Brasiliana development team and also from:
 - DSpace, by the Duraspace foundation (http://www.dspace.org);
 - Adore Djatoka (http://djatoka.sourceforge.net);
-- IIPMooViewer, from IIPImageServer, modified and distributed with Adore Djatoka;
+- IIPMooViewer, from IIPImageServer, originally modified and distributed with Adore Djatoka;
 - Internet Archive BookReader (http://openlibrary.org/dev/docs/bookreader). 
 
