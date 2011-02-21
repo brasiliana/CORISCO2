@@ -1,5 +1,4 @@
 ## Corisco Platform for DSpace
-
 Brasiliana Digital Library (http://brasiliana.usp.br) - 2011.
 
 Installation and configuration instructions can be found at the [wiki](https://github.com/brasiliana/Corisco/wiki).
