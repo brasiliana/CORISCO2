@@ -11,40 +11,52 @@
 <catalogue xml:lang="en" xmlns:i18n="http://apache.org/cocoon/i18n/2.1" xmlns="http://apache.org/cocoon/i18n/2.1">
 
     <!--
-		The format used by all keys is as follows
+        The format used by all keys is as follows
 
-		xmlui.<Aspect>.<Java Class>.<name>
+        xmlui.<Aspect>.<Java Class>.<name>
 
-		There are a few exceptions to this nameing format,
-		1) Some general keys are in the xmlui.general namespace
-		   because they are used very frequently.
-		2) Some general keys which are specific to a particular aspect
-		   may be found at xmlui.<Aspect> without specifiying a
-		   particular java class.
-		-->
+        There are a few exceptions to this nameing format,
+        1) Some general keys are in the xmlui.general namespace
+           because they are used very frequently.
+        2) Some general keys which are specific to a particular aspect
+           may be found at xmlui.<Aspect> without specifiying a
+           particular java class.
+        -->
 
 
-	<!-- General keys -->
-	<message key="xmlui.general.add_filter">Adicionar</message>
-	<message key="xmlui.general.main_tab">Tudo</message>
+    <!-- General keys -->
+    <message key="xmlui.general.add_filter">Adicionar</message>
+    <message key="xmlui.general.main_tab">Tudo</message>
+
+    <message key="xmlui.general.static_menu.1">SOBRE ESTE REPOSITÓRIO</message>
+    <message key="xmlui.general.static_menu.2">CONTATO</message>
+    <message key="xmlui.general.static_menu.about_corisco">SOBRE CORISCO</message>
 
 
     <!-- Theme keys -->
     <message key="xmlui.dri2xhtml.structural.pagination-info">Itens {0}-{1}</message>
     <message key="xmlui.dri2xhtml.structural.search-filter">Filtrar por</message>
 
-	<message key="xmlui.dri2xhtml.METS-1.0.various-authors">Vários autores</message>
+    <message key="xmlui.dri2xhtml.METS-1.0.various-authors">Vários autores</message>
+    <message key="xmlui.dri2xhtml.METS-1.0.item-files-download">Baixar</message>
+    <message key="xmlui.dri2xhtml.METS-1.0.item-files-thumbnail">Miniatura</message>
+    <message key="xmlui.dri2xhtml.METS-1.0.item-files-description">Descrição</message>
+    <message key="xmlui.dri2xhtml.METS-1.0.collection-view">Listar itens</message>
 
-	<message key="xmlui.dri2xhtml.METS-1.0.item-files-download">Baixar</message>
-	<message key="xmlui.dri2xhtml.METS-1.0.item-files-thumbnail">Miniatura</message>
+    <message key="xmlui.corisco.viewer.image.loading">Carregando</message>
+    <message key="xmlui.corisco.viewer.image.toolbar_tip">* Arraste para mover<br/>* Duplo clique para mostrar/esconder botões de navegação</message>
+    <message key="xmlui.corisco.viewer.image.zoom_in">Maior</message>
+    <message key="xmlui.corisco.viewer.image.zoom_out">Menor</message>
+    <message key="xmlui.corisco.viewer.image.reset">Melhor ajuste</message>
+    <message key="xmlui.corisco.viewer.image.snapshot">Salvar visualização</message>
+    <message key="xmlui.corisco.viewer.image.shift_left">Mover à esquerda</message>
+    <message key="xmlui.corisco.viewer.image.shift_up">Mover para cima</message>
+    <message key="xmlui.corisco.viewer.image.shift_down">Mover para baixo</message>
+    <message key="xmlui.corisco.viewer.image.shift_right">Mover à direita</message>
 
-	<message key="xmlui.dri2xhtml.METS-1.0.collection-view">Listar itens</message>
 
-	<message key="xmlui.dri2xhtml.METS-1.0.copyright">Direitos e Licenças</message>			
-
-
-	<!-- Labels for metadata fields -->
-	<message key="xmlui.dri2xhtml.METS-1.0.item-dateissued">Publicado</message>
+    <!-- Labels for metadata fields -->
+    <message key="xmlui.dri2xhtml.METS-1.0.item-dateissued">Publicado</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-date-issued">Ano de Publicação</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-identifier-uri">URI</message>
     <message key="xmlui.dri2xhtml.METS-1.0.item-identifier-issn">ISSN</message>
@@ -99,7 +111,7 @@
     <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dc.type">Tipo de Documento</message>
     <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dc.date.issued">Data de Publicação</message>
     <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dc.relation.ispartofseries">Série</message>
-	<message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dateissued">Data de Publicação</message>
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dateissued">Data de Publicação</message>
     <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_dateissued.year">Ano de Publicação</message>
     <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_type">Tipo</message>
     <message key="xmlui.ArtifactBrowser.AdvancedSearch.type_publisher">Editor</message>
@@ -110,9 +122,9 @@
     <message key="xmlui.ArtifactBrowser.AdvancedSearch.filter_by.head">Adicionar à busca</message>
     <message key="xmlui.ArtifactBrowser.AdvancedSearch.view_more">Ver mais</message>
 
-	<message key="xmlui.ArtifactBrowser.AdvancedSearch.and">E (AND) </message>
-	<message key="xmlui.ArtifactBrowser.AdvancedSearch.or">OU (OR)</message>
-	<message key="xmlui.ArtifactBrowser.AdvancedSearch.not">NÃO (NOT)</message>
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.and">E (AND) </message>
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.or">OU (OR)</message>
+    <message key="xmlui.ArtifactBrowser.AdvancedSearch.not">NÃO (NOT)</message>
 
 
     <!-- Site Level Recently Added Content -->
@@ -125,7 +137,7 @@
     <message key="xmlui.ArtifactBrowser.AbstractSearch.group_by">Agrupar resultados por</message>
     <message key="xmlui.ArtifactBrowser.AbstractSearch.group_by.none">Nenhum</message>
     <message key="xmlui.ArtifactBrowser.AbstractSearch.group_by.publication_grp">Publicação</message>
-	<message key="xmlui.ArtifactBrowser.AbstractSearch.result_empty_query">A busca produziu {0} resultado(s).</message>
+    <message key="xmlui.ArtifactBrowser.AbstractSearch.result_empty_query">A busca produziu {0} resultado(s).</message>
     <message key="xmlui.ArtifactBrowser.AbstractSearch.browse_head">Listagem por:</message>
     <message key="xmlui.ArtifactBrowser.AbstractSearch.type_dc.contributor.author_browse">Autor</message>
     <message key="xmlui.ArtifactBrowser.AbstractSearch.type_dc.title_browse">Título</message>
@@ -162,6 +174,19 @@
     -->
 
 
+
+    <!-- ArtifactBrowser ConfigurableBrowse -->
+    <message key="xmlui.ArtifactBrowser.ConfigurableBrowse.general.no_results">Desculpe, não há resultados para esta busca.</message>
+
+
+
+    <!-- ArtifactBrowser Navigation -->
+    <message key="xmlui.ArtifactBrowser.Navigation.browse_dc.title">Título</message>
+    <message key="xmlui.ArtifactBrowser.Navigation.browse_dc.contributor.author">Autor</message>
+    <message key="xmlui.ArtifactBrowser.Navigation.browse_dc.subject">Assunto</message>
+    <message key="xmlui.ArtifactBrowser.Navigation.browse_dateissued.year">Ano de publicação</message>
+
+
     <!-- SimpleSearch -->
     <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.all">Tudo</message>
     <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dc.title">Título</message>
@@ -176,7 +201,7 @@
 <!--    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dateissued.year">Ano de Publicação</message>-->
     <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.dateissued.year">Ano</message>
     <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.author_t">Autor</message>
-	<message key="xmlui.ArtifactBrowser.SimpleSearch.filter.content">Texto</message>
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.content">Texto</message>
 
     <message key="xmlui.ArtifactBrowser.SimpleSearch.selected_filters">Filtros selecionados</message>
 
@@ -188,29 +213,23 @@
 
 
 
-	<!-- org.dspace.app.xmlui.discovery.Navigation.java -->
-	<message key="xmlui.Discovery.Navigation.head_browse">Listar por</message>
-	<message key="xmlui.Discovery.Navigation.head_all_of_dspace">Todo o repositório</message>
-	<message key="xmlui.Discovery.Navigation.communities_and_collections">Tipos de documentos</message>
-	<message key="xmlui.Discovery.Navigation.browse_title">Título</message>
-	<message key="xmlui.Discovery.Navigation.browse_author">Autor</message>
-	<message key="xmlui.Discovery.Navigation.browse_subject">Assunto</message>
-	<message key="xmlui.Discovery.Navigation.browse_dateissued">Ano de publicação</message>
-	<message key="xmlui.Discovery.Navigation.browse_dateaccessioned">Pela data de submissão</message>
+    <!-- org.dspace.app.xmlui.discovery.Navigation.java -->
+    <message key="xmlui.Discovery.Navigation.head_browse">Listar por</message>
+    <message key="xmlui.Discovery.Navigation.head_all_of_dspace">Todo o repositório</message>
+    <message key="xmlui.Discovery.Navigation.communities_and_collections">Tipos de documentos</message>
+    <message key="xmlui.Discovery.Navigation.browse_title">Título</message>
+    <message key="xmlui.Discovery.Navigation.browse_author">Autor</message>
+    <message key="xmlui.Discovery.Navigation.browse_subject">Assunto</message>
+    <message key="xmlui.Discovery.Navigation.browse_dateissued">Ano de publicação</message>
+    <message key="xmlui.Discovery.Navigation.browse_dateaccessioned">Pela data de submissão</message>
     <message key="xmlui.Discovery.Navigation.head_this_collection">Esta Coleção</message>
     <message key="xmlui.Discovery.Navigation.head_this_community">Esta Comunidade</message>
-
-	<message key="xmlui.ArtifactBrowser.Navigation.browse_dc.title">Título</message>
-	<message key="xmlui.ArtifactBrowser.Navigation.browse_dc.contributor.author">Autor</message>
-	<message key="xmlui.ArtifactBrowser.Navigation.browse_dc.subject">Assunto</message>
 
     <message key="xmlui.Discovery.Navigation.top-search.head">Pesquisa</message>
     <message key="xmlui.Discovery.Navigation.top-search.help">Pesquisa no acervo digital</message>
 
-
     <message key="xmlui.Discovery.BrowseFacet.browse_century_head">Século</message>
     <message key="xmlui.Discovery.BrowseFacet.browse_century">{0}</message>
-
 
     <message key="xmlui.Discovery.ItemViewer.toolbar.view_modes">Modos de visualização:</message>
     <message key="xmlui.Discovery.ItemViewer.toolbar.navigation">Navegação:</message>

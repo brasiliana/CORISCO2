@@ -23,7 +23,6 @@
   contributors may be used to endorse or promote products derived from
   this software without specific prior written permission.
  
- 
   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -168,7 +167,6 @@
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.general.choose_year">Ano</message>	
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.general.jump_year">Ou digite o ano: </message>
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.general.jump_year_help">Visualize os itens que são de um dado ano.</message>
-	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.general.no_results">Desculpe, não há resultados para esta busca.</message>
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.general.sort_by"> Ordenado por: </message>
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.general.order"> Em ordem: </message>
 	<message key="xmlui.ArtifactBrowser.ConfigurableBrowse.general.rpp"> Resultados: </message><!-- /Page -->
@@ -271,11 +269,11 @@
 	<!-- org.dspace.app.xmlui.artifactbrowser.Navigation.java -->
 	<message key="xmlui.ArtifactBrowser.Navigation.head_browse">Listar por</message>
 	<message key="xmlui.ArtifactBrowser.Navigation.head_all_of_dspace">Todo o repositório</message>
-	<message key="xmlui.ArtifactBrowser.Navigation.communities_and_collections">Coleções</message>
-	<message key="xmlui.ArtifactBrowser.Navigation.browse_dc.title">Título</message>
-	<message key="xmlui.ArtifactBrowser.Navigation.browse_dc.contributor.author">Autor</message>
-	<message key="xmlui.ArtifactBrowser.Navigation.browse_dc.subject">Assunto</message>
-	<message key="xmlui.ArtifactBrowser.Navigation.browse_dateissued.year">Ano de publicação</message>
+	<message key="xmlui.ArtifactBrowser.Navigation.communities_and_collections">Comunidades &amp; Coleções</message>
+	<message key="xmlui.ArtifactBrowser.Navigation.browse_title">Título</message>
+	<message key="xmlui.ArtifactBrowser.Navigation.browse_author">Autor</message>
+	<message key="xmlui.ArtifactBrowser.Navigation.browse_subject">Assunto</message>
+	<message key="xmlui.ArtifactBrowser.Navigation.browse_dateissued">Data de publicação</message>
 	<message key="xmlui.ArtifactBrowser.Navigation.browse_dateaccessioned">Data de submissão</message>
 	<message key="xmlui.ArtifactBrowser.Navigation.head_this_collection">Esta Coleção</message>
 	<message key="xmlui.ArtifactBrowser.Navigation.head_this_community">Esta Comunidade</message>
@@ -311,13 +309,12 @@
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.auth_header">O Item é restrito</message>	
 	<message key="xmlui.ArtifactBrowser.RestrictedItem.auth_message">O item que está tentando acesso possui restrição de acesso. É preciso logar no repositório para ter a permissão necessária para acessá-lo ou entrar em contato com os administradores do repositório.</message>
 
-    <message key="xmlui.ArtifactBrowser.StatisticsViewer.choose_month">Relatórios Mensais</message>
-    <message key="xmlui.ArtifactBrowser.StatisticsViewer.report.title">Sumário estatístico</message>
-
-
+  <message key="xmlui.ArtifactBrowser.StatisticsViewer.choose_month">Relatórios Mensais</message>
+  <message key="xmlui.ArtifactBrowser.StatisticsViewer.report.title">Sumário estatístico</message>
 
 	<message key="xmlui.ArtifactBrowser.StatisticsViewer.no_report.title">Nenhum relatório disponível no momento</message>
-    <message key="xmlui.ArtifactBrowser.StatisticsViewer.no_report.text">Nenhum relatório disponível no momento para este serviço.  Por favor, cheque mais tarde.</message>
+  <message key="xmlui.ArtifactBrowser.StatisticsViewer.no_report.text">Nenhum relatório disponível no momento para este serviço. Por favor, cheque mais tarde.</message>
+
 
 	<!-- Authentication messages used for bitstream authentication -->	
 	<message key="xmlui.BitstreamReader.auth_header">O arquivo é restrito</message>	
@@ -326,7 +323,8 @@
 		<!-- Export Archive download messages -->
 	<message key="xmlui.ItemExportDownloadReader.auth_header">Este arquivo de exportação está restrito.</message>
 	<message key="xmlui.ItemExportDownloadReader.auth_message">O arquivo de exportação que está tentanto acessar é um recurso restrito e requer credenciais para visualização. Por favor, faça um login para acessar o arquivo de exportação.</message>
-	
+
+
 	<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		
 		                EPerson Aspect
@@ -358,7 +356,6 @@
 	<message key="xmlui.EPerson.EditProfile.first_name">Primeiro Nome</message>
 	<message key="xmlui.EPerson.EditProfile.last_name">Último Nome</message>
 	<message key="xmlui.EPerson.EditProfile.telephone">Telefone de contato</message>
-	<message key="xmlui.EPerson.EditProfile.Language">Language</message>
 	<message key="xmlui.EPerson.EditProfile.subscriptions">Inscrição</message>
 	<message key="xmlui.EPerson.EditProfile.subscriptions_help">Pode-se inscrever nas Coleções para receber avisos de novas sumbissões por emails. Pode-se faze-lo em quantas Coleções desejar. Pode-se, também, assimar o RSS disponível para todas as Coleções.</message>
 	<message key="xmlui.EPerson.EditProfile.email_subscriptions">Inscrição do Email</message>
@@ -810,9 +807,9 @@
 	<message key="xmlui.administrative.Navigation.context_create_subcommunity">Criar subcomunidade</message>
 	<message key="xmlui.administrative.Navigation.context_create_community">Criar Comunidade</message>
 	<message key="xmlui.administrative.Navigation.context_export_item">Exportar Item</message>
-    <message key="xmlui.administrative.Navigation.context_export_collection">Exportar Coleção</message>
-    <message key="xmlui.administrative.Navigation.context_export_community">Exportar Comunidade</message>
-    <message key="xmlui.administrative.Navigation.context_export_metadata">Exportar Metadados</message>
+  <message key="xmlui.administrative.Navigation.context_export_collection">Exportar Coleção</message>
+  <message key="xmlui.administrative.Navigation.context_export_community">Exportar Comunidade</message>
+  <message key="xmlui.administrative.Navigation.context_export_metadata">Exportar Metadados</message>
 	
 	<!-- Site administrator options -->
 	<message key="xmlui.administrative.Navigation.administrative_head">Administração</message>
@@ -824,14 +821,13 @@
 	<message key="xmlui.administrative.Navigation.administrative_metadata">Metadados</message>
 	<message key="xmlui.administrative.Navigation.administrative_format">Formato</message>
 	<message key="xmlui.administrative.Navigation.administrative_items">Itens</message>
-    <message key="xmlui.administrative.Navigation.administrative_withdrawn">Remover Itens</message>
+  <message key="xmlui.administrative.Navigation.administrative_withdrawn">Remover Itens</message>
 	<message key="xmlui.administrative.Navigation.administrative_control_panel">Painel de controle</message>
 	<message key="xmlui.administrative.Navigation.statistics">Estatísticas</message>
-    <message key="xmlui.administrative.Navigation.administrative_import_metadata">Importar Metadados</message>
+  <message key="xmlui.administrative.Navigation.administrative_import_metadata">Importar Metadados</message>
 	
 		
-
-	    <!-- my account items -->
+	<!-- my account items -->
 	<message key="xmlui.administrative.Navigation.account_export">Minhas Exportações</message>
 		
 	<!-- export item -->
@@ -848,7 +844,6 @@
 	<message key="xmlui.administrative.ItemExport.available.head">Arquivos exportados disponíveis para baixar (download):</message>
 
 		
-
 	<!-- org.dspace.app.xmlui.administrative.eperson.ManageEPeopleMain -->
 	<message key="xmlui.administrative.eperson.ManageEPeopleMain.title">Gerenciar E-people</message>
 	<message key="xmlui.administrative.eperson.ManageEPeopleMain.main_head">Gerenciamento de E-person</message>
@@ -958,7 +953,6 @@
 	<message key="xmlui.administrative.group.EditGroupForm.submit_add">Adicionar</message>
 	<message key="xmlui.administrative.group.EditGroupForm.submit_remove">Remover</message>
 	<message key="xmlui.administrative.group.EditGroupForm.collection_para">Este Grupo esta associado a Coleção: </message>
-	<message key="xmlui.administrative.group.EditGroupForm.community_para">E </message>
 	<message key="xmlui.administrative.group.EditGroupForm.label_name">Alterar o nome do Grupo: </message>
 	<message key="xmlui.administrative.group.EditGroupForm.label_instructions">Este Grupo está associado a uma Coleção específica e o nome não pode ser alterado.</message>
 	<message key="xmlui.administrative.group.EditGroupForm.label_search">Procurar membros para adicionar: </message>
@@ -1196,8 +1190,8 @@
 	<message key="xmlui.administrative.authorization.EditPolicyForm.groups_head">Buscar resultados</message>
 	<message key="xmlui.administrative.authorization.EditPolicyForm.policy_currentGroup">Selecionar um Grupo</message>
 	<message key="xmlui.administrative.authorization.EditPolicyForm.label_search">Buscar por um Grupo</message>
-    <message key="xmlui.administrative.authorization.EditPolicyForm.submit_search_groups">Buscar</message>
-    <message key="xmlui.administrative.authorization.EditPolicyForm.label_action">Selecionar uma ação</message>
+  <message key="xmlui.administrative.authorization.EditPolicyForm.submit_search_groups">Buscar</message>
+  <message key="xmlui.administrative.authorization.EditPolicyForm.label_action">Selecionar uma ação</message>
     
 	
 	<!-- org.dspace.app.xmlui.administrative.authorization.AdvacedAuthorizationsForm -->
@@ -1206,9 +1200,9 @@
 	<message key="xmlui.administrative.authorization.AdvacedAuthorizationsForm.main_head">Gerenciador de poítica avançada</message>
 	<message key="xmlui.administrative.authorization.AdvacedAuthorizationsForm.main_para">Permite adição de abreviaturas e limpar as políticas para os tipos de contúdos de Coleções específicas. CUIDADO - removendo a permissão de READ dos Itens, torna-os não acessíveis!</message>
 	<message key="xmlui.administrative.authorization.AdvacedAuthorizationsForm.actions_groupSentence">Para todos os Grupos selecionados...</message>
-    <message key="xmlui.administrative.authorization.AdvacedAuthorizationsForm.actions_actionSentence">...conceder a capacidade de executar as seguintes ações...</message>
+  <message key="xmlui.administrative.authorization.AdvacedAuthorizationsForm.actions_actionSentence">...conceder a capacidade de executar as seguintes ações...</message>
 	<message key="xmlui.administrative.authorization.AdvacedAuthorizationsForm.actions_resourceSentence">...Para todos os seguintes tipos de objetos...</message>
-    <message key="xmlui.administrative.authorization.AdvacedAuthorizationsForm.actions_collectionSentence">...atraves das seguintes Coleções.</message>
+  <message key="xmlui.administrative.authorization.AdvacedAuthorizationsForm.actions_collectionSentence">...atraves das seguintes Coleções.</message>
 	<message key="xmlui.administrative.authorization.AdvacedAuthorizationsForm.actions_policyGroup">Grupo</message>
 	<message key="xmlui.administrative.authorization.AdvacedAuthorizationsForm.actions_policyAction">Ação</message>
 	<message key="xmlui.administrative.authorization.AdvacedAuthorizationsForm.actions_policyResource">Tipo de conteúdo</message>
@@ -1244,7 +1238,6 @@
 	<message key="xmlui.administrative.item.AddBitstreamForm.bundle.THUMBNAIL">Thumbnails</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.bundle.LICENSE">Licenças</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.bundle.CC_LICENSE">Licença Creative Commons</message>
-    <message key="xmlui.administrative.item.AddBitstreamForm.bundle.FILMSTRIPTHUMB">Vídeos</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.file_label">Arquivo</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.file_help">Por favor coloque o nome do arquivo que deseja carregar no Item. Casi clique em "procurar ..." uma nova janela aparecerá para que possa localizar  e selecionar o arquivo no seu computador.</message>
 	<message key="xmlui.administrative.item.AddBitstreamForm.description_label">Descrição</message>
@@ -1475,7 +1468,7 @@
 	<message key="xmlui.administrative.collection.AssignCollectionRoles.label_submitters">Depositantes</message>
 	<message key="xmlui.administrative.collection.AssignCollectionRoles.label_default_read">Acesso padrão de leitura</message>
 	<message key="xmlui.administrative.collection.AssignCollectionRoles.sysadmins_only"><nobr>(Somente Administradores do sistema)</nobr></message>
-	<message key="xmlui.administrative.collection.AssignCollectionRoles.not_allowed"><nobr>(você não está autorizado a configurar isto)</nobr></message>
+	<message key="xmlui.administrative.collection.AssignCollectionRoles.not_allowed"><nobr>(Você não está autorizado a configurar isto)</nobr></message>
 
 	<!-- org.dspace.app.xmlui.administrative.collection.DeleteCollectionConfirm.java -->
 	<message key="xmlui.administrative.collection.DeleteCollectionConfirm.title">Confirmar Deleção</message>
@@ -1712,6 +1705,8 @@
 	<message key="xmlui.administrative.ControlPanel.activity_sort_url">página URL</message>
 	<message key="xmlui.administrative.ControlPanel.activity_sort_Agent">Usuário-Agente</message>
 	<message key="xmlui.administrative.ControlPanel.activity_anonymous">Anonimo {0}</message>	
+	<message key="xmlui.administrative.ControlPanel.activity_hideself">Ocultar as visualizações da minha página</message>
+	<message key="xmlui.administrative.ControlPanel.activity_showself">Mostrar as visualizações da minha página</message>
 	<message key="xmlui.administrative.ControlPanel.activity_none">Nenhuma visita registrada</message>
 		
 	<message key="xmlui.administrative.ControlPanel.select_panel">Use as abas abaixo para selecionar as informações a serem mostradas </message>
@@ -1761,28 +1756,29 @@
 
 	<!-- structural.xsl -->
 	<message key="xmlui.dri2xhtml.structural.footer-promotional">
-        <p>
-            A Brasiliana Digital utiliza a Plataforma Corisco, desenvolvida sobre o DSpace pela Brasiliana USP e que integra DSpace com busca facetada via Solr, servidor de imagens Djatoka, e visualizadores IIPimage e BookReader.
-        </p>
+      <div class="area_rodape">
+		      <a href="http://github.com/brasiliana/corisco" id="ds-logo-link">                            
+			      <span id="ds-footer-logo">&#160;</span>
+		      </a>
+          <p>
+              A <a href="http://github.com/brasiliana/corisco">Plataforma Corisco</a>,
+              desenvolvida pela <a href="http://brasiliana.usp.br">Brasiliana USP</a>,
+              integra o <a href="http://dspace.org">DSpace</a> com:
+                  busca facetada via <a href="http://lucene.apache.org/solr/">Solr</a>,
+                  servidor de imagens <a href="http://djatoka.sourceforge.net/">Djatoka</a>,
+                  e visualizadores de conteúdo <a href="http://sourceforge.net/apps/mediawiki/djatoka/index.php?title=Viewers#djatoka_IIPImage_Viewer">IIPimage</a>
+                  e <a href="http://openlibrary.org/dev/docs/bookreader">BookReader</a>.
+          </p>
+      </div>
 	</message>
-<!--		<a href="http://di.tamu.edu" id="ds-logo-link">
-			<span id="ds-footer-logo">&#160;</span>
-		</a>
-		<p>
-			Este portal está usando o Manakin, uma nova facilidade criada pela Biblioteca da Universidade do Texas A&amp;M. University.
-			A interface pode ser extensivamente modificada pelos "Aspectos" e "Temas" baseado em XSL.
-			Para maiores informações visite:
-			<a href="http://di.tamu.edu">http://di.tamu.edu</a> e
-			<a href="http://dspace.org">http://dspace.org</a>
-		</p>-->
 	<message key="xmlui.dri2xhtml.structural.contact-link">Contate-nos</message>
 	<message key="xmlui.dri2xhtml.structural.feedback-link">Fale conosco</message>
-	<message key="xmlui.dri2xhtml.structural.head-subtitle">Repositório DSpace/Manakin</message>
+	<message key="xmlui.dri2xhtml.structural.head-subtitle">Repositório DSpace/Manakin + Corisco</message>
 	<message key="xmlui.dri2xhtml.structural.profile">Perfil: </message>
 	<message key="xmlui.dri2xhtml.structural.logout">Sair</message>
 	<message key="xmlui.dri2xhtml.structural.login">Entrar</message>
 
-	<message key="xmlui.dri2xhtml.structural.search">Busca no acervo</message><!---->
+	<message key="xmlui.dri2xhtml.structural.search">Busca no acervo</message>
 	<message key="xmlui.dri2xhtml.structural.search-advanced">Pesquisa avançada</message>
 	<message key="xmlui.dri2xhtml.structural.search-in-community">Esta Comunidade</message>
 	<message key="xmlui.dri2xhtml.structural.search-in-collection">Esta Coleção</message>
@@ -1794,6 +1790,7 @@
 		
 	<message key="xmlui.dri2xhtml.structural.link_cc">Creative Commons</message>
 	<message key="xmlui.dri2xhtml.structural.link_original_license">Licença Original</message>
+
 	
 	<!-- DS-METS-1.0-MODS.xsl -->
 	<!-- DS-METS-1.0-DIM.xsl -->
@@ -1822,9 +1819,9 @@
 	<message key="xmlui.dri2xhtml.METS-1.0.item-files-size">Tamanho</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.item-files-format">Formato</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.item-files-view">Visualizar</message>
-	<message key="xmlui.dri2xhtml.METS-1.0.item-files-description">Descrição</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.item-files-viewOpen">Visualizar/<wbr/>Abrir</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.item-no-files">Não há arquivos associados a esse Item.</message>
+
 	<message key="xmlui.dri2xhtml.METS-1.0.size-bytes">bytes</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.size-kilobytes">KB</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.size-megabytes">MB</message>
@@ -1843,8 +1840,9 @@
 	
 	<message key="xmlui.dri2xhtml.METS-1.0.collection-logo-alt">O logotipo da Coleção</message>
 	<message key="xmlui.dri2xhtml.METS-1.0.community-logo-alt">O logotipo da comunidade</message>
-	<message key="xmlui.dri2xhtml.METS-1.0.no-logo-alt">Sem logotipo</message>		
-	<message key="xmlui.dri2xhtml.METS-1.0.news">Notícias</message>	
+	<message key="xmlui.dri2xhtml.METS-1.0.no-logo-alt">Sem logotipo</message>
+	<message key="xmlui.dri2xhtml.METS-1.0.news">Notícias</message>
+	<message key="xmlui.dri2xhtml.METS-1.0.copyright">Direitos e Licenças</message>
 		
 	<!-- Internationalization elements specific to the Qualified Dublin Core metadata handler.
 		DS-METS-1.0-QDC.xsl -->
@@ -1983,3 +1981,5 @@
   <message key="xmlui.ChoiceLookupTransformer.field.dc_contributor_author.nonauthority">Valor local "@1@" (fora da Autoridade de Nomes)</message>
 
 </catalogue>
+
+ 	  	 

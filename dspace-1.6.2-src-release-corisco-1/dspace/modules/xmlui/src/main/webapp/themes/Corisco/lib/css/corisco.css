@@ -260,8 +260,17 @@ a:hover {text-decoration: underline; color: inherit;}
 	#conteudo-baixo .caixa {position: relative; height: 35px; font-size: 12px; line-height: 25px;}
 
 #rodape {border-top:1px solid #A0A0A0;background:url(../img/footer_background.png) repeat scroll 0 0 transparent;height:100px;}
-#rodape p {font-size: 10px;width:950px;margin: 0 auto;padding-top:20px;}
-
+#rodape div.area_rodape{width:950px;margin: 0 auto;padding-top:20px;}
+#rodape p {font-size:10px;width:700px;}
+#rodape a#ds-logo-link{text-decoration: none;}
+#rodape span#ds-footer-logo{
+        float: left;
+        padding-right: 10px;
+        clear: both;
+        height: 25px;width: 25px;
+        color: inherit;
+        background:url("../img/logo_corisco.png") no-repeat white;
+}
 
 /*#iipviewer-help > ul > li > ul {list-style: circle inside !important;}*/
 

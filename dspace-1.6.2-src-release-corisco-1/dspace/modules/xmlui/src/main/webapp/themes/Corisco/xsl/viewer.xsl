@@ -97,18 +97,18 @@
                     render: 'random',
                     showNavButtons: true,
                     i18n: {
-                        'loading': 'Carregando',
-                        'toolbar tip': '* Arraste para mover<br/>* Duplo clique para mostrar/esconder botões de navegação'
+                        'loading': '<i18n:text>xmlui.corisco.viewer.image.loading</i18n:text>',
+                        'toolbar tip': '<i18n:text>xmlui.corisco.viewer.image.toolbar_tip</i18n:text>'
                     },
                     i18n_titles: {
-                        'zoomIn': 'Maior',
-                        'zoomOut': 'Menor',
-                        'reset': 'Melhor ajuste',
-                        'snapshot': 'Salvar visualização',
-                        'shiftLeft': 'Mover à esquerda',
-                        'shiftUp': 'Mover para cima',
-                        'shiftDown': 'Mover para baixo',
-                        'shiftRight': 'Mover à direita'
+                        'zoomIn': '<i18n:text>xmlui.corisco.viewer.image.zoom_in</i18n:text>',
+                        'zoomOut': '<i18n:text>xmlui.corisco.viewer.image.zoom_out</i18n:text>',
+                        'reset': '<i18n:text>xmlui.corisco.viewer.image.reset</i18n:text>',
+                        'snapshot': '<i18n:text>xmlui.corisco.viewer.image.snapshot</i18n:text>',
+                        'shiftLeft': '<i18n:text>xmlui.corisco.viewer.image.shift_left</i18n:text>',
+                        'shiftUp': '<i18n:text>xmlui.corisco.viewer.image.shift_up</i18n:text>',
+                        'shiftDown': '<i18n:text>xmlui.corisco.viewer.image.shift_down</i18n:text>',
+                        'shiftRight': '<i18n:text>xmlui.corisco.viewer.image.shift_right</i18n:text>'
                     }
                 });
               </script>

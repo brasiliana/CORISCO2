@@ -57,15 +57,23 @@
     <xsl:template name="cabecalho-menu">
         <div id="cabecalho-menu">
             <div id="menu-esquerdo">
-		<ul>
-			<li class="borda first"><a href="http://www.brasiliana.usp.br/node/503" title="Sobre a Brasiliana">SOBRE A BRASILIANA</a></li>
-			<li class="borda"><a href="http://www.brasiliana.usp.br/node/613" title="Contato">CONTATO</a></li>
-			<li class="borda"><a href="http://www.brasiliana.usp.br/node/507" title="Orientações e direitos">ORIENTAÇÕES E DIREITOS</a></li>
-			<li class="borda"><a href="http://www4.usp.br/" title="USP">USP</a></li>
-		</ul>
+                <ul>
+                    <li class="borda first">
+                        <a href="">
+                            <i18n:text>xmlui.general.static_menu.1</i18n:text>
+                        </a>
+                    </li>
+                    <li class="borda">
+                        <a href="">
+                            <i18n:text>xmlui.general.static_menu.2</i18n:text>
+                        </a>
+                    </li>
+		            </ul>
             </div>
             <div id="menu-direito">
-                <a href="http://www.brasiliana.usp.br/dicionario">CONSULTA AOS DICIONÁRIOS</a>
+                <a href="https://github.com/brasiliana/Corisco">
+                    <i18n:text>xmlui.general.static_menu.about_corisco</i18n:text>
+                </a>
             </div>
         </div>
     </xsl:template>
