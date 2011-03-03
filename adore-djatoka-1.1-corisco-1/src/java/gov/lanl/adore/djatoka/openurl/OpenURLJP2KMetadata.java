@@ -130,10 +130,10 @@ public class OpenURLJP2KMetadata implements Service, FormatConstants {
             if (r.getInstProps() != null) {
                 //HashMap<String, String> props = r.getInstProps();
                 sb.append("\n\"instProps\": {");
+                String separator = "";
                 for (Map.Entry<String, String> entry : r.getInstProps().entrySet()) {
-                    String key = entry.getKey();
-                    String value = entry.getValue();
-                    sb.append("\n\t\"" + key + "\": \"" + value + "\",");
+                    sb.append(separator + "\n\t\"" + entry.getKey() + "\": \"" + entry.getValue() + "\"");
+                    separator = ",";
                 }
                 sb.append("\n\t}");
             }
