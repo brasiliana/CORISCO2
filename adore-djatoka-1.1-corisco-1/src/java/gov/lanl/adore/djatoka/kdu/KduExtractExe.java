@@ -84,7 +84,7 @@ public class KduExtractExe implements IExtract {
     private static String kakaduHome;
 
     static {
-        env = System.getProperty("kakadu.home")
+        env = System.getProperty(KDU_EXPAND_EXE)
                 + System.getProperty("file.separator");
         exe = env
                 + ((System.getProperty("os.name").contains("Win")) ? KDU_EXPAND_EXE
@@ -103,8 +103,8 @@ public class KduExtractExe implements IExtract {
                         + System.getProperty("LD_LIBRARY_PATH")};
         }
         logger.debug("envParams: " + ((envParams != null) ? envParams[0] + " | " : "") + exe);
-        kakaduHome = System.getProperty("kakadu.home");
-        logger.info("setting kakadu.home: " + System.getProperty("kakadu.home"));
+        kakaduHome = System.getProperty(KDU_EXPAND_EXE);
+        logger.info("Setting " + KDU_EXPAND_EXE + ": " + System.getProperty(KDU_EXPAND_EXE));
     }
 
     public KduExtractExe() {
