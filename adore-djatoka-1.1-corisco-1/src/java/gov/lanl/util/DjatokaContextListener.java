@@ -1,7 +1,9 @@
 /*
  * DjatokaContextListener.java
+ * 
+ * Modified by Brasiliana USP, 2011.
  *
- * Date: Mon Aug 16 13:20:53 BRT 2010
+ * Date: Tue Mar 01 13:20:00 BRT 2011
  *
  * Based on:
  * Copyright (c) 2002-2009, The DSpace Foundation.  All rights reserved.
@@ -50,7 +52,7 @@ import java.net.URLConnection;
 //import java.util.Enumeration;
 
 /**
- * Class to initialize / cleanup resources used by DSpace when the web application
+ * Class to initialize / cleanup resources used by Djatoka when the web application
  * is started or stopped
  */
 public class DjatokaContextListener implements ServletContextListener
@@ -58,7 +60,7 @@ public class DjatokaContextListener implements ServletContextListener
     private static Logger log = Logger.getLogger(DjatokaContextListener.class);
 
     /**
-     * The DSpace config parameter, this is where the path to the DSpace
+     * The Djatoka config parameter, this is where the path to the Djatoka
      * configuration file can be obtained
      */
     public static final String DJATOKA_CONFIG_PARAMETER = "djatoka-config";
@@ -107,7 +109,7 @@ public class DjatokaContextListener implements ServletContextListener
         if (djatokaConfig == null || "".equals(djatokaConfig))
         {
             throw new RuntimeException(
-                    "\n\nDSpace has failed to initialize. This has occurred because it was unable to determine \n" +
+                    "\n\nDjatoka has failed to initialize. This has occurred because it was unable to determine \n" +
                     "where the dspace.cfg file is located. The path to the configuration file should be stored \n" +
                     "in a context variable, '"+DJATOKA_CONFIG_PARAMETER+"', in the global context. \n" +
                     "No context variable was found in either location.\n\n");
@@ -116,7 +118,7 @@ public class DjatokaContextListener implements ServletContextListener
         /**
          * Stage 2
          * 
-         * Load the dspace config. Also may load log4j configuration.
+         * Load the djatoka config. Also may load log4j configuration.
          * (Please rely on ConfigurationManager or Log4j to configure logging)
          * 
          */
@@ -127,11 +129,11 @@ public class DjatokaContextListener implements ServletContextListener
         catch (Throwable t)
         {
             throw new RuntimeException(
-                    "\n\nDSpace has failed to initialize, during stage 2. Error while attempting to read the \n" +
-                    "DSpace configuration file (Path: '"+djatokaConfig+"'). \n" +
+                    "\n\nDjatoka has failed to initialize, during stage 2. Error while attempting to read the \n" +
+                    "Djatoka configuration file (Path: '"+djatokaConfig+"'). \n" +
                     "This has likely occurred because either the file does not exist, or it's permissions \n" +
                     "are set incorrectly, or the path to the configuration file is incorrect. The path to \n" +
-                    "the DSpace configuration file is stored in a context variable, 'dspace-config', in \n" +
+                    "the Djatoka configuration file is stored in a context variable, '" + DJATOKA_CONFIG_PARAMETER + "', in \n" +
                     "either the local servlet or global context.\n\n",t);
         }
 

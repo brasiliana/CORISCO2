@@ -1,6 +1,10 @@
 /*
  * ConfigurationManager.java
  *
+ * Brasiliana USP, 2011.
+ * 
+ * Copied and modified from:
+ *
  * Version: $Revision: 4243 $
  *
  * Date: $Date: 2009-09-02 09:12:23 +0000 (Wed, 02 Sep 2009) $
@@ -56,21 +60,21 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.helpers.OptionConverter;
 
 /**
- * Class for reading the DSpace system configuration. The main configuration is
+ * Class for reading the Djatoka system configuration. The main configuration is
  * read in as properties from a standard properties file. Email templates and
  * configuration files for other tools are also be accessed via this class.
  * <P>
  * The main configuration is by default read from the <em>resource</em>
- * <code>/dspace.cfg</code>.
+ * <code>/djatoka.cfg</code>.
  * To specify a different configuration, the system property
- * <code>dspace.configuration</code> should be set to the <em>filename</em>
+ * <code>djatoka.configuration</code> should be set to the <em>filename</em>
  * of the configuration file.
  * <P>
  * Other configuration files are read from the <code>config</code> directory
- * of the DSpace installation directory (specified as the property
- * <code>dspace.dir</code> in the main configuration file.)
+ * of the Djatoka installation directory.
  *
  * 
+ * @author Fabio N. Kepler - Modifications for use with Djatoka.
  * @author Robert Tansley
  * @author Larry Stone - Interpolated values.
  * @author Mark Diggory - General Improvements to detection, logging and loading.
@@ -92,7 +96,7 @@ public class ConfigurationManager
     private final static int RECURSION_LIMIT = 9;
 
     /**
-     * Identify if DSpace is properly configured
+     * Identify if Djatoka is properly configured
      * @return boolean true if configured, false otherwise
      */
     public static boolean isConfigured()
@@ -136,6 +140,39 @@ public class ConfigurationManager
         }
         return propertyValue;
     }
+
+
+    /**
+     * Get a configuration property, with default
+     * 
+     * @param property
+     *            the name of the property
+     * 
+     * @param defaultValue
+     *            value to return if property is not found
+     *
+     * @return the value of the property, or <code>default</code> if the property
+     *         does not exist or is null.
+     */
+    public static String getProperty(String property, String defaultValue)
+    {
+        if (properties == null)
+        {
+            loadConfig(null);
+        }
+        String propertyValue = properties.getProperty(property);
+        
+        if (propertyValue != null)
+        {
+            propertyValue = propertyValue.trim();
+        }
+        else
+        {
+            propertyValue = defaultValue;
+        }
+        return propertyValue;
+    }
+
 
     /**
      * Get a configuration property as an integer
@@ -339,7 +376,7 @@ public class ConfigurationManager
 
         if (stringValue != null)
         {
-        	stringValue = stringValue.trim();
+            stringValue = stringValue.trim();
             return  stringValue.equalsIgnoreCase("true") ||
                     stringValue.equalsIgnoreCase("yes");
         }
@@ -350,9 +387,9 @@ public class ConfigurationManager
     }
 
     /**
-     * Returns an enumeration of all the keys in the DSpace configuration
+     * Returns an enumeration of all the keys in the Djatoka configuration
      * 
-     * @return an enumeration of all the keys in the DSpace configuration
+     * @return an enumeration of all the keys in the Djatoka configuration
      */
     public static Enumeration propertyNames()
     {
@@ -391,12 +428,12 @@ public class ConfigurationManager
     private static File loadedFile = null;
 
     /**
-     * Load the DSpace configuration properties. Only does anything if
+     * Load the Djatoka configuration properties. Only does anything if
      * properties are not already loaded. Properties are loaded in from the
      * specified file, or default locations.
      * 
      * @param configFile
-     *            The <code>dspace.cfg</code> configuration file to use, or
+     *            The <code>djatoka.cfg</code> configuration file to use, or
      *            <code>null</code> to try default locations
      */
     public static synchronized void loadConfig(String configFile)
@@ -416,7 +453,7 @@ public class ConfigurationManager
             String configProperty = null;
             try
             {
-                configProperty = System.getProperty("dspace.configuration");
+                configProperty = System.getProperty("djatoka.configuration");
             }
             catch (SecurityException se)
             {
@@ -436,7 +473,7 @@ public class ConfigurationManager
             // Has the default configuration location been overridden?
             else if (configProperty != null)
             {
-                info("Loading system provided config property (-Ddspace.configuration): " + configProperty);
+                info("Loading system provided config property (-Ddjatoka.configuration): " + configProperty);
                 
                 // Load the overriding configuration
                 loadedFile = new File(configProperty);
@@ -445,7 +482,7 @@ public class ConfigurationManager
             // Load configuration from default location
             else
             {
-                url = ConfigurationManager.class.getResource("/dspace.cfg");
+                url = ConfigurationManager.class.getResource("/djatoka.cfg");
                 if (url != null)
                 {
                     info("Loading from classloader: " + url);
@@ -456,8 +493,8 @@ public class ConfigurationManager
             
             if (url == null)
             {
-                fatal("Cannot find dspace.cfg");
-                throw new RuntimeException("Cannot find dspace.cfg");
+                fatal("Cannot find djatoka.cfg");
+                throw new RuntimeException("Cannot find djatoka.cfg");
             }
             else
             {
@@ -495,15 +532,15 @@ public class ConfigurationManager
             /*
              * Initialize Logging once ConfigurationManager is initialized.
              * 
-             * This is selection from a property in dspace.cfg, if the property
+             * This is selection from a property in djatoka.cfg, if the property
              * is absent then nothing will be configured and the application
              * will use the defaults provided by log4j. 
              * 
              * Property format is:
              * 
-             * log.init.config = ${dspace.dir}/config/log4j.properties
+             * log.init.config = ${djatoka.dir}/config/log4j.properties
              * or
-             * log.init.config = ${dspace.dir}/config/log4j.xml
+             * log.init.config = ${djatoka.dir}/config/log4j.xml
              * 
              * See default log4j initialization documentation here:
              * http://logging.apache.org/log4j/docs/manual.html
@@ -515,19 +552,19 @@ public class ConfigurationManager
              */
             String dsLogConfiguration = ConfigurationManager.getProperty("log.init.config");
 
-            if (dsLogConfiguration == null ||  System.getProperty("dspace.log.init.disable") != null)
+            if (dsLogConfiguration == null ||  System.getProperty("djatoka.log.init.disable") != null)
             {
                 /* 
-                 * Do nothing if log config not set in dspace.cfg or "dspace.log.init.disable" 
+                 * Do nothing if log config not set in djatoka.cfg or "djatoka.log.init.disable" 
                  * system property set.  Leave it upto log4j to properly init its logging 
                  * via classpath or system properties.
                  */
                 info("Using default log4j provided log configuration," +
-                        "if uninitended, check your dspace.cfg for (log.init.config)");
+                        "if uninitended, check your djatoka.cfg for (log.init.config)");
             }
             else
             {
-                info("Using dspace provided log configuration (log.init.config)");
+                info("Using djatoka provided log configuration (log.init.config)");
                 
                 
                 File logConfigFile = new File(dsLogConfiguration);
@@ -548,8 +585,8 @@ public class ConfigurationManager
         }
         catch (MalformedURLException e)
         {
-            fatal("Can't load dspace provided log4j configuration", e);
-            throw new RuntimeException("Cannot load dspace provided log4j configuration",e);
+            fatal("Can't load djatoka provided log4j configuration", e);
+            throw new RuntimeException("Cannot load djatoka provided log4j configuration",e);
         }
         
     }
@@ -611,7 +648,7 @@ public class ConfigurationManager
      * arguments:
      * <ul>
      * <li><code>-property name</code> prints the value of the property
-     * <code>name</code> from <code>dspace.cfg</code> to the standard
+     * <code>name</code> from <code>djatoka.cfg</code> to the standard
      * output. If the property does not exist, nothing is written.</li>
      * </ul>
      * 
@@ -638,7 +675,7 @@ public class ConfigurationManager
         else
         {
             System.err
-                    .println("Usage: ConfigurationManager OPTION\n  -property prop.name  get value of prop.name from dspace.cfg");
+                    .println("Usage: ConfigurationManager OPTION\n  -property prop.name  get value of prop.name from djatoka.cfg");
         }
 
         System.exit(1);
