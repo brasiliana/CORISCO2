@@ -32,7 +32,17 @@ function InitializeViewer() {
  
     // Return the width of a given page.  Here we assume all images are 800 pixels wide
     br.getPageWidth = function(index) {
-        return metadata.width;
+        try {
+            var pageKey = "Page " + br.getPageNum(index);
+            var size = br.pageSizes[pageKey];
+            var w = size.split(" ")[0];
+            return w;
+        } catch (e) {
+            console.log(e);
+            console.log("index: " + index);
+            return 400;
+        }
+//        return metadata.width;
 //        var metadata = null;
 //        var params = {rft_id: "http://localhost:8080/xmlui/bitstream/handle/1918/624530141/006245-3_IMAGEM_141.jp2",
 //            svc_id: "info:lanl-repo/svc/getMetadata"};
@@ -54,7 +64,17 @@ function InitializeViewer() {
  
     // Return the height of a given page.  Here we assume all images are 1200 pixels high
     br.getPageHeight = function(index) {
-        return metadata.height;
+        try {
+            var pageKey = "Page " + br.getPageNum(index);
+            var size = br.pageSizes[pageKey];
+            var h = size.split(" ")[1];
+            return h;
+        } catch (e) {
+            console.log(e);
+            console.log("index: " + index);
+            return 600;
+        }
+//        return metadata.height;
 //        var metadata = null;
 //        var params = {rft_id: "http://localhost:8080/xmlui/bitstream/handle/1918/624530141/006245-3_IMAGEM_141.jp2",
 //            svc_id: "info:lanl-repo/svc/getMetadata"};
@@ -204,8 +224,6 @@ function InitializeViewer() {
         '.funcional #ficha-link .label': 'Link permanente para o documento:'
         };
 
-    //"<div id='visualizador-barra' class='caixa'>"
-//    var toolbar_skel =
     br.toolbarHTMLContent = function () {
         if (this.addToolbar == false) {
             return null;
@@ -218,7 +236,6 @@ function InitializeViewer() {
                 +   " <span class='mosaico'><button class='icone_barra rollover thumbnail_mode' onclick='br.switchMode(3); return false;'/></span>"
                 +   " <span class='pagina-dupla'><button class='icone_barra rollover two_page_mode' onclick='br.switchMode(2); return false;'/></span>"
                 +   " <span class='ocr'><button class='icone_barra ocr_mode' onclick='br.switchMode(4); return false;'/></span>"
-//                +   " <span class='ocr'><button class='icone_barra ocr_mode' onclick='mostrarOCR(\"" + qsParm["OCRURL"] + "\", \"#BookReader\"); return false;'/></span>"
                 + "</div>"
 
                 + "<div class='zoom'>"
@@ -269,8 +286,11 @@ function InitializeViewer() {
     }
  
     // Total number of leafs
-    //br.numLeafs = qsParm["pgs"];
     br.numLeafs = metadata.compositingLayerCount;
+
+    // Page sizes in the format:
+    // "Page 1": "WWW.WW HHH.HH", "Page 2": "www.ww hhh.hh"
+    br.pageSizes = metadata.instProps;
  
     // Book title and the URL used for the book title link
     br.bookTitle = qsParm["title"];

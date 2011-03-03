@@ -113,13 +113,13 @@ public class ExtractPDF implements IExtract {
     // command to get image from PDF; @FILE@, @OUTPUT@ are placeholders
     private static final String PDFINFO_COMMAND[] =
     {
-        "@COMMAND@", "-f", "@FIRSTPAGE@", "-l", "@LASTPAGE@", "@FILE@"
+        "@COMMAND@", "-f", "@FIRSTPAGE@", "-l", "@LASTPAGE@", "-box", "@FILE@"
         //"@COMMAND@", "-f", "@FP@", "-l", "@LP@", "-box", "@FILE@"
     };
     private static final int PDFINFO_COMMAND_POSITION_BIN = 0;
     private static final int PDFINFO_COMMAND_POSITION_FIRSTPAGE = 2;
     private static final int PDFINFO_COMMAND_POSITION_LASTPAGE = 4;
-    private static final int PDFINFO_COMMAND_POSITION_FILE = 5;
+    private static final int PDFINFO_COMMAND_POSITION_FILE = 6;
 
 
     // executable path for "pdftoppm", comes from DSpace config at runtime.
@@ -130,8 +130,8 @@ public class ExtractPDF implements IExtract {
 
     // match line in pdfinfo output that describes file's MediaBox
     private static final Pattern MEDIABOX_PATT = Pattern.compile(
-        "^Page\\s+(\\d+)\\s+size:\\s+([\\.\\d-]+)\\s+x\\s+([\\.\\d-]+)\\s+pts");
-        //"^Page\\s+\\d+\\s+MediaBox:\\s+([\\.\\d-]+)\\s+([\\.\\d-]+)\\s+([\\.\\d-]+)\\s+([\\.\\d-]+)"); // For use with -box switch
+        //"^Page\\s+(\\d+)\\s+size:\\s+([\\.\\d]+)\\s+x\\s+([\\.\\d]+)\\s+pts\\.*$"); // Does not seem to match "Page   41 size: 595 x 842 pts (A4)".
+        "^Page\\s+(\\d+)\\s+MediaBox:\\s+([\\.\\d-]+)\\s+([\\.\\d-]+)\\s+([\\.\\d-]+)\\s+([\\.\\d-]+)"); // For use with -box switch
     /* Without the -box switch:
         Page    1 size: 444.72 x 771.12 pts
         Page    2 size: 416.16 x 743.52 pts
@@ -663,8 +663,15 @@ public class ExtractPDF implements IExtract {
                 for (MatchResult mr : pageSizes)
                 {
                     String page = mr.group(1);
-                    String width = mr.group(2);
-                    String height = mr.group(3);
+                    
+                    float x0 = Float.parseFloat(mr.group(2));
+                    float y0 = Float.parseFloat(mr.group(3));
+                    float x1 = Float.parseFloat(mr.group(4));
+                    float y1 = Float.parseFloat(mr.group(5));
+                    float w = Math.abs(x1 - x0);
+                    float h = Math.abs(y1 - y0);
+                    String width = "" + w; //mr.group(2);
+                    String height = "" + h; //mr.group(3);
                     pdfProperties.put("Page " + page, width + " " + height);
                 }
             }
@@ -731,8 +738,14 @@ public class ExtractPDF implements IExtract {
             else
             {
                 String page = pageSize.group(1);
-                double width = Double.parseDouble(pageSize.group(2));
-                double height = Double.parseDouble(pageSize.group(3));
+                double x0 = Double.parseDouble(pageSize.group(2));
+                double y0 = Double.parseDouble(pageSize.group(3));
+                double x1 = Double.parseDouble(pageSize.group(4));
+                double y1 = Double.parseDouble(pageSize.group(5));
+                double width = Math.abs(x1 - x0);
+                double height = Math.abs(y1 - y0);
+                //double width = Double.parseDouble(pageSize.group(2));
+                //double height = Double.parseDouble(pageSize.group(3));
                 pageDimension = new Dimension();
                 pageDimension.setSize(width, height);
             }
