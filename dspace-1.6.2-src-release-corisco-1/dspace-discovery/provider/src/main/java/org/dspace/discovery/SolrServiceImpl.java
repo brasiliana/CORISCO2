@@ -716,29 +716,31 @@ public class SolrServiceImpl implements SearchService, IndexingService {
                 if (meta.element.equals("date") && meta.schema.equals("dc")) {
                     try {
                         Date date = toDate(value);
-                        value = DateFormatUtils.formatUTC(date, "yyyy-MM-dd'T'HH:mm:ss'Z'");
-                        String fieldNameYear = meta.element + (meta.qualifier != null && !meta.qualifier.trim().equals("") ? meta.qualifier : "") + ".year";
-                        int fieldValueYear = Integer.parseInt(DateFormatUtils.formatUTC(date, "yyyy"));
-                        log.debug("field name:value: " + fieldNameYear + ":" + fieldValueYear);
-                        if (doc.getFieldValue(fieldNameYear) == null) {
-                            doc.addField(fieldNameYear, fieldValueYear);
-                            doc.addField(field, value);
-                            log.debug("addField: " + field + "(" + fieldNameYear + "):" + value + "(" + fieldValueYear + ")");
-                        } else {
-                            Date otherDate = toDate(doc.getFieldValue(field).toString());
-                            if (date.after(otherDate)) {
-                                doc.setField(fieldNameYear, fieldValueYear);
-                                doc.setField(field, value);
-                                log.debug("setField: " + field + "(" + fieldNameYear + "):" + value + "(" + fieldValueYear + ")");
+                        // FIXME: Not adding date field if it doesn't contain a valid date value;
+                        //        This behaviour is changeable, but depends on the date fields defined in schema.xml:
+                        //        If the field is of type "date" and an invalid value is added, the item will not
+                        //        appear in DSpace browsing lists and search results.
+                        if (date != null) {
+                            value = DateFormatUtils.formatUTC(date, "yyyy-MM-dd'T'HH:mm:ss'Z'");
+                            String fieldNameYear = meta.element + (meta.qualifier != null && !meta.qualifier.trim().equals("") ? meta.qualifier : "") + ".year";
+                            int fieldValueYear = Integer.parseInt(DateFormatUtils.formatUTC(date, "yyyy"));
+                            log.debug("field name:value: " + fieldNameYear + ":" + fieldValueYear);
+                            if (doc.getFieldValue(fieldNameYear) == null) {
+                                doc.addField(fieldNameYear, fieldValueYear);
+                                doc.addField(field, value);
+                                log.debug("addField: " + field + "(" + fieldNameYear + "):" + value + "(" + fieldValueYear + ")");
+                            } else {
+                                Date otherDate = toDate(doc.getFieldValue(field).toString());
+                                if (date.after(otherDate)) {
+                                    doc.setField(fieldNameYear, fieldValueYear);
+                                    doc.setField(field, value);
+                                    log.debug("setField: " + field + "(" + fieldNameYear + "):" + value + "(" + fieldValueYear + ")");
+                                }
                             }
                         }
                     } catch (Exception e) {
-                        if (meta.qualifier != null && meta.qualifier.equals("issued")) {
-                            doc.addField(field, value);
-                        } else {
-                            log.error("Converting date:");
-                            log.error(e.getMessage(), e);
-                        }
+                        log.warn("Converting date:");
+                        log.warn(e.getMessage(), e);
                     }
                 } else {
                     doc.addField(field, value);
@@ -952,7 +954,8 @@ public class SolrServiceImpl implements SearchService, IndexingService {
                 df.setLenient(false);
                 return df.parse(t);
             } catch (ParseException pe) {
-                log.error("Unable to parse date format", pe);
+                log.warn("Unable to parse date format", pe);
+                return null;
             }
         }
 
