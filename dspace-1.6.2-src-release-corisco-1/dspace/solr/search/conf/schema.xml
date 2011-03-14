@@ -386,10 +386,10 @@
         //webui.itemlist.sort-option.3 = dateaccessioned:dc.date.accessioned:date
         //webui.itemlist.sort-option.4 = ispartof:dc.relation.ispartof:text
       -->
-    <field name="dateissued.year"  type="sint" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-    <field name="dateissued"  type="date" indexed="true" stored="true" multiValued="false" />
-    <field name="dateaccessioned.year"  type="sint" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-    <field name="dateaccessioned"  type="date" indexed="true" stored="true" multiValued="false" />
+    <field name="dateissued.year"  type="sint" indexed="true" stored="true" multiValued="false" omitNorms="true" sortMissingLast="true" />
+    <field name="dateissued"  type="date" indexed="true" stored="true" multiValued="false" sortMissingLast="true" />
+    <field name="dateaccessioned.year"  type="sint" indexed="true" stored="true" multiValued="false" omitNorms="true" sortMissingLast="true" />
+    <field name="dateaccessioned"  type="date" indexed="true" stored="true" multiValued="false" sortMissingLast="true" />
 
     <!--
     <field name="title" type="lowerCaseSort" indexed="true" stored="true" multiValued="true" omitNorms="true" />
@@ -439,10 +439,10 @@
 
 
     <!-- explicitly defines dc.date.issued, accessioned, available for searching and sorting -->
-    <field name="date.year"  type="sint" indexed="true" stored="true" multiValued="true" omitNorms="true" />
-    <field name="dc.date"  type="date" indexed="true" stored="true" multiValued="true" omitNorms="true" />
+    <field name="date.year" type="sint" indexed="true" stored="true" multiValued="true" omitNorms="true" />
+    <field name="dc.date" type="date" indexed="true" stored="true" multiValued="true" omitNorms="true" />
     <dynamicField name="*.year" type="sint" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-    <dynamicField name="dc.date.*" type="date" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+    <dynamicField name="dc.date.*" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
 
     <!-- suppress provenance from search -->
     <field name="dc.description.provenance" type="ignored" multiValued="true"/>
