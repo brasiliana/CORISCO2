@@ -63,7 +63,7 @@
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
   <target name="compile" depends="prepare" description="Compile Java source files">
-    <javac srcdir="${src.dir}"
+    <javac srcdir="${src.dir}/java"
            destdir="${build.dir}/classes"
            source="1.5"
            optimize="${optimize}"
@@ -107,7 +107,7 @@
         </tarfileset>
         <tarfileset dir="." prefix="adore-djatoka-${version}">
             <exclude name="adore-djatoka-${version}.tar.gz"/>
-            <exclude name="src/gov/lanl/adore/djatoka/test/"/>
+            <exclude name="src/java/gov/lanl/adore/djatoka/test/"/>
             <include name="build.xml"/>
             <include name="README.txt"/>
             <include name="INSTALL.txt"/>
@@ -115,7 +115,7 @@
             <include name="dist/**/*"/>
             <include name="etc/**/*"/>
             <include name="lib/**/*"/>
-            <include name="src/gov/**/*"/>
+            <include name="src/java/gov/**/*"/>
             <include name="src/web/**/*"/>
         </tarfileset>
     </tar>
@@ -135,7 +135,7 @@
              windowtitle="aDORe djatoka API"
              classpathref="djatoka.classpath"
              additionalparam="-breakiterator">
-      <packageset dir="${src.dir}">
+      <packageset dir="${src.dir}/java">
          <exclude name="kdu_jni"/>
          <exclude name="gov/lanl/adore/djatoka/test/"/>
       </packageset>
