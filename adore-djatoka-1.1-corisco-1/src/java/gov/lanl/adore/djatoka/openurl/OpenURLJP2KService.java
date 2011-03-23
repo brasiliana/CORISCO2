@@ -156,7 +156,7 @@ public class OpenURLJP2KService implements Service, FormatConstants {
         HashMap<String, String> kev = setServiceValues(contextObject);
         DjatokaDecodeParam params = new DjatokaDecodeParam();
         if (kev.containsKey("region"))
-            params.setRegion(kev.get("region"));        
+            params.setRegion(kev.get("region"));
         if (kev.containsKey("format")) {
             format = kev.get("format");
             if (!format.startsWith("image")) {
@@ -325,7 +325,7 @@ public class OpenURLJP2KService implements Service, FormatConstants {
                 int w = Integer.parseInt(r[3]);
                 if ((h * w) >= maxPixels)
                     return false;
-            }    
+            }
         }
             
         return true;
