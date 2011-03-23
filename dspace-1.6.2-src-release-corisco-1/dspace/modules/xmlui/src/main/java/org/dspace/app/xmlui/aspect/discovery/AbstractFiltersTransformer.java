@@ -521,20 +521,20 @@ public abstract class AbstractFiltersTransformer extends AbstractDSpaceTransform
                             //facet.addItem(itemName, "selected").addContent(displayedValue + " (" + value.getCount() + ")");
                             itemRend = "selected";
                         }
-                            if (value.getCount() > 0) {
-                                String URI = null;
-                                try {
-                                    URI = request.getSitemapURI().split("/")[request.getSitemapURI().split("/").length - 1];
-                                    if (URI.matches("[0-9]+")) {
-                                        URI = null;
-                                    }
-                                } catch (Exception e) {
-                                    log.error(e.getMessage(), e);
+                        if (value.getCount() > 0) {
+                            String URI = null;
+                            try {
+                                URI = request.getSitemapURI().split("/")[request.getSitemapURI().split("/").length - 1];
+                                if (URI.matches("[0-9]+")) {
+                                    URI = null;
                                 }
-                                facet.addItem(itemName, itemRend).addXref(contextPath + (commColl == null ? "" : "/handle/" + commColl.getHandle()) + "/" + (URI != null ? URI : "") + (queryString != null ? "?" + queryString : ""), displayedValue + " (" + "" + value.getCount() + ")");
-                            } else {
-                                facet.addItem(itemName, "disabled").addContent(displayedValue + " (" + value.getCount() + ")");
+                            } catch (Exception e) {
+                                log.error(e.getMessage(), e);
                             }
+                            facet.addItem(itemName, itemRend).addXref(contextPath + (commColl == null ? "" : "/handle/" + commColl.getHandle()) + "/" + (URI != null ? URI : "") + (queryString != null ? "?" + queryString : ""), displayedValue + " (" + "" + value.getCount() + ")");
+                        } else {
+                            facet.addItem(itemName, "disabled").addContent(displayedValue + " (" + value.getCount() + ")");
+                        }
                     }
                 }
             }
