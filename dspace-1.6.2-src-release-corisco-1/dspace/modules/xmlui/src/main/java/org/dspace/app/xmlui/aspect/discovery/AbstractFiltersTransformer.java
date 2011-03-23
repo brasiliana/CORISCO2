@@ -407,7 +407,6 @@ public abstract class AbstractFiltersTransformer extends AbstractDSpaceTransform
                 java.util.List<FacetField.Count> values = fieldLocation.getValues();
                 if (values != null) {
                     String queryString = request.getQueryString();
-                    //log.error("queryString: " + queryString);
                     queryString = queryString != null ? queryString.replaceAll("&fq=location[:[%3A]+][ml][0-9]+", "") : queryString;
                     // Find selected community/collection.
                     String curCommCollSelectedName = "m1"; // Default
@@ -428,7 +427,6 @@ public abstract class AbstractFiltersTransformer extends AbstractDSpaceTransform
                     Map<String, FacetField.Count> sortedSolrNameLocationWithValues = new TreeMap<String, FacetField.Count>();
                     for (FacetField.Count v : values) {
                         sortedSolrNameLocationWithValues.put(v.getName(), v);
-                        //log.error("v: " + v.getName());
                     }
                     // Default selection is "m1" (community with ID 1).
                     int curCommCollSelectedType = Constants.COMMUNITY;
@@ -437,7 +435,6 @@ public abstract class AbstractFiltersTransformer extends AbstractDSpaceTransform
                         curCommCollSelectedType = curCommCollSelectedName.startsWith("m") ? Constants.COMMUNITY : Constants.COLLECTION;
                         curCommCollSelectedID = Integer.parseInt(curCommCollSelectedName.substring(1));
                     }
-                    //log.error("cur ml: " + curCommCollSelectedName + "; id: " + curCommCollSelectedID + "; type: " + curCommCollSelectedType);
                     Map<Integer, String> sortedHandleWithSolrName = new TreeMap<Integer, String>();
                     Map<String, DSpaceObject> sortedSolrNameWithDSpaceObject = new TreeMap<String, DSpaceObject>();
                     
@@ -536,10 +533,8 @@ public abstract class AbstractFiltersTransformer extends AbstractDSpaceTransform
                                 }
                                 facet.addItem(itemName, itemRend).addXref(contextPath + (commColl == null ? "" : "/handle/" + commColl.getHandle()) + "/" + (URI != null ? URI : "") + (queryString != null ? "?" + queryString : ""), displayedValue + " (" + "" + value.getCount() + ")");
                             } else {
-                            //itemRend = "disabled";
                                 facet.addItem(itemName, "disabled").addContent(displayedValue + " (" + value.getCount() + ")");
                             }
-                        
                     }
                 }
             }

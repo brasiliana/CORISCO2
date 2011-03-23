@@ -583,8 +583,6 @@ public class BrowseFacet extends AbstractDSpaceTransformer implements CacheableP
                     int currentPage = getParameterPage(); //(int) (firstItemIndex / getParameterRpp()) + 1;
                     int pagesTotal = (int) ((itemsTotal - 1) / getParameterRpp()) + 1;
 
-                    //log.error("items total: " + itemsTotal + "; first: " + firstItemIndex + "; last: " + lastItemIndex + "; rpp: " + getParameterRpp() + "; cur page: " + currentPage);
-
                     Map<String, String> parameters = new HashMap<String, String>();
                     parameters.put("page", "{pageNum}");
                     String pageURLMask = generateURL(parameters);
