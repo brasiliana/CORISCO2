@@ -121,6 +121,7 @@
       <dependency>
          <groupId>org.dspace</groupId>
          <artifactId>dspace-lni-webapp</artifactId>
+         <version>1.6.2</version>
          <type>war</type>
       </dependency>
       <dependency>
