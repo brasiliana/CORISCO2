@@ -5,6 +5,7 @@ gov.lanl.adore.djatoka.io.writer
 gov.lanl.adore.djatoka.kdu
 gov.lanl.adore.djatoka.kdu.jni
 gov.lanl.adore.djatoka.openurl
+gov.lanl.adore.djatoka.openurl.plugin.dspace
 gov.lanl.adore.djatoka.openurl.plugin.rftdb
 gov.lanl.adore.djatoka.plugin
 gov.lanl.adore.djatoka.util

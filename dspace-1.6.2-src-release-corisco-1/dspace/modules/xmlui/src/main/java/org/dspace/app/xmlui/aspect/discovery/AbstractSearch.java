@@ -281,8 +281,9 @@ public abstract class AbstractSearch extends AbstractFiltersTransformer {
 
             // Look for any communities or collections in the mix
             // UPDATE: mix everything. It's what is expected from a search.
+            // UPDATE 2: actually not. Comm/coll should appear separated.
             ReferenceSet referenceSet = null;
-            /*
+            //*
             boolean resultsContainsBothContainersAndItems = false;
             for (SolrDocument doc : solrResults) {
                 DSpaceObject resultDSO = SearchUtils.findDSpaceObject(context, doc);
@@ -306,7 +307,8 @@ public abstract class AbstractSearch extends AbstractFiltersTransformer {
             for (SolrDocument doc : solrResults) {
                 DSpaceObject resultDSO = SearchUtils.findDSpaceObject(context, doc);
 
-                //if (resultDSO instanceof Item) {
+                //
+                if (resultDSO instanceof Item) {
 
                     String group_by = this.getParameterGroup();
                     // If we are grouping, attempt to acquire the dc.isPartOf parent of the Item and group on it.
@@ -324,7 +326,8 @@ public abstract class AbstractSearch extends AbstractFiltersTransformer {
                     } else {
                         referenceSet.addReference(resultDSO);
                     }
-                //}
+                //
+                }
             }
 
             // Add hit highlighting information

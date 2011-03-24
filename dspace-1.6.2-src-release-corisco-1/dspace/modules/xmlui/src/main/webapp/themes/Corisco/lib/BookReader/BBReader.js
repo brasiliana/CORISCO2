@@ -14,8 +14,6 @@ if (qsParm["serverURL"] != "") {
 }
 
 if (qsParm["item"] != "") {
-    //$.getJSON("http://" + document.domain + ':' + location.port + "/" + qsParm["item"],
-    //var url = "http://" + document.domain + ':' + location.port + resolverURL + "&svc_id=" + getMetadataSVC_ID + "&rft_id=" + qsParm["item"];
     var url = baseURL + "&svc_id=" + getMetadataSVC_ID + "&rft_id=" + qsParm["item"];
     $.getJSON(url,
         function(data) {
@@ -23,55 +21,36 @@ if (qsParm["item"] != "") {
             InitializeViewer();
         }
         );
-//} else {
-//    pages = new Array(5);
-//    InitializeViewer();
 }
 
 function InitializeViewer() {
- 
-    // Return the width of a given page.  Here we assume all images are 800 pixels wide
+
+    // Return the width of a given page.
     br.getPageWidth = function(index) {
-        return metadata.width;
-//        var metadata = null;
-//        var params = {rft_id: "http://localhost:8080/xmlui/bitstream/handle/1918/624530141/006245-3_IMAGEM_141.jp2",
-//            svc_id: "info:lanl-repo/svc/getMetadata"};
-//        $.ajax({
-//            url: baseURL,
-//            dataType: 'json',
-//            data: params,
-//            success: function(data) {
-//                metadata = data;
-//            },
-//            async: false
-//        });
-//        if (metadata != null) {
-//            return metadata.width;
-//        } else {
-//            return 800;
-//        }
+        try {
+            var pageKey = "Page " + br.getPageNum(index);
+            var size = br.pageSizes[pageKey];
+            var w = size.split(" ")[0];
+            return w;
+        } catch (e) {
+            console.log(e);
+            console.log("index: " + index);
+            return 400;
+        }
     }
  
-    // Return the height of a given page.  Here we assume all images are 1200 pixels high
+    // Return the height of a given page.
     br.getPageHeight = function(index) {
-        return metadata.height;
-//        var metadata = null;
-//        var params = {rft_id: "http://localhost:8080/xmlui/bitstream/handle/1918/624530141/006245-3_IMAGEM_141.jp2",
-//            svc_id: "info:lanl-repo/svc/getMetadata"};
-//        $.ajax({
-//            url: baseURL,
-//            dataType: 'json',
-//            data: params,
-//            success: function(data) {
-//                metadata = data;
-//            },
-//            async: false
-//        });
-//        if (metadata != null) {
-//            return metadata.height;
-//        } else {
-//            return 1200;
-//        }
+        try {
+            var pageKey = "Page " + br.getPageNum(index);
+            var size = br.pageSizes[pageKey];
+            var h = size.split(" ")[1];
+            return h;
+        } catch (e) {
+            console.log(e);
+            console.log("index: " + index);
+            return 600;
+        }
     }
  
     // We load the images from archive.org -- you can modify this function to retrieve images
@@ -204,8 +183,6 @@ function InitializeViewer() {
         '.funcional #ficha-link .label': 'Link permanente para o documento:'
         };
 
-    //"<div id='visualizador-barra' class='caixa'>"
-//    var toolbar_skel =
     br.toolbarHTMLContent = function () {
         if (this.addToolbar == false) {
             return null;
@@ -218,7 +195,6 @@ function InitializeViewer() {
                 +   " <span class='mosaico'><button class='icone_barra rollover thumbnail_mode' onclick='br.switchMode(3); return false;'/></span>"
                 +   " <span class='pagina-dupla'><button class='icone_barra rollover two_page_mode' onclick='br.switchMode(2); return false;'/></span>"
                 +   " <span class='ocr'><button class='icone_barra ocr_mode' onclick='br.switchMode(4); return false;'/></span>"
-//                +   " <span class='ocr'><button class='icone_barra ocr_mode' onclick='mostrarOCR(\"" + qsParm["OCRURL"] + "\", \"#BookReader\"); return false;'/></span>"
                 + "</div>"
 
                 + "<div class='zoom'>"
@@ -268,9 +244,12 @@ function InitializeViewer() {
         return index + 1;
     }
  
-    // Total number of leafs
-    //br.numLeafs = qsParm["pgs"];
+    // Total number of leafs (i.e., number of pages).
     br.numLeafs = metadata.compositingLayerCount;
+
+    // Page sizes in the format:
+    // "Page 1": "WWW.WW HHH.HH", "Page 2": "www.ww hhh.hh"
+    br.pageSizes = metadata.instProps;
  
     // Book title and the URL used for the book title link
     br.bookTitle = qsParm["title"];
@@ -288,9 +267,6 @@ function InitializeViewer() {
     //br.toolbarHTML = qsParm["toolbarHTML"];
     br.addToolbar = false;
     
-    // Store the item identifier for later use
-    //br.bhlItemId = qsParm["item"];
- 
 //    br.ui = "embed";
     br.ui = "full";
  
