@@ -112,29 +112,33 @@ public class KduExtractProcessorJNI {
 			StringTokenizer st = new StringTokenizer(params.getRegion(), "{},");
 			String token;
 			// top
-			if ((token=st.nextToken()).contains(".")) {
+            if ((token = st.nextToken()).contains(".")) {
 				topDouble = Double.parseDouble(token);
 				usetopDouble = true;
-			} else
+            } else {
 				top = Integer.parseInt(token);
+            }
 			// left
-			if ((token=st.nextToken()).contains(".")) {
+            if ((token = st.nextToken()).contains(".")) {
 				leftDouble = Double.parseDouble(token);
 				useleftDouble = true;
-			} else
+            } else {
 				left = Integer.parseInt(token);
+            }
 			// height
-			if ((token=st.nextToken()).contains(".")) {
+            if ((token = st.nextToken()).contains(".")) {
 				heightDouble = Double.parseDouble(token);
 				useheightDouble = true;
-			} else
+            } else {
 				height = Integer.parseInt(token);
+            }
 			// width
-			if ((token=st.nextToken()).contains(".")) {
+            if ((token = st.nextToken()).contains(".")) {
 				widthDouble = Double.parseDouble(token);
 				usewidthDouble = true;
-			} else
+            } else {
 				width = Integer.parseInt(token);
+            }
 			
 			useRegion = true;
 		}
@@ -163,24 +167,29 @@ public class KduExtractProcessorJNI {
 			}
 
 			compositor = new Kdu_region_compositor();
-			if (raw_src != null)
+            if (raw_src != null) {
 				compositor.Create(raw_src);
-			else
+            } else {
 				compositor.Create(wrapped_src);
+            }
 
 			Kdu_dims imageDimensions = new Kdu_dims();
 			compositor.Get_total_composition_dims(imageDimensions);
 			Kdu_coords imageSize = imageDimensions.Access_size();
 			Kdu_coords imagePosition = imageDimensions.Access_pos();
 
-			if (useleftDouble)
+            if (useleftDouble) {
 				left = imagePosition.Get_x() + (int) Math.round(leftDouble * imageSize.Get_x());
-			if (usetopDouble)
+            }
+            if (usetopDouble) {
 				top = imagePosition.Get_y() + (int) Math.round(topDouble * imageSize.Get_y());
-			if (useheightDouble)
+            }
+            if (useheightDouble) {
 				height = (int) Math.round(heightDouble * imageSize.Get_y());
-			if (usewidthDouble)
+            }
+            if (usewidthDouble) {
 				width = (int) Math.round(widthDouble * imageSize.Get_x());
+            }
 
 			if (useRegion) {
 				imageSize.Set_x(width);
@@ -201,14 +210,15 @@ public class KduExtractProcessorJNI {
 			viewDims.Access_size().Set_y(imageSize.Get_y());
 			compositor.Add_compositing_layer(0, viewDims, viewDims);
 
-			if (params.getRotationDegree() == 90)
+            if (params.getRotationDegree() == 90) {
 				compositor.Set_scale(true, false, true, 1.0F);
-			else if (params.getRotationDegree() == 180)
+            } else if (params.getRotationDegree() == 180) {
 				compositor.Set_scale(false, true, true, 1.0F);
-			else if (params.getRotationDegree() == 270)
+            } else if (params.getRotationDegree() == 270) {
 				compositor.Set_scale(true, true, false, 1.0F);
-			else 
+            } else {
 			    compositor.Set_scale(false, false, false, 1.0F);
+            }
 
 			compositor.Get_total_composition_dims(viewDims);
 			Kdu_coords viewSize = viewDims.Access_size();
@@ -225,8 +235,9 @@ public class KduExtractProcessorJNI {
 				newOffset.Subtract(viewDims.Access_pos());
 
 				int newPixels = newSize.Get_x() * newSize.Get_y();
-				if (newPixels == 0)
+                if (newPixels == 0) {
 					continue;
+                }
 				if (newPixels > regionBufferSize) {
 					regionBufferSize = newPixels;
 					kduBuffer = new int[regionBufferSize];
@@ -242,18 +253,21 @@ public class KduExtractProcessorJNI {
 					}
 				}
 			}
-			if (params.getRotationDegree() == 90 || params.getRotationDegree() == 270)
+            if (params.getRotationDegree() == 90 || params.getRotationDegree() == 270) {
 			    image = new BufferedImage(imageSize.Get_y(), imageSize.Get_x(), BufferedImage.TYPE_INT_RGB);
-			else
+            } else {
 				image = new BufferedImage(imageSize.Get_x(), imageSize.Get_y(), BufferedImage.TYPE_INT_RGB);
+            }
 			image.setRGB(0, 0, viewSize.Get_x(), viewSize.Get_y(), imgBuffer, 0, viewSize.Get_x());
 
-			if (compositor != null)
+            if (compositor != null) {
 				compositor.Native_destroy();
+            }
 			wrapped_src.Native_destroy();
 			family_src.Native_destroy();
-			if (raw_src != null)
+            if (raw_src != null) {
 				raw_src.Native_destroy();
+            }
 			
 			return image;
 		} catch (KduException e) {
@@ -284,29 +298,33 @@ public class KduExtractProcessorJNI {
 			StringTokenizer st = new StringTokenizer(params.getRegion(), "{},");
 			String token;
 			// top
-			if ((token=st.nextToken()).contains(".")) {
+            if ((token = st.nextToken()).contains(".")) {
 				topDouble = Double.parseDouble(token);
 				usetopDouble = true;
-			} else
+            } else {
 				top = Integer.parseInt(token);
+            }
 			// left
-			if ((token=st.nextToken()).contains(".")) {
+            if ((token = st.nextToken()).contains(".")) {
 				leftDouble = Double.parseDouble(token);
 				useleftDouble = true;
-			} else
+            } else {
 				left = Integer.parseInt(token);
+            }
 			// height
-			if ((token=st.nextToken()).contains(".")) {
+            if ((token = st.nextToken()).contains(".")) {
 				heightDouble = Double.parseDouble(token);
 				useheightDouble = true;
-			} else
+            } else {
 				height = Integer.parseInt(token);
+            }
 			// width
-			if ((token=st.nextToken()).contains(".")) {
+            if ((token = st.nextToken()).contains(".")) {
 				widthDouble = Double.parseDouble(token);
 				usewidthDouble = true;
-			} else
+            } else {
 				width = Integer.parseInt(token);
+            }
 			
 			useRegion = true;
 		}
@@ -339,10 +357,11 @@ public class KduExtractProcessorJNI {
 			codestream.Create(input);
 			Kdu_channel_mapping channels = new Kdu_channel_mapping();
 
-			if (inputSource.Exists())
+            if (inputSource.Exists()) {
 				channels.Configure(inputSource, false);
-			else
+            } else {
 				channels.Configure(codestream);
+            }
 			int ref_component = channels.Get_source_component(0);
 			Kdu_coords ref_expansion = getReferenceExpansion(ref_component, channels, codestream);
 			Kdu_dims image_dims = new Kdu_dims();
@@ -350,14 +369,18 @@ public class KduExtractProcessorJNI {
 			Kdu_coords imageSize = image_dims.Access_size();
 			Kdu_coords imagePosition = image_dims.Access_pos();
 
-			if (useleftDouble)
+            if (useleftDouble) {
 				left = imagePosition.Get_x() + (int) Math.round(leftDouble * imageSize.Get_x());
-			if (usetopDouble)
+            }
+            if (usetopDouble) {
 				top = imagePosition.Get_y() + (int) Math.round(topDouble * imageSize.Get_y());
-			if (useheightDouble)
+            }
+            if (useheightDouble) {
 				height = (int) Math.round(heightDouble * imageSize.Get_y());
-			if (usewidthDouble)
+            }
+            if (usewidthDouble) {
 				width = (int) Math.round(widthDouble * imageSize.Get_x());
+            }
 
 			if (useRegion) {
 				imageSize.Set_x(width);
@@ -409,14 +432,15 @@ public class KduExtractProcessorJNI {
 			BufferedImage image = new BufferedImage(imageSize.Get_x(), imageSize.Get_y(), BufferedImage.TYPE_INT_RGB);
 			image.setRGB(0, 0, viewSize.Get_x(), viewSize.Get_y(), imgBuffer, 0, viewSize.Get_x());
 			
-			if (params.getRotationDegree() > 0) {				
+            if (params.getRotationDegree() > 0) {
 				image = ImageProcessingUtils.rotate(image, params.getRotationDegree());
 			}
 			
 			decompressor.Native_destroy();
 			channels.Native_destroy();
-			if (codestream.Exists())
+            if (codestream.Exists()) {
 				codestream.Destroy();
+            }
 			inputSource.Native_destroy();
 			input.Native_destroy();
 			jp2_family_in.Native_destroy();
@@ -444,10 +468,12 @@ public class KduExtractProcessorJNI {
 
 		for (c = 0; c < channels.Get_num_channels(); c++) {
 			codestream.Get_subsampling(channels.Get_source_component(c), subs);
-			if (subs.Get_x() < min_subs.Get_x())
+            if (subs.Get_x() < min_subs.Get_x()) {
 				min_subs.Set_x(subs.Get_x());
-			if (subs.Get_y() < min_subs.Get_y())
+            }
+            if (subs.Get_y() < min_subs.Get_y()) {
 				min_subs.Set_y(subs.Get_y());
+            }
 		}
 		
 		Kdu_coords expansion = new Kdu_coords();
