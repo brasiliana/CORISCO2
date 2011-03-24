@@ -109,6 +109,11 @@
         <!-- <theme name="Test Theme 1" handle="123456789/1" path="theme1/"/> -->
         <!-- <theme name="Test Theme 2" regex="community-list" path="theme2/"/> -->
 
+        <!-- Themes for the administration interface -->
+        <theme name="Default Reference Theme" regex="admin" path="Reference/" />
+        <theme name="Default Reference Theme" regex="login" path="Reference/" />
+        <theme name="Default Reference Theme" regex="submissions" path="Reference/" />
+        <theme name="Default Reference Theme" regex="submit" path="Reference/" />
         <!-- Default theme -->
         <!-- <theme name="Default Reference Theme" regex=".*" path="Reference/" /> -->
         <theme name="Corisco" regex=".*" path="Corisco/"/>

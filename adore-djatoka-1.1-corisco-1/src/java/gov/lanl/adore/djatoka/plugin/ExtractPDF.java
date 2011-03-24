@@ -33,6 +33,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 
 import javax.imageio.ImageIO;
 
@@ -49,9 +50,6 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//import java.nio.ByteBuffer;
-//import java.nio.channels.FileChannel;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -66,16 +64,6 @@ import org.apache.log4j.Logger;
 
 import gov.lanl.util.ConfigurationManager;
 
-/*
-import org.im4java.core.ConvertCmd;
-import org.im4java.core.IM4JavaException;
-import org.im4java.core.IMOperation;
-import org.im4java.core.Info;
-import org.im4java.core.InfoException;
-import org.im4java.core.PDFInfo;
-import org.im4java.core.Stream2BufferedImage;
-*/
-
 
 /**
  * Uses Poppler PDF commands to extract PDF pages to PNG files.
@@ -86,16 +74,16 @@ public class ExtractPDF implements IExtract {
     private static Logger logger = Logger.getLogger(ExtractPDF.class);
 
     // maximum size of either preview image dimension
-    private static final int MAX_PX = 800;
+    private static final int MAX_PX = 1000;
 
-    // maxium DPI - use common screen res, 100dpi.
-    private static final int MAX_DPI = 150;
+    // maxium DPI
+    private static final int MAX_DPI = 180;
 
-    private static int DEFAULT_DENSITY = 150;
-    private static String DEFAULT_COLORSPACE = "RGB";
+    private static int DEFAULT_DENSITY = 72;
+    //private static String DEFAULT_COLORSPACE = "RGB";
     private static int DEFAULT_LEVELS = 4;
 
-    // command to get image from PDF; @FILE@, @OUTPUT@ are placeholders
+    // command to get image from PDF; @FILE@, @OUTPUT@ etc are placeholders
     private static final String PDFTOPPM_COMMAND[] =
     {
         "@COMMAND@", "-q", "-png", "-f", "@FIRSTPAGE@", "-l", "@LASTPAGE@",
@@ -105,16 +93,15 @@ public class ExtractPDF implements IExtract {
     private static final int PDFTOPPM_COMMAND_POSITION_FIRSTPAGE = 4;
     private static final int PDFTOPPM_COMMAND_POSITION_LASTPAGE = 6;
     private static final int PDFTOPPM_COMMAND_POSITION_DPI = 8;
-    //private static final int PDFTOPPM_COMMAND_POSITION_OPTIONAL_EXTRAS = 9;
+    private static final int PDFTOPPM_COMMAND_POSITION_OPTIONAL_EXTRAS = 9; // Must insert at this position instead of just setting it.
     private static final int PDFTOPPM_COMMAND_POSITION_FILE = 9;
     private static final int PDFTOPPM_COMMAND_POSITION_OUTPUTFILE = 10;
     
 
-    // command to get image from PDF; @FILE@, @OUTPUT@ are placeholders
+    // command to get image from PDF; @FILE@, @OUTPUT@ etc are placeholders
     private static final String PDFINFO_COMMAND[] =
     {
         "@COMMAND@", "-f", "@FIRSTPAGE@", "-l", "@LASTPAGE@", "-box", "@FILE@"
-        //"@COMMAND@", "-f", "@FP@", "-l", "@LP@", "-box", "@FILE@"
     };
     private static final int PDFINFO_COMMAND_POSITION_BIN = 0;
     private static final int PDFINFO_COMMAND_POSITION_FIRSTPAGE = 2;
@@ -175,7 +162,7 @@ public class ExtractPDF implements IExtract {
 	public final ImageRecord getMetadata(ImageRecord r) throws DjatokaException {
 		if ((r.getImageFile() == null || !new File(r.getImageFile()).exists()) && r.getObject() == null)
 			throw new DjatokaException("Image Does Not Exist: " + r.toString());
-		//logger.debug("Get metadata: " + r.toString());
+		logger.debug("Get metadata: " + r.toString());
         try {
             DjatokaDecodeParam params = new DjatokaDecodeParam();
             BufferedImage bi = process(r, params);
@@ -187,7 +174,6 @@ public class ExtractPDF implements IExtract {
             r.setBitDepth(bi.getColorModel().getPixelSize());
             r.setNumChannels(bi.getColorModel().getNumColorComponents());
             
-            //logger.debug("setting compositing layer count");
             //r.setCompositingLayerCount(getNumberOfPages(r)); // Semantics: number of pages in the PDF file.
             HashMap<String, String> pdfProps = (HashMap<String, String>)getPDFProperties(r);
             int n = Integer.parseInt(pdfProps.remove("Pages"));
@@ -197,7 +183,7 @@ public class ExtractPDF implements IExtract {
             // (because in Djatoka's point of view a PDF is just one image with various compositing layers, which are the pages),
             // at this point right here we query the PDF file about the size of all pages and store this
             // information in a Map. This map can be returned by getMetadata by setting it as the instProps member of the
-            // ImageRecord class, which Djatoka already implements and which is returned as JSON to viewer.
+            // ImageRecord class, which Djatoka already implements and which is returned as JSON to the viewer JS.
             // The viewer then has to store this information and later query it instead of asking Djatoka (getMetadata) again.
             //Map<String, String> instProps = getPagesSizes(r);
             r.setInstProps(pdfProps);
@@ -288,6 +274,7 @@ public class ExtractPDF implements IExtract {
         BufferedImage processedImage = null;
         try
         {
+            /*
             // First get max physical dim of bounding box of the page
             // to compute the DPI to ask for..  otherwise some AutoCAD
             // drawings can produce enormous files even at 75dpi, for
@@ -306,27 +293,42 @@ public class ExtractPDF implements IExtract {
                 int maxdim = (int)Math.max(Math.abs(w), Math.abs(h));
                 dpi = Math.min(MAX_DPI, (MAX_PX * 72 / maxdim));
                 logger.debug("DPI: pdfinfo method got dpi="+dpi+" for max dim="+maxdim+" (points, 1/72\")");
-            }
+            } */
+
+            // Scale
+            int dpi = getScaledDPI(params);
 
             // Requires Sun JAI imageio additions to read ppm directly.
-            // this will get "-000001.ppm" appended to it by pdftoppm
+            // this will get "-[0]+1.ppm" appended to it by pdftoppm
             File outPrefixF = File.createTempFile("pdftopng", "out");
             String outPrefix = outPrefixF.toString();
             outPrefixF.delete();
 
-            String pdfCmd[] = PDFTOPPM_COMMAND.clone();
-            pdfCmd[PDFTOPPM_COMMAND_POSITION_BIN] = pdftoppmPath;
-            pdfCmd[PDFTOPPM_COMMAND_POSITION_FIRSTPAGE] = "" + page_number;
-            pdfCmd[PDFTOPPM_COMMAND_POSITION_LASTPAGE] = "" + page_number;
-            pdfCmd[PDFTOPPM_COMMAND_POSITION_DPI] = String.valueOf(dpi);
-            pdfCmd[PDFTOPPM_COMMAND_POSITION_FILE] = input.toString();
-            pdfCmd[PDFTOPPM_COMMAND_POSITION_OUTPUTFILE] = outPrefix;
+            //String pdfCmd[] = PDFTOPPM_COMMAND.clone();
+            ArrayList<String> pdfCmd = new ArrayList<String>(Arrays.asList(PDFTOPPM_COMMAND));
+            pdfCmd.set(PDFTOPPM_COMMAND_POSITION_BIN, pdftoppmPath);
+            pdfCmd.set(PDFTOPPM_COMMAND_POSITION_FIRSTPAGE, "" + page_number);
+            pdfCmd.set(PDFTOPPM_COMMAND_POSITION_LASTPAGE, "" + page_number);
+            pdfCmd.set(PDFTOPPM_COMMAND_POSITION_DPI, String.valueOf(dpi));
+            pdfCmd.set(PDFTOPPM_COMMAND_POSITION_FILE, input.toString());
+            pdfCmd.set(PDFTOPPM_COMMAND_POSITION_OUTPUTFILE, outPrefix);
 
-            logger.debug("Running pdftoppm command: " + Arrays.deepToString(pdfCmd));
+            // Crop
+            Rectangle crop = getCropParam(params);
+            if (crop != null) {
+                String[] cropParams = {"-x", ""+(int)crop.getX(), "-y", ""+(int)crop.getY(), "-W", ""+(int)crop.getWidth(), "-H", ""+(int)crop.getHeight()};
+                pdfCmd.addAll(PDFTOPPM_COMMAND_POSITION_OPTIONAL_EXTRAS, Arrays.asList(cropParams));
+            }
+
+            String[] pdfCmdA = pdfCmd.toArray(new String[pdfCmd.size()]);
+            logger.debug("Running pdftoppm command: " + Arrays.deepToString(pdfCmdA));
+            //logger.debug("Running pdftoppm command: " + pdfCmd.toString());
+
             File outf = null;
+            Process pdfProc = null;
             try
             {
-                Process pdfProc = Runtime.getRuntime().exec(pdfCmd);
+                pdfProc = Runtime.getRuntime().exec(pdfCmdA);
                 status = pdfProc.waitFor();
                 logger.debug("status: " + status);
                 
@@ -357,6 +359,11 @@ public class ExtractPDF implements IExtract {
                 }
                 logger.debug("PDFTOPPM output is: "+outf+", exists=" + outf.exists());
                 processedImage = ImageIO.read(outf);
+                
+                // Rotate
+                if (params.getRotationDegree() > 0) {
+                    processedImage = ImageProcessingUtils.rotate(processedImage, params.getRotationDegree());
+                }
             }
             catch (InterruptedException e)
             {
@@ -366,9 +373,14 @@ public class ExtractPDF implements IExtract {
             finally
             {
                 outf.delete();
+                // Our exec() should not produce any output, but we want to stay safe.
+                // http://mark.koli.ch/2011/01/leaky-pipes-remember-to-close-your-streams-when-using-javas-runtimegetruntimeexec.html
+                org.apache.commons.io.IOUtils.closeQuietly(pdfProc.getOutputStream());
+                org.apache.commons.io.IOUtils.closeQuietly(pdfProc.getInputStream());
+                org.apache.commons.io.IOUtils.closeQuietly(pdfProc.getErrorStream());
             }
         }
-        catch (IOException e)
+        catch (Exception e)
         {
                 logger.error("Failed converting PDF file to image: ", e);
                 throw new IllegalArgumentException("Failed converting PDF file to image: ", e);
@@ -380,82 +392,8 @@ public class ExtractPDF implements IExtract {
         }
 
         return processedImage;
-
-        // Scale image and return in-memory stream
-        /*
-        BufferedImage toenail = scaleImage(source, maxwidth*3/4, maxwidth);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(toenail, "jpeg", baos);
-        return new ByteArrayInputStream(baos.toByteArray());
-        */
-        
-        //op.density(DEFAULT_DENSITY, DEFAULT_DENSITY);
-        //op.colorspace(DEFAULT_COLORSPACE);
-        //op.background("white");
-        //setScaleParam1(op, params);
-
-        //String crop = getCropParam(params);
-        //if (crop != null) {
-        //    op.addRawArgs("-crop " + crop);
-        //}
-
-        //if (params.getRotationDegree() > 0) {
-        //    op.rotate(params.getRotationDegree() * 1.0);
-        //}
-
-        //setScaleParam2(op, params);
-        //params.setScalingFactor(1.0);
-        //params.setScalingDimensions(null);
-
-        //op.addImage("png:-");
-        //logger.debug("op: " + op.toString());
-        //Stream2BufferedImage s2b = new Stream2BufferedImage();
-
-        /*
-        ConvertCmd cmd = new ConvertCmd();
-        cmd.setOutputConsumer(s2b);
-        try {
-            cmd.run(op);
-            BufferedImage bi = s2b.getImage();
-            return bi;
-        } catch (IOException ex) {
-            logger.error(ex, ex);
-        } catch (InterruptedException ex) {
-            logger.error(ex, ex);
-        } catch (IM4JavaException ex) {
-            logger.error(ex, ex);
-        }
-        return null;
-        */
 	}
 
-/* From XPDFThumbnail.java (DSpace).
-    // scale the image, preserving aspect ratio, if at least one
-    // dimension is not between min and max.
-    private static BufferedImage scaleImage(BufferedImage source,
-                                            int min, int max)
-    {
-        int xsize = source.getWidth(null);
-        int ysize = source.getHeight(null);
-        int msize = Math.max(xsize, ysize);
-        BufferedImage result = null;
-
-        // scale the image if it's outside of requested range.
-        // ALSO pass through if min and max are both 0
-        if ((min == 0 && max == 0) ||
-            (msize >= min && Math.min(xsize, ysize) <= max))
-            return source;
-        else
-        {
-            int xnew = xsize * max / msize;
-            int ynew = ysize * max / msize;
-            result = new BufferedImage(xnew, ynew, BufferedImage.TYPE_INT_RGB);
-            Graphics2D g2d = result.createGraphics();
-            g2d.drawImage(source, 0, 0, xnew, ynew, null);
-            return result;
-        }
-    }
-*/
 
     public BufferedImage processUsingTemp(InputStream input, DjatokaDecodeParam params)
             throws DjatokaException {
@@ -499,34 +437,6 @@ public class ExtractPDF implements IExtract {
         return processUsingTemp(input, params);
     }
 
-/*
-    private BufferedImage applyParams(BufferedImage bi, DjatokaDecodeParam params) throws DjatokaException {
-        ImageRecord r = getMetadata(bi);
-        setLevelReduction(r, params);
-        if (params.getLevelReductionFactor() > 0) {
-            int reduce = 1 << params.getLevelReductionFactor(); // => image.size() / 2^r: reduce 0 means image/1, reduce 1 means image/2, etc.
-            bi = ImageProcessingUtils.scale(bi, 1.0 / reduce);
-        }
-        if (params.getRegion() != null) {
-            ArrayList<Double> dims = null;
-            dims = getRegionMetadata(r, params); // Region info: dims[0..3] = Y,X,H,W
-            logger.debug("dims: " + dims.toString());
-            logger.debug("region: " + params.getRegion());
-            logger.debug("reduce: " + params.getLevelReductionFactor());
-            if (dims != null && dims.size() == 4) {
-                double x = dims.get(1);
-                double y = dims.get(0);
-                double w = dims.get(3);
-                double h = dims.get(2);
-                bi = ImageProcessingUtils.clipRegion(bi, x, y, w, h); // dims[0..3] = Y,X,H,W
-            }
-        }
-        if (params.getRotationDegree() > 0) {
-            bi = ImageProcessingUtils.rotate(bi, params.getRotationDegree());
-        }
-        return bi;
-    }
-*/
 	
 	/**
 	 * Extracts region defined in DjatokaDecodeParam as BufferedImage
@@ -551,12 +461,6 @@ public class ExtractPDF implements IExtract {
 							+ " is not supported");
 	}
 
-/*
-    private static int getNumberOfPages(ImageRecord input) throws DjatokaException {
-        logger.debug("Getting number of pages");
-        
-    }
-*/
 
     /**
      * Get PDF information with pdfinfo:
@@ -601,7 +505,6 @@ public class ExtractPDF implements IExtract {
                 in.deleteOnExit();
 
                 FileOutputStream fos = new FileOutputStream(in);
-                //in.deleteOnExit();
                 IOUtils.copyStream(fis, fos);
             } catch (IOException e) {
                 logger.error(e, e);
@@ -620,12 +523,13 @@ public class ExtractPDF implements IExtract {
         pdfinfoCmd[PDFINFO_COMMAND_POSITION_FIRSTPAGE] = "1";
         pdfinfoCmd[PDFINFO_COMMAND_POSITION_LASTPAGE] = "-1"; // Last page even we not knowing its number.
         pdfinfoCmd[PDFINFO_COMMAND_POSITION_FILE] = sourcePath;
+        Process pdfProc = null;
         try
         {
             ArrayList<MatchResult> pageSizes = new ArrayList<MatchResult>();
             MatchResult pages = null;
             
-            Process pdfProc = Runtime.getRuntime().exec(pdfinfoCmd);
+            pdfProc = Runtime.getRuntime().exec(pdfinfoCmd);
             BufferedReader lr = new BufferedReader(new InputStreamReader(pdfProc.getInputStream()));
             String line;
             for (line = lr.readLine(); line != null; line = lr.readLine())
@@ -670,32 +574,32 @@ public class ExtractPDF implements IExtract {
                     float y1 = Float.parseFloat(mr.group(5));
                     float w = Math.abs(x1 - x0);
                     float h = Math.abs(y1 - y0);
-                    String width = "" + w; //mr.group(2);
-                    String height = "" + h; //mr.group(3);
+                    // Have to scale page sizes by max dpi (MAX_DPI / DEFAULT_DENSITY). Otherwise, BookReader.js will request the wrong zoom level (svc.level).
+                    float ws = w * MAX_DPI / DEFAULT_DENSITY;
+                    float hs = h * MAX_DPI / DEFAULT_DENSITY;
+                    String width = "" + ws; //mr.group(2);
+                    String height = "" + hs; //mr.group(3);
                     pdfProperties.put("Page " + page, width + " " + height);
                 }
             }
             
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             logger.error("Failed getting PDF information: ", e);
             throw new DjatokaException("Failed getting PDF information: ", e);
+        } finally {
+            // Our exec() should just consume one of the streams, but we want to stay safe.
+            // http://mark.koli.ch/2011/01/leaky-pipes-remember-to-close-your-streams-when-using-javas-runtimegetruntimeexec.html
+            org.apache.commons.io.IOUtils.closeQuietly(pdfProc.getOutputStream());
+            org.apache.commons.io.IOUtils.closeQuietly(pdfProc.getInputStream());
+            org.apache.commons.io.IOUtils.closeQuietly(pdfProc.getErrorStream());
         }
+        
         return pdfProperties;
     }
 
-
-    /*
-    private static Map<String, String> getPagesSizes(ImageRecord input) throws DjatokaException {
-        logger.debug("Getting size of pages");
-        Map<String, String> instProps;
-    }
-    */
-
-
+/*
     private static Dimension getPDFPageSize(String source, int page_number) throws DjatokaException {
-        logger.debug("Getting PDF info");
+        logger.debug("Getting PDF info for size of page '" + page_number + "'.");
         
         Dimension pageDimension = null;
 
@@ -711,11 +615,12 @@ public class ExtractPDF implements IExtract {
         pdfinfoCmd[PDFINFO_COMMAND_POSITION_FIRSTPAGE] = "" + page_number;
         pdfinfoCmd[PDFINFO_COMMAND_POSITION_LASTPAGE] = "" + page_number; // Last page even we not knowing its number.
         pdfinfoCmd[PDFINFO_COMMAND_POSITION_FILE] = source;
+        Process pdfProc = null;
         try
         {
             MatchResult pageSize = null;;
             
-            Process pdfProc = Runtime.getRuntime().exec(pdfinfoCmd);
+            pdfProc = Runtime.getRuntime().exec(pdfinfoCmd);
             BufferedReader lr = new BufferedReader(new InputStreamReader(pdfProc.getInputStream()));
             String line;
             for (line = lr.readLine(); line != null; line = lr.readLine())
@@ -744,8 +649,6 @@ public class ExtractPDF implements IExtract {
                 double y1 = Double.parseDouble(pageSize.group(5));
                 double width = Math.abs(x1 - x0);
                 double height = Math.abs(y1 - y0);
-                //double width = Double.parseDouble(pageSize.group(2));
-                //double height = Double.parseDouble(pageSize.group(3));
                 pageDimension = new Dimension();
                 pageDimension.setSize(width, height);
             }
@@ -755,31 +658,18 @@ public class ExtractPDF implements IExtract {
         {
             logger.error("Failed getting PDF page size: ", e);
             throw new DjatokaException("Failed getting PDF page size: ", e);
+        } finally {
+            // Our exec() should just consume one of the streams, but we want to stay safe.
+            // http://mark.koli.ch/2011/01/leaky-pipes-remember-to-close-your-streams-when-using-javas-runtimegetruntimeexec.html
+            org.apache.commons.io.IOUtils.closeQuietly(pdfProc.getOutputStream());
+            org.apache.commons.io.IOUtils.closeQuietly(pdfProc.getInputStream());
+            org.apache.commons.io.IOUtils.closeQuietly(pdfProc.getErrorStream());
         }
         return pageDimension;
     }
+*/
 
-
-    private void setLevelReduction(ImageRecord r, DjatokaDecodeParam params) {
-        if (params.getLevel() >= 0) {
-            int levels = ImageProcessingUtils.getLevelCount(r.getWidth(), r.getHeight());
-            levels = (r.getDWTLevels() < levels) ? r.getDWTLevels() : levels;
-            int reduce = levels - params.getLevel();
-            params.setLevelReductionFactor((reduce >= 0) ? reduce : 0);
-        } else if (params.getLevel() == -1 && params.getRegion() == null && params.getScalingDimensions() != null) {
-            int width = params.getScalingDimensions()[0];
-            int height = params.getScalingDimensions()[1];
-            int levels = ImageProcessingUtils.getLevelCount(r.getWidth(), r.getHeight());
-            int scale_level = ImageProcessingUtils.getScalingLevel(r.getWidth(), r.getHeight(), width, height);
-            levels = (r.getDWTLevels() < levels) ? r.getDWTLevels() : levels;
-            int reduce = levels - scale_level;
-            System.out.println(reduce);
-            params.setLevelReductionFactor((reduce >= 0) ? reduce : 0);
-        }
-    }
-
-/*
-    private boolean setScaleParam1(IMOperation op, DjatokaDecodeParam params) {
+    private int getScaledDPI(DjatokaDecodeParam params) {
         if (params.getLevel() >= 0) {
             int levels = DEFAULT_LEVELS;
             int reduce = levels - params.getLevel();
@@ -787,44 +677,26 @@ public class ExtractPDF implements IExtract {
         } else if (params.getLevel() == -1 && params.getRegion() == null && params.getScalingDimensions() != null) {
             int width = params.getScalingDimensions()[0];
             int height = params.getScalingDimensions()[1];
-            op.scale(width, height);
-            return true;
+            int levels = DEFAULT_LEVELS;
+            int scale_level = Math.min(MAX_DPI, (MAX_PX * DEFAULT_DENSITY / Math.max(Math.abs(width), Math.abs(height))));
+            int reduce = levels - scale_level;
+            params.setLevelReductionFactor((reduce >= 0) ? reduce : 0);            
         }
-
         if (params.getLevelReductionFactor() > 0) {
             int reduce = 1 << params.getLevelReductionFactor(); // => image.size() / 2^r: reduce 0 means image/1, reduce 1 means image/2, etc.
             double s = 1.0 / reduce;
-            op.scale((s * 100.0), Boolean.TRUE);
-            return true;
+            return (int)(MAX_DPI * s);
         }
-        return false;
-    }
+        return MAX_DPI;
+    }    
+    
 
-    private boolean setScaleParam2(IMOperation op, DjatokaDecodeParam params) {
-        if (params.getScalingFactor() != 1.0
-                && params.getScalingFactor() > 0
-                && params.getScalingFactor() < 3) {
-            op.scale(params.getScalingFactor() * 100.0, true);
-            return true;
-        } else if (params.getScalingDimensions() != null
-                && params.getScalingDimensions().length == 2) {
-            int width = params.getScalingDimensions()[0];
-            int height = params.getScalingDimensions()[1];
-            op.scale(width, height);
-        }
-        return false;
-    }
-*/
-
-    private String getCropParam(DjatokaDecodeParam params) {
-        String crop = null;
-
+    private Rectangle getCropParam(DjatokaDecodeParam params) {
         if (params.getRegion() != null) {
             StringTokenizer st = new StringTokenizer(params.getRegion(), "{},");
             String token;
-            logger.info("region params: " + params.getRegion());
-            int x, y;
-            String w, h;
+            logger.debug("Region params: " + params.getRegion());
+            int x, y, w, h;
             // top
             if ((token = st.nextToken()).contains(".")) {
                 y = Integer.parseInt(token);
@@ -839,87 +711,30 @@ public class ExtractPDF implements IExtract {
             }
             // height
             if ((token = st.nextToken()).contains(".")) {
-                h = (Double.parseDouble(token) * 100.0) + "%";
+                h = Integer.parseInt(token);
             } else {
-                h = token;
+                h = Integer.parseInt(token);
             }
             // width
             if ((token = st.nextToken()).contains(".")) {
-                w = (Double.parseDouble(token) * 100.0) + "%";
+                w = Integer.parseInt(token);
             } else {
-                w = token;
+                w = Integer.parseInt(token);
             }
             
-            crop = w + "x" + h + "+" + x + "+" + y;
+            return new Rectangle(x, y, w, h);
         }
 
-        return crop;
+        return null;
     }
 
-    private ArrayList<Double> getRegionMetadata(ImageRecord r, DjatokaDecodeParam params)
-            throws DjatokaException {
-
-        int reduce = 1 << params.getLevelReductionFactor(); // => image.size() / 2^r: reduce 0 means image/1, reduce 1 means image/2, etc.
-        ArrayList<Double> dims = new ArrayList<Double>();
-
-        if (params.getRegion() != null) {
-            StringTokenizer st = new StringTokenizer(params.getRegion(), "{},");
-            String token;
-            logger.info("region params: " + params.getRegion());
-            // top
-            if ((token = st.nextToken()).contains(".")) {
-                dims.add(Double.parseDouble(token));
-            } else {
-                int t = Integer.parseInt(token);
-                if (r.getHeight() < t) {
-                    throw new DjatokaException("Region inset out of bounds: " + t + ">" + r.getHeight());
-                }
-                dims.add(Double.parseDouble(token) / r.getHeight());
-            }
-            // left
-            if ((token = st.nextToken()).contains(".")) {
-                dims.add(Double.parseDouble(token));
-            } else {
-                int t = Integer.parseInt(token);
-                if (r.getWidth() < t) {
-                    throw new DjatokaException("Region inset out of bounds: " + t + ">" + r.getWidth());
-                }
-                dims.add(Double.parseDouble(token) / r.getWidth());
-            }
-            // height
-            if ((token = st.nextToken()).contains(".")) {
-                dims.add(Double.parseDouble(token));
-            } else {
-                dims.add(Double.parseDouble(token) / (Double.valueOf(r.getHeight()) / Double.valueOf(reduce)));
-//                dims.add(Double.parseDouble(token) / Double.valueOf(r.getHeight()));
-            }
-            // width
-            if ((token = st.nextToken()).contains(".")) {
-                dims.add(Double.parseDouble(token));
-            } else {
-                dims.add(Double.parseDouble(token) / (Double.valueOf(r.getWidth()) / Double.valueOf(reduce)));
-//                dims.add(Double.parseDouble(token) / Double.valueOf(r.getWidth()));
-            }
-        }
-
-        return dims;
-    }
-
-    private static final String escape(String path) {
-        if (path.contains(" ")) {
-            path = "\"" + path + "\"";
-        }
-        return path;
-    }
     
     private static void setPDFCommandsPath() throws IllegalStateException {
         // sanity check: poppler paths are required. can cache since it won't change
         if (pdftoppmPath == null || pdfinfoPath == null)
         {
             //props = IOUtils.loadConfigByCP(classConfig.getArg("props"));
-            //pdftoppmPath = props.getProperty(PROPS_PDF_PDFTOPPM_PATH, DEFAULT_PDFTOPPM_PATH);
-            //pdfinfoPath = props.getProperty(PROPS_PDF_PDFINFO_PATH, DEFAULT_PDFINFO_PATH);
-            
+
             pdftoppmPath = ConfigurationManager.getProperty(PROPS_PDF_PDFTOPPM_PATH, DEFAULT_PDFTOPPM_PATH);
             pdfinfoPath = ConfigurationManager.getProperty(PROPS_PDF_PDFINFO_PATH, DEFAULT_PDFINFO_PATH);
 
@@ -929,5 +744,5 @@ public class ExtractPDF implements IExtract {
                 throw new IllegalStateException("No value for key \"" + PROPS_PDF_PDFINFO_PATH + "\" in djatoka.properties! Should be path to pdfinfo executable.");
         }
     }
-
 }
+

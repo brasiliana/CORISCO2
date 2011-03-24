@@ -14,8 +14,6 @@ if (qsParm["serverURL"] != "") {
 }
 
 if (qsParm["item"] != "") {
-    //$.getJSON("http://" + document.domain + ':' + location.port + "/" + qsParm["item"],
-    //var url = "http://" + document.domain + ':' + location.port + resolverURL + "&svc_id=" + getMetadataSVC_ID + "&rft_id=" + qsParm["item"];
     var url = baseURL + "&svc_id=" + getMetadataSVC_ID + "&rft_id=" + qsParm["item"];
     $.getJSON(url,
         function(data) {
@@ -23,14 +21,11 @@ if (qsParm["item"] != "") {
             InitializeViewer();
         }
         );
-//} else {
-//    pages = new Array(5);
-//    InitializeViewer();
 }
 
 function InitializeViewer() {
- 
-    // Return the width of a given page.  Here we assume all images are 800 pixels wide
+
+    // Return the width of a given page.
     br.getPageWidth = function(index) {
         try {
             var pageKey = "Page " + br.getPageNum(index);
@@ -42,27 +37,9 @@ function InitializeViewer() {
             console.log("index: " + index);
             return 400;
         }
-//        return metadata.width;
-//        var metadata = null;
-//        var params = {rft_id: "http://localhost:8080/xmlui/bitstream/handle/1918/624530141/006245-3_IMAGEM_141.jp2",
-//            svc_id: "info:lanl-repo/svc/getMetadata"};
-//        $.ajax({
-//            url: baseURL,
-//            dataType: 'json',
-//            data: params,
-//            success: function(data) {
-//                metadata = data;
-//            },
-//            async: false
-//        });
-//        if (metadata != null) {
-//            return metadata.width;
-//        } else {
-//            return 800;
-//        }
     }
  
-    // Return the height of a given page.  Here we assume all images are 1200 pixels high
+    // Return the height of a given page.
     br.getPageHeight = function(index) {
         try {
             var pageKey = "Page " + br.getPageNum(index);
@@ -74,24 +51,6 @@ function InitializeViewer() {
             console.log("index: " + index);
             return 600;
         }
-//        return metadata.height;
-//        var metadata = null;
-//        var params = {rft_id: "http://localhost:8080/xmlui/bitstream/handle/1918/624530141/006245-3_IMAGEM_141.jp2",
-//            svc_id: "info:lanl-repo/svc/getMetadata"};
-//        $.ajax({
-//            url: baseURL,
-//            dataType: 'json',
-//            data: params,
-//            success: function(data) {
-//                metadata = data;
-//            },
-//            async: false
-//        });
-//        if (metadata != null) {
-//            return metadata.height;
-//        } else {
-//            return 1200;
-//        }
     }
  
     // We load the images from archive.org -- you can modify this function to retrieve images
@@ -285,7 +244,7 @@ function InitializeViewer() {
         return index + 1;
     }
  
-    // Total number of leafs
+    // Total number of leafs (i.e., number of pages).
     br.numLeafs = metadata.compositingLayerCount;
 
     // Page sizes in the format:
@@ -308,9 +267,6 @@ function InitializeViewer() {
     //br.toolbarHTML = qsParm["toolbarHTML"];
     br.addToolbar = false;
     
-    // Store the item identifier for later use
-    //br.bhlItemId = qsParm["item"];
- 
 //    br.ui = "embed";
     br.ui = "full";
  
