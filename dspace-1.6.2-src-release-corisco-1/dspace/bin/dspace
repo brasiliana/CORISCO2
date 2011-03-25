@@ -61,5 +61,8 @@ if [ "$JAVA_OPTS" = "" ]; then
   JAVA_OPTS=-Xmx256m
 fi
 
+LOG='-Djava.util.logging.config.file=$DSPACEDIR/config/logging.properties'
+
 # Now invoke Java
-java $JAVA_OPTS -classpath $FULLPATH org.dspace.app.launcher.ScriptLauncher "$@"
+java $JAVA_OPTS -classpath $FULLPATH $LOG org.dspace.app.launcher.ScriptLauncher "$@"
+
