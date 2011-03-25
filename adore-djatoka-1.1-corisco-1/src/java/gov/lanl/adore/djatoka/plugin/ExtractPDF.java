@@ -357,7 +357,7 @@ public class ExtractPDF implements IExtract {
                         break;
                     }
                 }
-                logger.debug("PDFTOPPM output is: "+outf+", exists=" + outf.exists());
+                logger.debug("PDFTOPPM output is: "+outf+", exists=" + outf != null ? outf.exists() : "!");
                 processedImage = ImageIO.read(outf);
                 
                 // Rotate
@@ -372,7 +372,7 @@ public class ExtractPDF implements IExtract {
             }
             finally
             {
-                outf.delete();
+                if (outf != null) outf.delete();
                 // Our exec() should not produce any output, but we want to stay safe.
                 // http://mark.koli.ch/2011/01/leaky-pipes-remember-to-close-your-streams-when-using-javas-runtimegetruntimeexec.html
                 org.apache.commons.io.IOUtils.closeQuietly(pdfProc.getOutputStream());
