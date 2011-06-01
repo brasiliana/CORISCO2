@@ -36,7 +36,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
@@ -70,6 +71,11 @@ public class ExtractorFactory implements FormatConstants {
     private static HashMap<String, IExtract> extractors = new HashMap<String, IExtract>();
     private static HashMap<String, DjatokaExtractProcessor> djatokaExtractors = new HashMap<String, DjatokaExtractProcessor>();
 
+    /** MIME util */
+    private static OpendesktopMimeDetector opendesktopMimeDetector = new OpendesktopMimeDetector();
+    private static final int MAX_CONCURRENT_DETECTIONS = 1;
+    private static final Semaphore detectorRateLimit = new Semaphore(MAX_CONCURRENT_DETECTIONS, true); // true: fair => first-in, first-out
+
 
     /**
      * Default Constructor, uses default format map.
@@ -77,7 +83,7 @@ public class ExtractorFactory implements FormatConstants {
     public ExtractorFactory() {
         this(getDefaultFormatMap());
     }
-
+    
     
     /**
      * Create a new ExtractorFactory using provided format map. Format maps
@@ -127,12 +133,12 @@ public class ExtractorFactory implements FormatConstants {
             String format = getMimetypeForFile(file);
             return getExtractorInstanceForFormat(format);
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(ExtractorFactory.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Priority.FATAL, null, ex);
         }
         return null;
     }
 
-
+    
     /**
      * Returns format writer implementation for provided format identifier
      * @param format identifier of requested identifier
@@ -143,7 +149,7 @@ public class ExtractorFactory implements FormatConstants {
             String format = getMimetypeForFile(file);
             return getDjatokaExtractorProcessorForFormat(format);
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(ExtractorFactory.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Priority.FATAL, null, ex);
         }
         return null;
     }
@@ -157,15 +163,49 @@ public class ExtractorFactory implements FormatConstants {
      * @throws MimeException
      */
     public static String getMimetypeForFile(String file) throws FileNotFoundException, MimeException {
-        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-        OpendesktopMimeDetector omd = new OpendesktopMimeDetector();
-        Collection<String> coll = omd.getMimeTypesInputStream(bis);
-        //logger.debug("Number of mimetypes: " + coll.size() + "; first mimetype: " + (coll.size() > 0 ? coll.toArray()[0] : ""));
-        return (String) (coll.size() > 0 ? coll.toArray()[0] : "");
+        if (MAX_CONCURRENT_DETECTIONS > 0) {
+            try {
+                if (!detectorRateLimit.tryAcquire(0, TimeUnit.SECONDS)) {
+                    logger.debug("Waiting for semaphore");
+                    detectorRateLimit.acquire();
+                    logger.debug("Acquired semaphore");
+                }
+            } catch (InterruptedException e) {
+                // Shouldn't happen?
+                logger.error("MimeType detection interrupted waiting for semaphore", e);
+            }
+        }
 
+        BufferedInputStream bis = null;
+        Collection<String> coll = null;
+        try {
+            bis = new BufferedInputStream(new FileInputStream(file));
+            coll = opendesktopMimeDetector.getMimeTypesInputStream(bis);
+            logger.debug("coll size: " + (coll == null ? "null" : coll.size()) + "; coll: " + coll.toString());
+            return (String) (coll.size() > 0 ? coll.toArray()[0] : "");
+        } catch (IllegalArgumentException ex) { // Trying to circumvent a bug in mime-util (see http://sourceforge.net/tracker/?func=detail&aid=3007610&group_id=205064&atid=992132#).
+            int max_tries = 2;
+            int next_try = 1;
+            while (coll == null && next_try <= max_tries) {
+                logger.error("Exception in MimeDetector; retrying " + next_try + " of " + max_tries + " try(ies)", ex);
+                coll = opendesktopMimeDetector.getMimeTypesInputStream(bis);
+            }
+            if (coll == null) return "";
+            else return (String) (coll.size() > 0 ? coll.toArray()[0] : "");
+        } catch (Exception ex) {
+            logger.error("Exception in MimeDetector", ex);
+            return "";
+        } finally {
+            if (MAX_CONCURRENT_DETECTIONS > 0) detectorRateLimit.release();
+            try {
+                if (bis != null) bis.close();
+            } catch (IOException ex) {
+                logger.error("Closing file stream", ex);
+            }
+        }
     }
 
-
+    
     public IExtract getExtractorInstanceForFormat(String format) {
         try {
             if (extractors.containsKey(format)) {
