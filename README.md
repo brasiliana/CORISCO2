@@ -1,6 +1,6 @@
 ## Corisco Platform for DSpace
 Brasiliana Digital Library (http://brasiliana.usp.br) - 2011.
-Current version: 1.2.1.
+Current version: 1.2.2.
 
 Installation and configuration instructions can be found at the [wiki](https://github.com/brasiliana/Corisco/wiki).
 
