@@ -64,9 +64,6 @@ import org.dspace.core.ConfigurationManager;
 public class DSpaceObjectManager implements ObjectManager
 {
   
-	/** List of all managed DSpaceObjects */
-	private List<DSpaceObject> dsos = new ArrayList<DSpaceObject>();
-	
     /**
      * Manage the given object, if this manager is unable to manage the object then false must be returned.
      * 
@@ -76,30 +73,10 @@ public class DSpaceObjectManager implements ObjectManager
      */
     public boolean manageObject(Object object) throws WingException
     {
-    	// First check that the object is of a type we can manage.
-    	if (object instanceof BrowseItem)
-    	{
-    		dsos.add((BrowseItem) object);
-    		return true;
-    	}
-    	else if (object instanceof Item)
-    	{
-    		dsos.add((Item) object);
-    		return true;
-    	}
-    	else if (object instanceof Collection)
-    	{
-    		dsos.add((Collection) object);
-    		return true;
-    	}
-    	else if (object instanceof Community)
-    	{
-    		dsos.add((Community) object);
-    		return true;
-    	}
-    	
-    	// We are unable to manage this object.
-    	return false;
+        return (object instanceof BrowseItem) ||
+               (object instanceof Item) ||
+               (object instanceof Collection) ||
+               (object instanceof Community);
     }
 	
 	
