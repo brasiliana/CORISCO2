@@ -1,4 +1,4 @@
-## Corisco Platform for DSpace
+## Corisco Platform 
 
 
 Installation and configuration instructions can be found at the [wiki](https://github.com/brasiliana/Corisco/wiki).
